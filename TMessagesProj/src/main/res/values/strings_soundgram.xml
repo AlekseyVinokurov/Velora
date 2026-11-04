@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Modern Audio Experience Client</string>
-    <string name="SoundGramStyle">SoundGram Style &amp; Audio FX</string>
-    <string name="SoundGramEqualizer">SoundGram DSP Equalizer</string>
+    <string name="SoundGramStyle">Velora Style &amp; Audio FX</string>
+    <string name="SoundGramEqualizer">Velora DSP Equalizer</string>
     <string name="SoundGramEQGraph">🎛️ Equalizer Graph</string>
     <string name="SoundGramEQEffects">✨ Effects &amp; Tone</string>
     <string name="SoundGramPresetFlat">Flat</string>
@@ -106,10 +106,10 @@
     <string name="min">min</string>
     <string name="hour">h</string>
     <string name="day">days</string>
-    <string name="stat">SoundGram Statistics</string>
+    <string name="stat">Velora Statistics</string>
     <string name="imports">Import Tracks</string>
     <string name="im">Import (</string>
-    <string name="ims">Import to SoundGram</string>
+    <string name="ims">Import to Velora</string>
     <string name="src">Search</string>
     <string name="chus">Enter channel @username</string>
     <string name="imm">Import music from channel</string>
@@ -203,7 +203,7 @@
     <string name="sg_source_untitled">Untitled</string>
     <string name="sg_eq_title">AudioFX &amp; Pitch</string>
     <string name="sg_eq_hero_title">sound</string>
-    <string name="sg_eq_hero_switch_descr">Enable SoundGram Equalizer</string>
+    <string name="sg_eq_hero_switch_descr">Enable Velora Equalizer</string>
     <string name="sg_eq_status_active">enabled</string>
     <string name="sg_eq_status_disabled">disabled</string>
     <string name="sg_eq_section_graph">eq curve · 5 bands</string>
@@ -244,7 +244,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Concert 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Bass Max</string>
-    <string name="sg_style_title">SoundGram Appearance</string>
+    <string name="sg_style_title">Velora Appearance</string>
     <string name="sg_style_section_glass">GLASSMORPHISM STYLE</string>
     <string name="sg_style_player_title">Audio Player</string>
     <string name="sg_style_player_subtitle">Frosted glass effect for full player</string>
@@ -261,7 +261,7 @@
     <string name="sg_style_tracks_title">Track List</string>
     <string name="sg_style_tracks_subtitle">Translucent dividers and track background</string>
     <string name="sg_style_eq_title">Equalizer</string>
-    <string name="sg_style_eq_subtitle">Glass interface for SoundGram Equalizer</string>
+    <string name="sg_style_eq_subtitle">Glass interface for Velora Equalizer</string>
     <string name="sg_sphere_settings">MY WAVE SPHERE SETTINGS</string>
     <string name="sg_sphere_size_title">Sphere Size</string>
     <string name="sg_sphere_size_subtitle">3D sphere scale: %d%%</string>

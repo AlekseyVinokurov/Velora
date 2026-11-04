@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Moderner Audio Experience Client</string>
-    <string name="SoundGramStyle">SoundGram-Stil &amp; Audioeffekte</string>
-    <string name="SoundGramEqualizer">SoundGram DSP-Equalizer</string>
+    <string name="SoundGramStyle">Velora-Stil &amp; Audioeffekte</string>
+    <string name="SoundGramEqualizer">Velora DSP-Equalizer</string>
     <string name="SoundGramEQGraph">🎛️ Equalizer-Diagramm</string>
     <string name="SoundGramEQEffects">✨ Effekte &amp; Klangfarbe</string>
     <string name="SoundGramPresetFlat">Flach</string>
@@ -108,10 +108,10 @@
     <string name="min">Min.</string>
     <string name="hour">Std.</string>
     <string name="day">Tage</string>
-    <string name="stat">SoundGram-Statistiken</string>
+    <string name="stat">Velora-Statistiken</string>
     <string name="imports">Titel importieren</string>
     <string name="im">Importieren (</string>
-    <string name="ims">In SoundGram importieren</string>
+    <string name="ims">In Velora importieren</string>
     <string name="src">Suchen</string>
     <string name="chus">Kanal-@Benutzernamen eingeben</string>
     <string name="imm">Musik aus Kanal importieren</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Künstler</string>
     <string name="sg_source_untitled">Ohne Titel</string>
     <string name="sg_eq_title">AudioFX &amp; Tonhöhe</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram-Equalizer</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram-Equalizer aktivieren</string>
+    <string name="sg_eq_hero_title">🎛️ Velora-Equalizer</string>
+    <string name="sg_eq_hero_switch_descr">Velora-Equalizer aktivieren</string>
     <string name="sg_eq_status_active">Aktiviert und aktiv</string>
     <string name="sg_eq_status_disabled">Deaktiviert</string>
     <string name="sg_eq_section_graph">📈 10-BAND INTERAKTIVER EQUALIZER-GRAPH</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Titelliste</string>
     <string name="sg_style_tracks_subtitle">Halbtransparente Trennlinien und Hintergrund</string>
     <string name="sg_style_eq_title">Equalizer</string>
-    <string name="sg_style_eq_subtitle">Glasoberfläche für den SoundGram-Equalizer</string>
+    <string name="sg_style_eq_subtitle">Glasoberfläche für den Velora-Equalizer</string>
     <string name="sg_sphere_settings">SPHÄREN-EINSTELLUNGEN „MEINE WELLE“</string>
     <string name="sg_sphere_size_title">Sphärengröße</string>
     <string name="sg_sphere_size_subtitle">3D-Sphären-Skalierung: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Wiederholen</string>
     <string name="AccDescrShuffle">Zufallswiedergabe</string>
     <string name="AccDescrEqualizer">Equalizer</string>
-    <string name="NimarkoGramSettings">SoundGram-Einstellungen</string>
+    <string name="NimarkoGramSettings">Velora-Einstellungen</string>
     <string name="NM_Cat_General">Allgemein</string>
     <string name="NM_Cat_Appearance">Erscheinungsbild</string>
     <string name="NM_Cat_Chats">Chats</string>

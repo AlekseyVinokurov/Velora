@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Włącza lokalnie funkcje interfejsu użytkownika Telegram Premium (podwójne limity, znaczniki folderów itp.)</string>
-    <string name="NimarkoAbout">O SoundGramie</string>
-    <string name="NimarkoAboutAuthor">autorstwa @soundgram_project</string>
+    <string name="NimarkoAbout">O Veloraie</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">Akcent jako kolor powiadomienia</string>
     <string name="NimarkoAdminsShortcut">Skrót administratora</string>
     <string name="NimarkoAltOpenAnim">Alternatywna otwarta animacja</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">Naklejki</string>
     <string name="NimarkoSectionTabsTitles">Zakładki i tytuły</string>
     <string name="NimarkoSectionVoiceTranslation">Głos i tłumaczenie</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Pokaż znaczniki czasu akcji</string>
     <string name="NimarkoShowAddToSaved">Dodaj do zapisanych wiadomości</string>
     <string name="NimarkoShowClearHistory">Pokaż Wyczyść historię</string>

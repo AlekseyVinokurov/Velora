@@ -19,8 +19,8 @@ import org.telegram.tgnet.TLRPC;
 import java.util.ArrayList;
 
 public abstract class BaseRemoteHelper {
-    public static final long CHANNEL_METADATA_ID = 3720083750L;
-    public static final String CHANNEL_METADATA_NAME = "Soundgram_updates";
+    public static final long CHANNEL_METADATA_ID = 0L;
+    public static final String CHANNEL_METADATA_NAME = org.telegram.messenger.BuildConfig.VELORA_UPDATE_CHANNEL;
 
     protected static final SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoremoteconfig", Activity.MODE_PRIVATE);
 
@@ -121,6 +121,10 @@ public abstract class BaseRemoteHelper {
     }
 
     private void load(boolean forceRefreshAccessHash, Delegate delegate) {
+        if (TextUtils.isEmpty(CHANNEL_METADATA_NAME)) {
+            if (delegate != null) onError("Velora update channel is not configured", delegate);
+            return;
+        }
         TLRPC.TL_contacts_resolveUsername req1 = new TLRPC.TL_contacts_resolveUsername();
         req1.username = CHANNEL_METADATA_NAME;
         getConnectionsManager().sendRequest(req1, (response1, error1) -> {

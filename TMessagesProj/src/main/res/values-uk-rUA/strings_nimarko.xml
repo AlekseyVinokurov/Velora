@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Вмикає функції Telegram Premium UI локально (подвійні обмеження, теги папок тощо)</string>
-    <string name="NimarkoAbout">Про SoundGram</string>
-    <string name="NimarkoAboutAuthor">від @soundgram_project</string>
+    <string name="NimarkoAbout">Про Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">Акцент як колір сповіщень</string>
     <string name="NimarkoAdminsShortcut">Ярлик адміністратора</string>
     <string name="NimarkoAltOpenAnim">Альтернативна відкрита анімація</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">наклейки</string>
     <string name="NimarkoSectionTabsTitles">Вкладки та заголовки</string>
     <string name="NimarkoSectionVoiceTranslation">Голос і переклад</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Показати позначки часу дії</string>
     <string name="NimarkoShowAddToSaved">Додати до збережених повідомлень</string>
     <string name="NimarkoShowClearHistory">Показати Очистити історію</string>

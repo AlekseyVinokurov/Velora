@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="XChannel">SoundGram Kanalı</string>
+    <string name="XChannel">Velora Kanalı</string>
     <string name="EnableSaveDeletedMessages">Silinen Mesajları Kaydet</string>
     <string name="DeletedMessage">silindi</string>
     <string name="EnableSaveEditsHistory">Düzenleme Geçmişini Kaydet</string>
@@ -322,7 +322,7 @@
     <string name="sg_chat_list_background">Sohbet listesi arka planı</string>
     <string name="sg_choose_from_gallery">Galeriden Seç</string>
     <string name="sg_delete_background">Arka planı sil</string>
-    <string name="sg_soundgram_status">💎 SoundGram Durumu</string>
+    <string name="sg_soundgram_status">💎 Velora Durumu</string>
     <string name="sg_status_member">Üye</string>
     <string name="sg_eq_notice">⚡ Hız, ton ve efektler yalnızca müzik parçalarına uygulanır</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

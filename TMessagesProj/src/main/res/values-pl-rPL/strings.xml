@@ -18,7 +18,7 @@
     <string name="AccDescrGIFs">GIF-y</string>
     <string name="AccDescrStickers">Naklejki</string>
     <string name="ActionsChartTitle">Działania</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Czy na pewno?</string>
     <string name="AvatarPreviewSearchMessages">Szukaj wiadomości</string>
     <string name="Back">Wstecz</string>
@@ -237,7 +237,7 @@
     <string name="NM_Config_Exported">Ustawienia zapisane do pliku</string>
     <string name="NM_Config_Header">Konfiguracja</string>
     <string name="NM_Config_Import">Importuj ustawienia</string>
-    <string name="NM_Config_ImportEmpty">Wybrany plik nie jest konfiguracją SoundGram</string>
+    <string name="NM_Config_ImportEmpty">Wybrany plik nie jest konfiguracją Velora</string>
     <string name="NM_Config_Info">Zapisz ustawienia do pliku lub przywróć je na innym urządzeniu.</string>
     <string name="NM_CustomTitle">Tytuł aplikacji</string>
     <string name="NM_DBG_AudioSource">Źródło dźwięku mikrofonu</string>
@@ -283,7 +283,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Wysyłaj emoji premium bez subskrypcji.</string>
     <string name="NM_GEN_MiscHeader">Różne</string>
     <string name="NM_GE_UploadSpeedBoost">Szybsze wysyłanie</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram bazuje na Telegramie; funkcje z SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Kod źródłowy</string>
     <string name="NM_HideActionBarStatus">Ukryj status w nagłówku</string>
     <string name="NM_HideBubbleTail">Ukryj ogonki dymków</string>
@@ -439,5 +439,5 @@
     <string name="TranslateMessage">Przetłumacz</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">Wyłączona</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

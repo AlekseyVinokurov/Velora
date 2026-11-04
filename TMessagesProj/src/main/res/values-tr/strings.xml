@@ -41,7 +41,7 @@
     <string name="ResetPluginSettingsInfo">**%1$s** ayarlarını varsayılana sıfırlamak istediğinize emin misiniz?</string>
     <string name="RestartRequired">Değişikliklerin etkili olması için uygulamayı yeniden başlatın.</string>
     <string name="UpdatePlugin">Güncelle</string>
-<string name="ForkedByNimarko">SoundGram tarafından çatallandı</string><string name="PluginIncompatible">Uyumsuz eklenti</string><string name="PluginIncompatibleInfo">Bu eklenti uygulamanın daha yeni bir sürümünü gerektiriyor.</string><string name="PluginsDevMode">Geliştirici modu</string><string name="PluginsDevServerLaunched">Geliştirme sunucusu başlatıldı.</string><string name="PluginsDevServerStopped">Geliştirme sunucusu durduruldu.</string><string name="PluginsDisableAll">Tümünü devre dışı bırak</string><string name="PluginsDisableAllConfirm">Tüm etkin eklentiler devre dışı bırakılsın mı?</string><string name="PluginsDisabledN">%1$d eklenti devre dışı bırakıldı.</string><string name="PluginsPoweredBy"><![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]> eklenti motoru tarafından sağlanmaktadır.</string><string name="PluginsPySdkAutoUpdate">SDK\'yı otomatik güncelle</string><string name="PluginsPySdkCheckUpdates">SDK güncellemelerini denetle</string><string name="PluginsPySdkEnableBetaVersion">Beta SDK kullan</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">SoundGram\'da çevrimiçi güncellemeler devre dışı.</string><string name="PluginsRestartEngine">Motoru yeniden başlat</string><string name="PluginsRestartingEngine">Eklenti motoru yeniden başlatılıyor…</string><string name="PluginsRowSubtitle">Uygulamayı genişleten Python betikleri</string><string name="PluginsSafeModeInfo2">Tüm eklentiler devre dışı bırakıldı. Sorun çıkaranı bulmak için tek tek tekrar etkinleştirin.</string><string name="PluginsSafeModeOff">Güvenli mod devre dışı.</string><string name="PluginsSafeModeOn">Güvenli mod etkin. Eklentiler otomatik yüklenmeyecek.</string>    <string name="AP_CenterTitle">Ortalanmış başlık</string>
+<string name="ForkedByNimarko">Velora based on SoundGram</string><string name="PluginIncompatible">Uyumsuz eklenti</string><string name="PluginIncompatibleInfo">Bu eklenti uygulamanın daha yeni bir sürümünü gerektiriyor.</string><string name="PluginsDevMode">Geliştirici modu</string><string name="PluginsDevServerLaunched">Geliştirme sunucusu başlatıldı.</string><string name="PluginsDevServerStopped">Geliştirme sunucusu durduruldu.</string><string name="PluginsDisableAll">Tümünü devre dışı bırak</string><string name="PluginsDisableAllConfirm">Tüm etkin eklentiler devre dışı bırakılsın mı?</string><string name="PluginsDisabledN">%1$d eklenti devre dışı bırakıldı.</string><string name="PluginsPoweredBy"><![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]> eklenti motoru tarafından sağlanmaktadır.</string><string name="PluginsPySdkAutoUpdate">SDK\'yı otomatik güncelle</string><string name="PluginsPySdkCheckUpdates">SDK güncellemelerini denetle</string><string name="PluginsPySdkEnableBetaVersion">Beta SDK kullan</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Velora\'da çevrimiçi güncellemeler devre dışı.</string><string name="PluginsRestartEngine">Motoru yeniden başlat</string><string name="PluginsRestartingEngine">Eklenti motoru yeniden başlatılıyor…</string><string name="PluginsRowSubtitle">Uygulamayı genişleten Python betikleri</string><string name="PluginsSafeModeInfo2">Tüm eklentiler devre dışı bırakıldı. Sorun çıkaranı bulmak için tek tek tekrar etkinleştirin.</string><string name="PluginsSafeModeOff">Güvenli mod devre dışı.</string><string name="PluginsSafeModeOn">Güvenli mod etkin. Eklentiler otomatik yüklenmeyecek.</string>    <string name="AP_CenterTitle">Ortalanmış başlık</string>
     <string name="AP_DisableDividers">Ayırıcıları gizle</string>
     <string name="AP_GlareOnElements">Öğelerdeki parlama</string>
     <string name="AP_GlareOnElementsInfo">Sıvı cam öğelerinde üst ve alt vurguları göster.</string>
@@ -59,7 +59,7 @@
     <string name="AccDescrGIFs">GIF\'ler</string>
     <string name="AccDescrStickers">Çıkartmalar</string>
     <string name="ActionsChartTitle">Eylemler</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Emin misiniz?</string>
     <string name="AvatarPreviewSearchMessages">Mesajları Ara</string>
     <string name="Back">Geri</string>
@@ -278,7 +278,7 @@
     <string name="NM_Config_Exported">Ayarlar dosyaya kaydedildi</string>
     <string name="NM_Config_Header">Yapılandırma</string>
     <string name="NM_Config_Import">Ayarları içe aktar</string>
-    <string name="NM_Config_ImportEmpty">Seçilen dosya bir SoundGram yapılandırması değil</string>
+    <string name="NM_Config_ImportEmpty">Seçilen dosya bir Velora yapılandırması değil</string>
     <string name="NM_Config_Info">Ayarları bir dosyaya kaydedin veya başka bir cihazda geri yükleyin.</string>
     <string name="NM_CustomTitle">Uygulama başlığı</string>
     <string name="NM_DBG_AudioSource">Mikrofon ses kaynağı</string>
@@ -324,7 +324,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Premium aboneliği olmadan premium emojiler gönderin.</string>
     <string name="NM_GEN_MiscHeader">Çeşitli</string>
     <string name="NM_GE_UploadSpeedBoost">Daha hızlı yüklemeler</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram resmi Telegram üzerinde oluşturulmuştur; özellikler SoundGram\'dan aktarılmıştır.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Kaynak kodu</string>
     <string name="NM_HideActionBarStatus">Başlık çubuğu durumunu gizle</string>
     <string name="NM_HideBubbleTail">Mesaj kuyruklarını gizle</string>
@@ -476,5 +476,5 @@
     <string name="TranslateMessage">Çevir</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">Devre dışı</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

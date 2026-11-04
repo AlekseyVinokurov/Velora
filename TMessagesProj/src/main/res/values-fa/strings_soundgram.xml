@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">کلاینت پیشرفته تجربه صوتی</string>
-    <string name="SoundGramStyle">سبک و جلوه‌های صوتی SoundGram</string>
-    <string name="SoundGramEqualizer">اکولایزر DSP ساندگرام</string>
+    <string name="SoundGramStyle">سبک و جلوه‌های صوتی Velora</string>
+    <string name="SoundGramEqualizer">اکولایزر DSP Velora</string>
     <string name="SoundGramEQGraph">🎛️ نمودار اکولایزر</string>
     <string name="SoundGramEQEffects">✨ جلوه‌ها و تن صدا</string>
     <string name="SoundGramPresetFlat">یکنواخت</string>
@@ -108,10 +108,10 @@
     <string name="min">دقیقه</string>
     <string name="hour">ساعت</string>
     <string name="day">روز</string>
-    <string name="stat">آمار SoundGram</string>
+    <string name="stat">آمار Velora</string>
     <string name="imports">درون‌ریزی آهنگ‌ها</string>
     <string name="im">درون‌ریزی (</string>
-    <string name="ims">درون‌ریزی به SoundGram</string>
+    <string name="ims">درون‌ریزی به Velora</string>
     <string name="src">جستجو</string>
     <string name="chus">نام کاربری @کانال را وارد کنید</string>
     <string name="imm">درون‌ریزی موسیقی از کانال</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">خواننده</string>
     <string name="sg_source_untitled">بدون نام</string>
     <string name="sg_eq_title">جلوه‌های صوتی و تن</string>
-    <string name="sg_eq_hero_title">🎛️ اکولایزر SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">فعال‌سازی اکولایزر SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ اکولایزر Velora</string>
+    <string name="sg_eq_hero_switch_descr">فعال‌سازی اکولایزر Velora</string>
     <string name="sg_eq_status_active">فعال و در حال کار</string>
     <string name="sg_eq_status_disabled">غیرفعال</string>
     <string name="sg_eq_section_graph">📈 نمودار اکولایزر تعاملی ۱۰ بانده</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ کنسرت سه‌بعدی</string>
     <string name="sg_eq_rule_bassmax">🔊 حداکثر باس</string>
-    <string name="sg_style_title">ظاهر SoundGram</string>
+    <string name="sg_style_title">ظاهر Velora</string>
     <string name="sg_style_section_glass">سبک شیشه مات (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">پخش‌کننده صوتی</string>
     <string name="sg_style_player_subtitle">جلوه شیشه مات برای پخش‌کننده کامل</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">فهرست آهنگ‌ها</string>
     <string name="sg_style_tracks_subtitle">جداکننده‌ها و پس‌زمینه نیمه‌شفاف آهنگ‌ها</string>
     <string name="sg_style_eq_title">اکولایزر</string>
-    <string name="sg_style_eq_subtitle">رابط کاربری شیشه‌ای برای اکولایزر ساندگرام</string>
+    <string name="sg_style_eq_subtitle">رابط کاربری شیشه‌ای برای اکولایزر Velora</string>
     <string name="sg_sphere_settings">تنظیمات کره سه‌بعدی «موج من»</string>
     <string name="sg_sphere_size_title">اندازه کره</string>
     <string name="sg_sphere_size_subtitle">مقیاس کره سه‌بعدی: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">تکرار</string>
     <string name="AccDescrShuffle">پخش تصادفی</string>
     <string name="AccDescrEqualizer">اکولایزر</string>
-    <string name="NimarkoGramSettings">تنظیمات SoundGram</string>
+    <string name="NimarkoGramSettings">تنظیمات Velora</string>
     <string name="NM_Cat_General">عمومی</string>
     <string name="NM_Cat_Appearance">ظاهر</string>
     <string name="NM_Cat_Chats">گفتگوها</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Telegram プレミアム UI 機能をローカルで有効にします (二重制限、フォルダー タグなど)。</string>
-    <string name="NimarkoAbout">サウンドグラムについて</string>
-    <string name="NimarkoAboutAuthor">@soundgram_project より</string>
+    <string name="NimarkoAbout">Veloraについて</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">通知色としてのアクセント</string>
     <string name="NimarkoAdminsShortcut">管理者のショートカット</string>
     <string name="NimarkoAltOpenAnim">代替の開くアニメーション</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">ステッカー</string>
     <string name="NimarkoSectionTabsTitles">タブとタイトル</string>
     <string name="NimarkoSectionVoiceTranslation">音声と翻訳</string>
-    <string name="NimarkoSettingsTitle">サウンドグラム</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">アクションのタイムスタンプを表示する</string>
     <string name="NimarkoShowAddToSaved">保存されたメッセージに追加</string>
     <string name="NimarkoShowClearHistory">履歴の消去を表示</string>

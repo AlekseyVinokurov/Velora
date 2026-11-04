@@ -2,8 +2,8 @@
 <resources>
     <!-- NimarkoGram настройки (отсортировано по ключу) -->
     <string name="LocalPremiumNotice">Включает функции Telegram Premium локально (удвоенные лимиты, теги папок и др.)</string>
-    <string name="NimarkoAbout">О SoundGram</string>
-    <string name="NimarkoAboutAuthor">от @soundgram_project</string>
+    <string name="NimarkoAbout">О Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (первоисточник)</string>
     <string name="NimarkoAccentAsNotif">Акцент как цвет уведомлений</string>
     <string name="NimarkoAdminsShortcut">Ярлык «Администраторы»</string>
     <string name="NimarkoAltOpenAnim">Альтернативная анимация открытия</string>
@@ -161,7 +161,7 @@
     <string name="NimarkoSectionStickers">Стикеры</string>
     <string name="NimarkoSectionTabsTitles">Вкладки и заголовки</string>
     <string name="NimarkoSectionVoiceTranslation">🎤 Голос и перевод</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Показывать время действий</string>
     <string name="NimarkoShowAddToSaved">Добавить в «Избранное»</string>
     <string name="NimarkoShowClearHistory">Показывать «Очистить историю»</string>

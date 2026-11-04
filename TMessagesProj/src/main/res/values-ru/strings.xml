@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="NM_CP_Header_ChatView">Вид чата</string>
     <string name="NM_CP_Header_Interaction">Взаимодействие</string>
     <string name="NM_CP_Header_Media">Медиа</string>
@@ -12,7 +12,7 @@
     <string name="NM_CP_PreReformRussian_Desc">Исходящие сообщения – в дореформенном правописании (ѣ, і, ѳ, ъ).</string>
     <string name="EP_NavigationAnimationCrossfading">Плавная смена заголовка</string>
     <string name="NM_SettingsDesc_NavigationCrossfade">Анимация перехода при смене экранов</string>
-    <string name="AppNameBeta">SoundGram Beta</string>
+    <string name="AppNameBeta">Velora Beta</string>
     <string name="LanguageName">Русский</string>
     <string name="English">Английский</string>
     <string name="LanguageNameInEnglish">Russian</string>
@@ -38,21 +38,21 @@
     <string name="WrongNumberFormat">Некорректный формат</string>
     <string name="ShortNumberInfo">Указанный номер слишком короткий для региона **%1$s**:\n\n**%2$s**\n\nУбедитесь, что правильно указываете номер. Он должен начинаться с кода страны.</string>
     <string name="EditNumber">Изменить номер</string>
-    <string name="DidNotGetTheCodeInfo">Если Вы не получили звонок или SMS с кодом, проверьте настройки сотовой связи и указанный Вами номер:\n\n**%1$s**\n\nЕсли это не помогло, Вы можете указать другой номер телефона или связаться с командой поддержки SoundGram. Чтобы сообщить нам о проблеме и отправить техническую информацию для диагностики, нажмите **Помощь**.</string>
+    <string name="DidNotGetTheCodeInfo">Если Вы не получили звонок или SMS с кодом, проверьте настройки сотовой связи и указанный Вами номер:\n\n**%1$s**\n\nЕсли это не помогло, Вы можете указать другой номер телефона или связаться с командой поддержки Telegram. Чтобы сообщить нам о проблеме и отправить техническую информацию для диагностики, нажмите **Помощь**.</string>
     <string name="DidNotGetTheCodeHelpButton">Помощь</string>
     <string name="DidNotGetTheCodeEditNumberButton">Другой номер</string>
     
     <string name="YourCode">Проверка телефона</string>
     <string name="SentSmsCode">Мы отправили SMS с кодом проверки на Ваш телефон **%1$s**.</string>
-    <string name="SentAppCode">Мы отправили код в приложение **SoundGram** на другом Вашем устройстве.</string>
-    <string name="SentAppCodeWithPhone">Мы отправили код через **SoundGram** на другое устройство, где авторизован %1$s.</string>
-    <string name="SentAppCodeTitle">Проверьте сообщения в SoundGram</string>
+    <string name="SentAppCode">Мы отправили код в приложение **Telegram** на другом Вашем устройстве.</string>
+    <string name="SentAppCodeWithPhone">Мы отправили код через **Telegram** на другое устройство, где авторизован %1$s.</string>
+    <string name="SentAppCodeTitle">Проверьте сообщения в Telegram</string>
     <string name="SentFragmentCode">Получите код для %1$s в разделе Anonymous Numbers платформы Fragment.</string>
     <string name="SentSmsCodeTitle">Введите код</string>
     <string name="OpenFragment">Перейти к Fragment</string>
-    <string name="SentCallCode">Наш робот звонит на номер **%1$s**.\n\nОтвечать на звонок не требуется, SoundGram автоматически получит код для входа.</string>
+    <string name="SentCallCode">Наш робот звонит на номер **%1$s**.\n\nОтвечать на звонок не требуется, Velora автоматически получит код для входа.</string>
     <string name="SentCallOnly">Мы звоним Вам по номеру **%1$s**, чтобы продиктовать код.</string>
-    <string name="CallText">SoundGram позвонит Вам через %1$d:%2$02d</string>
+    <string name="CallText">Velora позвонит Вам через %1$d:%2$02d</string>
     <string name="SmsText">Мы отправим Вам SMS через %1$d:%2$02d</string>
     <string name="Calling">Звоним вам...</string>
     <string name="SendingSms">Отправка SMS...</string>
@@ -63,7 +63,7 @@
     <string name="DidNotGetTheCodeSms">Отправить код через SMS</string>
     <string name="DidNotGetTheCodeFragment">Получить код на платформе Fragment</string>
     <string name="CancelAccountReset">Отмена сброса аккаунта</string>
-    <string name="CancelAccountResetInfo2">Кто-то с доступом к **%1$s** запросил удаление Вашего аккаунта SoundGram и сброс пароля двухэтапной аутентификации.\n\nЕсли это были не Вы, введите код из SMS, отправленного на Ваш номер. Вы также можете отменить удаление, *изменив номер телефона*.</string>
+    <string name="CancelAccountResetInfo2">Кто-то с доступом к **%1$s** запросил удаление Вашего аккаунта Telegram и сброс пароля двухэтапной аутентификации.\n\nЕсли это были не Вы, введите код из SMS, отправленного на Ваш номер. Вы также можете отменить удаление, *изменив номер телефона*.</string>
     <string name="ResetAccount">Сброс аккаунта</string>
     <string name="ResetAccountInfo">Поскольку аккаунт **%1$s** используется и защищён паролем, в целях безопасности мы удалим его только через неделю.\n\nВы можете передумать и остановить отсчёт в любой момент.</string>
     <string name="ResetAccountStatus">Вы сможете сбросить свой аккаунт через:</string>
@@ -72,7 +72,7 @@
     <string name="CancelLinkExpired">Ссылка неверна или устарела.</string>
     <string name="CancelLinkSuccessTitle">Готово</string>
     <string name="CancelLinkSuccess">Удаление аккаунта %1$s отменено. Это окно можно закрыть.</string>
-    <string name="OtherLoginCode">Ваш код для входа: **%1$s**. Укажите его в приложении SoundGram, в котором хотите зайти в свой аккаунт.\n\nНикому не передавайте этот код.</string>
+    <string name="OtherLoginCode">Ваш код для входа: **%1$s**. Укажите его в приложении Telegram, в котором хотите зайти в свой аккаунт.\n\nНикому не передавайте этот код.</string>
     <string name="SmsAvailableIn">Вы сможете запросить SMS через %1$d:%2$02d</string>
     <string name="ResendSmsAvailableIn">Вы сможете повторно запросить SMS через %1$d:%2$02d</string>
     <string name="RequestSmsButton">Получить SMS с кодом</string>
@@ -128,7 +128,7 @@
     <string name="PleaseEnterNewSecondPasswordHint">Повторите новый пароль</string>
     <string name="RecoveryEmail">Электронная почта</string>
     <string name="RecoveryEmailTitle">Электронная почта</string>
-    <string name="RecoveryEmailSubtitle">Вы можете задать адрес электронной почты для сброса пароля и восстановления доступа к своему аккаунту в SoundGram.</string>
+    <string name="RecoveryEmailSubtitle">Вы можете задать адрес электронной почты для сброса пароля и восстановления доступа к своему аккаунту в Telegram.</string>
     <string name="YourEmail">Адрес электронной почты</string>
     <string name="YourNewEmail">Ваш новый адрес</string>
     <string name="YourLoginEmailChangedSuccess">Электронная почта изменена.</string>
@@ -209,9 +209,9 @@
     <string name="VerificationCode">Код подтверждения</string>
     <string name="EnterCode">Ввести код</string>
     <string name="ResendCodeInfo">На Ваш email отправлен код подтверждения.</string>
-    <string name="EnabledPasswordText">Установлен облачный пароль.\nВам нужно будет вводить его для входа в свой аккаунт в SoundGram.</string>
+    <string name="EnabledPasswordText">Установлен облачный пароль.\nВам нужно будет вводить его для входа в свой аккаунт в Telegram.</string>
     <string name="AddEmailTitle">Укажите почту для входа</string>
-    <string name="AddEmailSubtitle">Вы будете получать коды для входа в SoundGram на адрес электронной почты, а не через SMS. Пожалуйста, введите адрес, к которому у Вас есть доступ.</string>
+    <string name="AddEmailSubtitle">Вы будете получать коды для входа в Velora на адрес электронной почты, а не через SMS. Пожалуйста, введите адрес, к которому у Вас есть доступ.</string>
     <string name="EnterNewEmail">Укажите новый адрес</string>
     <string name="VerificationCodeSubtitle">Проверьте почту %1$s (не забудьте о папке со спамом) и введите код, который получили в письме.</string>
     <string name="CheckYourEmail">Проверьте почту</string>
@@ -220,18 +220,18 @@
     <string name="CheckYourNewEmailSubtitle">Введите код, который пришёл на указанный Вами адрес %1$s.</string>
     <string name="LoginOrSingInWithGoogle">или</string>
     
-    <string name="Page1Title">SoundGram</string>
+    <string name="Page1Title">Velora</string>
     <string name="Page2Title">Быстрый</string>
     <string name="Page3Title">Бесплатный</string>
     <string name="Page4Title">Безопасный</string>
     <string name="Page5Title">Мощный</string>
     <string name="Page6Title">Облачный</string>
     <string name="Page1Message">Самый **быстрый** мессенджер в мире.\n**Бесплатный** и **безопасный**.</string>
-    <string name="Page2Message">**SoundGram** доставляет сообщения быстрее\nлюбого другого приложения.</string>
-    <string name="Page3Message">**SoundGram** предоставляет бесплатное безлимитное облачное хранилище для чатов и медиа.\n</string>
-    <string name="Page4Message">**SoundGram** защищает Вашу переписку от злоумышленников.</string>
-    <string name="Page5Message">**SoundGram** не ограничивает размер\n Ваших медиафайлов и чатов.</string>
-    <string name="Page6Message">В **SoundGram** можно переписываться с любого количества устройств.</string>
+    <string name="Page2Message">**Velora** доставляет сообщения быстрее\nлюбого другого приложения.</string>
+    <string name="Page3Message">**Velora** предоставляет бесплатное безлимитное облачное хранилище для чатов и медиа.\n</string>
+    <string name="Page4Message">**Velora** защищает Вашу переписку от злоумышленников.</string>
+    <string name="Page5Message">**Velora** не ограничивает размер\n Ваших медиафайлов и чатов.</string>
+    <string name="Page6Message">В **Velora** можно переписываться с любого количества устройств.</string>
     <string name="StartMessaging">Начать общение</string>
     
     <string name="formatterBoostExpired">dd MMM yyyy</string>
@@ -292,7 +292,7 @@
     <string name="PluginsSafeModeInfo2">Все плагины отключены. Включайте их по одному, чтобы найти проблемный.</string>
     <string name="PluginsDocumentation">Документация</string>
     <string name="PluginsTrusted">Доверенные плагины</string>
-    <string name="ForkedByNimarko">Форкнуто SoundGram</string>
+    <string name="ForkedByNimarko">Velora на основе SoundGram</string>
     <string name="PluginsPoweredBy">Движок плагинов адаптирован из &lt;a href="https://github.com/exteraSquad/exteraGram"&gt;exteraGram&lt;/a&gt;.</string>
     <string name="PluginsNotFound">Плагины ещё не установлены.</string>
     <string name="PluginNoDescription">Нет описания</string>
@@ -320,7 +320,7 @@
     <string name="PluginsSafeModeOff">Безопасный режим выключен</string>
     <string name="PluginsSafeModeOn">Безопасный режим включён</string>
 <string name="Preferences">Настройки exteraGram</string><string name="Links">Ссылки</string><string name="EnablePluginsEngine">Включить систему плагинов</string><string name="PluginNotEnabled">Включите **Систему плагинов**, чтобы установить **%1$s**.</string><string name="PluginInstalledButFailedToEnable">**%1$s** установлен, но при включении произошла ошибка.</string><string name="PluginEnableError">Не удалось включить **%1$s**.</string><string name="PluginDisableError">Не удалось выключить **%1$s**.</string><string name="PluginIsNotResponding">Плагин не отвечает.</string><string name="PluginIsNotRespondingAlert">%1$s не отвечает</string><string name="EnterValue">Введите значение</string><string name="PluginDelete">Удалить плагин</string><string name="PluginDeleteInfo">Вы уверены, что хотите удалить **%1$s**?</string><string name="ResetPluginSettings">Настройки **%1$s** были сброшены.</string><string name="ResetPluginSettingsInfo">Вы уверены, что хотите сбросить настройки **%1$s** до стандартных?</string><string name="PluginEngineNotEnabled">Включите **Систему плагинов**, чтобы открыть настройки **%1$s**.</string><string name="PluginNotFound">**%1$s** не найден.</string><string name="PluginHasNoSettings">**%1$s** не имеет настроек.</string><string name="PluginsDevMode">Режим разработчика</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkAutoUpdate">Авто-обновление SDK</string><string name="PluginsPySdkEnableBetaVersion">Использовать бета SDK</string><string name="PluginsPySdkCheckUpdates">Проверить обновления SDK</string>
-    <string name="NimarkoGramSettings">Настройки SoundGram</string>
+    <string name="NimarkoGramSettings">Настройки Velora</string>
     <string name="Privacy">Конфиденциальность</string>
     <string name="ChatTweaks">Настройки чата</string>
     <string name="HideProxySponsor">Скрыть рекламу прокси</string>
@@ -545,8 +545,8 @@
     <string name="NM_HUB_Header_Misc">Разное</string>
     <string name="NM_HUB_Restart">Перезапустить приложение</string>
     <string name="NM_HUB_SourceCode">Исходный код</string>
-    <string name="NM_HUB_ForkedFromCherrygram">SoundGram</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram построен на официальном клиенте Telegram с полным набором расширенных возможностей.</string>
+    <string name="NM_HUB_ForkedFromCherrygram">Velora</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora — независимый неофициальный клиент на основе SoundGram и Telegram для Android. Проект не связан с Telegram и не одобрен им. Благодарности: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram и exteraGram.</string>
     <string name="NM_HUB_Debug">Отладка</string>
     <string name="NM_HUB_Experimental">Экспериментальные</string>
 
@@ -660,7 +660,7 @@
     <string name="NM_MP_CustomizeProfile">Настроить профиль</string>
     <string name="NM_MP_ShowSeconds">Показывать время с секундами</string>
     <string name="NM_MP_ShowSeconds_Desc" translatable="false">12:34 -&gt; 12:34:56</string>
-    <string name="NM_MP_PreviewChannelMessage">Добро пожаловать в SoundGram — функциональный форк Telegram.</string>
+    <string name="NM_MP_PreviewChannelMessage">Добро пожаловать в Velora — функциональный форк Telegram.</string>
     <string name="NM_MP_DisablePremiumStatuses">Отключить Premium статусы</string>
     <string name="NM_MP_ReplyBackground">Фон в ответах</string>
     <string name="NM_MP_ReplyCustomColors">Кастомные цвета в ответах и превью ссылок</string>
@@ -719,7 +719,7 @@
     <string name="UP_ClearedUpdatesCache">Очищено %1$s кэша.</string>
     <string name="UP_NothingToClear">Нечего очищать.</string>
     <string name="UP_CheckForUpdates">Обновить приложение</string>
-    <string name="UP_Not_Found">У вас последняя версия SoundGram.</string>
+    <string name="UP_Not_Found">У вас последняя версия Velora.</string>
     <string name="UP_CheckFailed">Не удалось проверить наличие обновлений. Повторите попытку позже.</string>
     <string name="UP_Install">Установить</string>
     <string name="UP_DownloadFailed">Ошибка загрузки, нажмите ещё раз</string>
@@ -735,7 +735,7 @@
     <string name="NM_DownloadMedia_Done">Готово</string>
     <string name="NM_DownloadMedia_Error">Ошибка скачивания</string>
     <string name="NM_DownloadMedia_VideoBy">Видео от %1$s</string>
-    <string name="NM_MediaBuiltIn">**SoundGramMedia** уже встроен в клиент</string>
+    <string name="NM_MediaBuiltIn">**VeloraMedia** уже встроен в клиент</string>
     
     <string name="NM_BAN_Title">Баннеры</string>
     <string name="NM_BAN_Enable">Система баннеров</string>
@@ -781,7 +781,7 @@
     <string name="NM_Config_Info">Сохраните настройки в файл или восстановите их на другом устройстве.</string>
     <string name="NM_Config_Exported">Настройки сохранены в файл</string>
     <string name="NM_Config_Error">Не удалось</string>
-    <string name="NM_Config_ImportEmpty">Выбранный файл — не конфигурация SoundGram</string>
+    <string name="NM_Config_ImportEmpty">Выбранный файл — не конфигурация Velora</string>
     <string name="NM_BAN_GlobalHeader">Глобальный баннер</string>
     <string name="NM_BAN_LocalHeader">Локальный баннер</string>
     <string name="NM_BAN_ExtraHeader">Дополнительно</string>
@@ -845,7 +845,7 @@
     <string name="NM_BAN_QualityHeader">Качество</string>
     <string name="NM_BAN_SoundOn">Звук включён</string>
     <string name="NM_BAN_SoundOff">Звук выключен</string>
-    <string name="NM_BAN_PluginIntegrated">**SoundGramBanner** уже встроен в клиент</string>
+    <string name="NM_BAN_PluginIntegrated">**VeloraBanner** уже встроен в клиент</string>
     <string name="NM_CARDS_Title">Инфо-карточки</string>
     <string name="NM_CARDS_GeneralHeader">Основное</string>
     <string name="NM_CARDS_Enable">Включить</string>
@@ -872,7 +872,7 @@
     <string name="NM_CARDS_NameProxy">Прокси</string>
     <string name="NM_CARDS_Footer">Перетаскивайте для сортировки. Нажмите на карточку для настройки.</string>
     <string name="NM_WSBypassBuiltIn">**Обход блокировок** уже встроен в клиент</string>
-    <string name="NM_NM_Title">SoundGramMedia</string>
+    <string name="NM_NM_Title">VeloraMedia</string>
     <string name="NM_NM_SupportedPlatforms">Поддерживаемые платформы</string>
     <string name="NM_NM_PlatformsList">TikTok, YouTube, SoundCloud, Instagram, Twitter / X, Reddit, VK, Pinterest, Bluesky, Twitch, Vimeo, Dailymotion.</string>
     <string name="NM_NM_HowItWorks">Зажмите сообщение со ссылкой с поддерживаемой платформы и выберите «Скачать медиа». Файл загрузится через сервер и отправится в текущий чат.</string>
@@ -1205,7 +1205,7 @@
     <string name="CG_SendPhotoAsSticker">Отправить как стикер</string>
     <string name="CG_Sleep">Таймер сна</string>
     <string name="CG_Sleep_Disabled">Таймер сна отключен</string>
-    <string name="CG_Sleep_Permission">Разрешите SoundGram устанавливать точные будильники, чтобы таймер сна работал корректно.</string>
+    <string name="CG_Sleep_Permission">Разрешите Velora устанавливать точные будильники, чтобы таймер сна работал корректно.</string>
     <string name="CG_Sleep_Timer">Таймер сна установлен на **%s**</string>
     <string name="CG_SortByDate">Сортировка по дате сообщения</string>
     <string name="CG_SortByUnread">Сортировка по непрочитанным</string>
@@ -1324,9 +1324,9 @@
     <string name="NM_WSB_VoIP_Enable">Пропускать звонки через обход</string>
     <string name="NM_WSB_Subscribe_Header">Нужна подписка</string>
     <string name="NM_WSB_Subscribe_Info">Обход работает на собственной инфраструктуре. Чтобы продолжить им пользоваться, оставайтесь подписаны на канал хотя бы с одного аккаунта.</string>
-    <string name="NM_WSB_Subscribe_Button">Подписаться на @soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora на GitHub</string>
     <string name="NM_CP_LatexRendering">Отображать формулы LaTeX</string>
     <string name="NM_CP_LatexRendering_Desc">Распознаёт формулы внутри $…$ и $$…$$ в сообщениях.</string>
 <string name="AccActionPause">Пауза</string><string name="AccActionPlay">Воспроизведение</string><string name="AccDescrCustomEmoji">Пользовательские эмодзи</string><string name="AccDescrGIFs">GIF</string><string name="AccDescrStickers">Стикеры</string><string name="ActionsChartTitle">Действия</string><string name="AddAccount">Добавить аккаунт</string><string name="AddEmojiNotFound">Набор эмодзи не найден.</string><string name="AddStickersNotFound">Стикеры не найдены</string><string name="AnonymousNumber">Анонимный номер</string><string name="AppUpdateDownloadNow">Загрузить сейчас</string><string name="AppUpdateDownloading">Загрузка %1$d%%...</string><string name="AppUpdateRemindMeLater">Напомнить позже</string><string name="ArchivedChats">В архиве</string><string name="AreYouSure">Вы уверены?</string><string name="AuthAnotherClient">Сканировать QR-код</string><string name="AutomaticTranslation">Автоматический перевод</string><string name="AvatarPreviewSearchMessages">Поиск сообщений</string><string name="Back">Назад</string><string name="BoostChannel">Усилить канал</string><string name="BusinessHoursProfile">Часы работы</string><string name="BusinessHoursProfileNowOpen">Открыто</string><string name="BusinessProfileLocation">Адрес</string><string name="Call">Позвонить</string><string name="Calls">Звонки</string><string name="Cancel">Отмена</string><string name="CardNumberCopied">Номер карты скопирован в буфер обмена</string><string name="ChangePasscode">Сменить код-пароль</string><string name="ChangePermissions">Изменить разрешения</string><string name="ChannelAdministrators">Администраторы</string><string name="ChannelBlacklist">Удалённые пользователи</string><string name="ChannelMembers">Участники</string><string name="ChannelPermissions">Разрешения</string><string name="Clear">Очистить</string><string name="Close">Закрыть</string><string name="Copy">Копировать</string><string name="CopyLink">Скопировать ссылку</string><string name="CustomAvatarTooltip">фотография, установленная вами</string><string name="Deactivate">УДАЛИТЬ СЕЙЧАС</string><string name="Default">По умолчанию</string><string name="Delete">Удалить</string><string name="DeleteAll">Удалить всё</string><string name="DirectShare">Прямая отправка</string><string name="DirectShareInfo">Показывать недавние чаты в меню «Поделиться» Android</string><string name="DisablePasscodeTurnOff">Отключить</string><string name="Done">Готово</string><string name="Edit">Изменить</string><string name="EditAdminRights">Изменить права</string><string name="EditedMessage">изменено</string><string name="Emoji">Эмодзи</string><string name="ErrorOccurred">Произошла ошибка.</string><string name="EventLog">Недавние действия</string><string name="FallbackTooltip">публичная фотография</string><string name="FilterAddChats">Добавить чаты</string><string name="FilterAllChats">Все чаты</string><string name="FilterBots">Боты</string><string name="FilterChannels">Каналы</string><string name="FilterChats">Чаты</string><string name="FilterContacts">Контакты</string><string name="FilterGroups">Группы</string><string name="FilterNameNonMuted">Со звуком</string><string name="FilterNameUnread">Непрочитанные</string><string name="FilterNonContacts">Не из контактов</string><string name="FilterStories">Истории</string><string name="Forward">Переслать</string><string name="ForwardsRestrictedInfoChannel">Копирование и пересылка запрещены в этом канале.</string><string name="ForwardsRestrictedInfoGroup">Копирование и пересылка запрещены в этой группе.</string><string name="General">Основные</string><string name="Gift2TitleSelf1">Купить подарок</string><string name="Info">Информация</string><string name="InvalidFormatError">Неверный формат</string><string name="KickFromGroup">Удалить из группы</string><string name="Language">Язык</string><string name="LiteBatteryDisabled">Выкл.</string><string name="LiteBatteryEnabled">Вкл.</string><string name="LiteMode">Анимации</string><string name="LocalMiscellaneousCache">Прочее</string><string name="LogOut">Выйти</string><string name="MainTabsChats">Чаты</string><string name="MainTabsProfile">Профиль</string><string name="Mention">Упоминание</string><string name="Message">Сообщение</string><string name="MessagesSettings">Сообщения</string><string name="Music">Музыка</string><string name="MyProfile">Мой профиль</string><string name="NG_OpenEmojiPack">Открыть набор эмодзи</string><string name="NG_OpenStickerPack">Открыть набор стикеров</string><string name="NM_BT_MoveLeft">Переместить влево</string><string name="NM_BT_MoveRight">Переместить вправо</string><string name="NM_BT_TabDisabled">Выключено</string><string name="NM_BT_TabEnabled">Включено</string><string name="NewChannel">Создать канал</string><string name="NoHandleAppInstalled">Нет приложения для открытия файлов типа «%1$s», установите подходящее</string><string name="NoResultFoundFor">Ничего не найдено по запросу «%s».</string><string name="None">Нет</string><string name="Notifications">Уведомления</string><string name="NotificationsService">Фоновая служба соединения</string><string name="NotificationsSound">Звук уведомления</string><string name="NumberUnknown">Неизвестный</string><string name="OK">ОК</string><string name="Online">в сети</string><string name="PhoneMobile">Мобильный</string><string name="PinMessage">Закрепить</string><string name="PopupDisabled">Выключено</string><string name="ProfileBirthday">День рождения</string><string name="ProxySettings">Настройки прокси</string><string name="Quality1440Short">2K</string><string name="QualityAuto">Авто</string><string name="Reactions">Реакции</string><string name="Reply">Ответить</string><string name="ReportChat">Пожаловаться</string><string name="RepostToStory">Репост в историю</string><string name="Reset">Сбросить</string><string name="SafetyNetErrorOccurred">Произошла внутренняя ошибка. Повторите попытку позже.</string><string name="Save">Сохранить</string><string name="SaveForNotifications">Сохранить для уведомлений</string><string name="SaveToDownloads">Сохранить в Загрузки</string><string name="SaveToGallery">Сохранить в галерею</string><string name="SavedMessages">Избранное</string><string name="Search">Поиск</string><string name="SendMessage">Отправить сообщение</string><string name="Set">Установить</string><string name="Settings">Настройки</string><string name="SettingsAccount">Аккаунт</string><string name="SettingsAccountInfo">Номер, имя пользователя, описание</string><string name="SettingsAccounts">Аккаунты</string><string name="SettingsNotifications">Уведомления</string><string name="ShareFile">Поделиться</string><string name="ShareLink">Поделиться ссылкой</string><string name="ShortToday">сегодня</string><string name="StatisticsAndBoosts">Статистика и бусты</string><string name="StickersName">Стикеры</string><string name="TelegramPremium">Telegram Premium</string><string name="TextCopied">Текст скопирован в буфер обмена</string><string name="TosDeclineDeleteAccount">Внимание: это действие необратимо удалит ваш аккаунт Telegram вместе со всеми данными в облаке Telegram.
 
-Вы можете отменить удаление и сначала экспортировать данные в Telegram Desktop.</string><string name="TranslateMessage">Перевести</string><string name="TranslateTo">Перевести на</string><string name="TranslationTarget">Язык перевода</string><string name="UserColorApplied">Цвет вашего имени обновлен!</string><string name="UserColorTabProfile">Профиль</string><string name="UserRestrictionsCustom">Настроить</string><string name="VibrationDisabled">Отключена</string><string name="VideoCall">Видеозвонок</string><string name="ViewProfile">Просмотреть профиль &gt;</string><string name="ViewStatistics">Статистика</string><string name="Warning">Предупреждение</string><string name="Yesterday">вчера</string><string name="exteraAppName">SoundGram</string></resources>
+Вы можете отменить удаление и сначала экспортировать данные в Telegram Desktop.</string><string name="TranslateMessage">Перевести</string><string name="TranslateTo">Перевести на</string><string name="TranslationTarget">Язык перевода</string><string name="UserColorApplied">Цвет вашего имени обновлен!</string><string name="UserColorTabProfile">Профиль</string><string name="UserRestrictionsCustom">Настроить</string><string name="VibrationDisabled">Отключена</string><string name="VideoCall">Видеозвонок</string><string name="ViewProfile">Просмотреть профиль &gt;</string><string name="ViewStatistics">Статистика</string><string name="Warning">Предупреждение</string><string name="Yesterday">вчера</string><string name="exteraAppName">Velora</string></resources>

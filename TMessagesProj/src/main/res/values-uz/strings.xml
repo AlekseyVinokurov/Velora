@@ -24,7 +24,7 @@
     <string name="AccDescrGIFs">GIFlar</string>
     <string name="AccDescrStickers">Stikerlar</string>
     <string name="ActionsChartTitle">Harakatlar</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Ishonchingiz komilmi?</string>
     <string name="AvatarPreviewSearchMessages">Xabarlarni qidirish</string>
     <string name="Back">Orqaga</string>
@@ -243,7 +243,7 @@
     <string name="NM_Config_Exported">Sozlamalar faylga saqlandi</string>
     <string name="NM_Config_Header">Konfiguratsiya</string>
     <string name="NM_Config_Import">Sozlamalarni import qilish</string>
-    <string name="NM_Config_ImportEmpty">Tanlangan fayl SoundGram konfiguratsiyasi emas</string>
+    <string name="NM_Config_ImportEmpty">Tanlangan fayl Velora konfiguratsiyasi emas</string>
     <string name="NM_Config_Info">Sozlamalarni faylga saqlang yoki boshqa qurilmada tiklang.</string>
     <string name="NM_CustomTitle">Ilova sarlavhasi</string>
     <string name="NM_DBG_AudioSource">Mikrofon audio manbasi</string>
@@ -289,7 +289,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Premium obunasiz premium emojilarni yuborish.</string>
     <string name="NM_GEN_MiscHeader">Boshqa</string>
     <string name="NM_GE_UploadSpeedBoost">Tezroq yuklash</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram rasmiy Telegram asosida yaratilgan; funksiyalar SoundGramdan ko‘chirilgan.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Dastur kodi</string>
     <string name="NM_HideActionBarStatus">Yuqori paneldagi statusni yashirish</string>
     <string name="NM_HideBubbleTail">Xabar dumlarini yashirish</string>
@@ -443,5 +443,5 @@
     <string name="TranslateMessage">Tarjima qilish</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">O‘chirilgan</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

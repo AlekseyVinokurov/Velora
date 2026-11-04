@@ -357,7 +357,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             textView.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlueText));
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             textView.setTypeface(AndroidUtilities.bold());
-            textView.setText("SoundGram Bypass");
+            textView.setText("Velora Bypass");
             textView.setLines(1);
             textView.setMaxLines(1);
             textView.setSingleLine(true);

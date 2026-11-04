@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="XChannel">کانال SoundGram</string>
+    <string name="XChannel">کانال Velora</string>
     <string name="EnableSaveDeletedMessages">نمایش پیام‌های حذف شده</string>
     <string name="DeletedMessage">حذف شده</string>
     <string name="EnableSaveEditsHistory">ذخیره تاریخچه ویرایش پیام‌ها</string>
@@ -326,7 +326,7 @@
     <string name="sg_chat_list_background">پس‌زمینه لیست گفتگوها</string>
     <string name="sg_choose_from_gallery">انتخاب از گالری</string>
     <string name="sg_delete_background">حذف پس‌زمینه</string>
-    <string name="sg_soundgram_status">💎 وضعیت ساوندگرام</string>
+    <string name="sg_soundgram_status">💎 وضعیت Velora</string>
     <string name="sg_status_member">عضو</string>
     <string name="sg_eq_notice">⚡ سرعت، تن صدا و افکت‌ها فقط روی آهنگ‌ها اعمال می‌شوند</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

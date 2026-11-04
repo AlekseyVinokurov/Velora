@@ -71,7 +71,7 @@ public class MessagesPreviewCell extends LinearLayout {
         message.flags = 33027;
         message.message = incoming
                 ? "Message preview"
-                : "SoundGram";
+                : "Velora";
         message.media = new TLRPC.TL_messageMediaEmpty();
         message.out = !incoming;
         message.from_id = new TLRPC.TL_peerUser();
@@ -83,7 +83,7 @@ public class MessagesPreviewCell extends LinearLayout {
 
         MessageObject object = new MessageObject(account, message, true, false);
         object.forceAvatar = incoming;
-        object.customReplyName = incoming ? "Telegram" : "SoundGram";
+        object.customReplyName = incoming ? "Telegram" : "Velora";
         object.eventId = index + 1L;
         object.resetLayout();
         return object;

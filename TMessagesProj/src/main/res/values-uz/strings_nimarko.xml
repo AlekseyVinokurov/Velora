@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Enables Telegram Premium UI features locally (double limits, folder tags, etc.)</string>
-    <string name="NimarkoAbout">About SoundGram</string>
-    <string name="NimarkoAboutAuthor">by @soundgram_project</string>
+    <string name="NimarkoAbout">About Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">Bildirishnoma rangi sifatida aksent</string>
     <string name="NimarkoAdminsShortcut">Administrators shortcut</string>
     <string name="NimarkoAltOpenAnim">Muqobil ochiq animatsiya</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">Stikerlar</string>
     <string name="NimarkoSectionTabsTitles">Varaqlar va sarlavhalar</string>
     <string name="NimarkoSectionVoiceTranslation">Ovoz va tarjima</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Harakat vaqt belgilarini ko\'rsatish</string>
     <string name="NimarkoShowAddToSaved">Saqlangan xabarlarga qo\'shing</string>
     <string name="NimarkoShowClearHistory">Tarixni tozalashni ko\'rsatish</string>

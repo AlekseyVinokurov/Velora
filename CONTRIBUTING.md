@@ -8,7 +8,7 @@ Issues and pull requests may be written in English, Russian or Chinese.
 
 - Search existing issues for duplicates.
 - Reproduce the problem on the latest available build.
-- Record the Android version, device model, NimarkoGram version and exact steps.
+- Record the Android version, device model, Velora version and exact steps.
 - Remove account identifiers, chat content and other personal data from diagnostics.
 
 ## Pull requests

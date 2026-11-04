@@ -30,8 +30,8 @@ public class BuildVars {
     public static String APP_HASH = BuildConfig.TELEGRAM_API_HASH;
 
     public static String SAFETYNET_KEY = BuildConfig.GOOGLE_SAFETYNET_KEY;
-    public static String PLAYSTORE_APP_URL = "https://play.google.com/store/apps/details?id=org.telegram.messenger";
-    public static String HUAWEI_STORE_URL = "https://appgallery.huawei.com/app/C101184875";
+    public static String PLAYSTORE_APP_URL = "https://github.com/AlekseyVinokurov/Velora";
+    public static String HUAWEI_STORE_URL = "https://github.com/AlekseyVinokurov/Velora";
     public static String GOOGLE_AUTH_CLIENT_ID = BuildConfig.GOOGLE_AUTH_CLIENT_ID;
 
     public static String HUAWEI_APP_ID = BuildConfig.HUAWEI_APP_ID;

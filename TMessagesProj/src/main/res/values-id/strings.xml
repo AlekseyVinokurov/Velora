@@ -14,7 +14,7 @@
     <string name="PluginsSafeModeInfo2">Semua plugin dinonaktifkan. Aktifkan satu per satu untuk menemukan plugin bermasalah.</string>
     <string name="PluginsDocumentation">Dokumentasi</string>
     <string name="PluginsTrusted">Plugin tepercaya</string>
-    <string name="ForkedByNimarko">Difork oleh SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">Didukung oleh <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]>.</string>
     <string name="PluginsNotFound">Belum ada plugin terpasang.</string>
     <string name="PluginNoDescription">Tanpa deskripsi</string>
@@ -30,7 +30,7 @@
     <string name="PluginInstalled">Plugin terpasang</string>
     <string name="PluginUpdated">Plugin diperbarui</string>
     <string name="PluginInstallError">Gagal memasang plugin</string>
-<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in SoundGram.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">Judul di tengah</string>
+<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in Velora.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">Judul di tengah</string>
     <string name="AP_DisableDividers">Sembunyikan pemisah</string>
     <string name="AP_GlareOnElements">Silau pada elemen</string>
     <string name="AP_GlareOnElementsInfo">Tampilkan sorotan atas dan bawah pada elemen kaca cair.</string>
@@ -48,7 +48,7 @@
     <string name="AccDescrGIFs">GIF</string>
     <string name="AccDescrStickers">Stiker</string>
     <string name="ActionsChartTitle">Tindakan</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Apakah Anda yakin?</string>
     <string name="AvatarPreviewSearchMessages">Cari Pesan</string>
     <string name="Back">Kembali</string>
@@ -266,7 +266,7 @@
     <string name="NM_Config_Exported">Pengaturan disimpan ke file</string>
     <string name="NM_Config_Header">Konfigurasi</string>
     <string name="NM_Config_Import">Impor pengaturan</string>
-    <string name="NM_Config_ImportEmpty">File yang dipilih bukan konfigurasi SoundGram</string>
+    <string name="NM_Config_ImportEmpty">File yang dipilih bukan konfigurasi Velora</string>
     <string name="NM_Config_Info">Simpan pengaturan ke file atau pulihkan di perangkat lain.</string>
     <string name="NM_CustomTitle">Judul aplikasi</string>
     <string name="NM_DBG_AudioSource">Sumber audio mikrofon</string>
@@ -312,7 +312,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Kirim emoji premium tanpa langganan Premium.</string>
     <string name="NM_GEN_MiscHeader">Lain-lain</string>
     <string name="NM_GE_UploadSpeedBoost">Unggahan lebih cepat</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram dibangun di atas Telegram resmi; fitur di-porting dari SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Kode sumber</string>
     <string name="NM_HideActionBarStatus">Sembunyikan status di header</string>
     <string name="NM_HideBubbleTail">Sembunyikan ekor pesan</string>
@@ -464,5 +464,5 @@
     <string name="TranslateMessage">Terjemahkan</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">Nonaktif</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

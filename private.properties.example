@@ -1,10 +1,14 @@
+# Local configuration only; never commit private.properties or signing keys.
+# Obtain your own Telegram API credentials at https://my.telegram.org.
 TELEGRAM_API_ID=0
 TELEGRAM_API_HASH=
 GOOGLE_AUTH_CLIENT_ID=
 GOOGLE_SAFETYNET_KEY=
 GOOGLE_MAPS_API_KEY=
 HUAWEI_APP_ID=
-NIMARKO_UPDATE_ENDPOINT=
+# Optional Velora services; blank disables automatic updates / remote badges.
+VELORA_UPDATE_CHANNEL=
+VELORA_BADGES_URL=
 NIMARKO_MEDIA_API_URL=
 NIMARKO_API_BASE_URL=
 NIMARKO_BANNER_API_URL=

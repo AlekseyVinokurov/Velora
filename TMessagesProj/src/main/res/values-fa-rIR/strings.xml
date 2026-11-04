@@ -18,7 +18,7 @@
     <string name="AccDescrGIFs">گیف‌ها</string>
     <string name="AccDescrStickers">استیکرها</string>
     <string name="ActionsChartTitle">اقدامات</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">آیا مطمئن هستید؟</string>
     <string name="AvatarPreviewSearchMessages">جستجوی پیام‌ها</string>
     <string name="Back">بازگشت</string>
@@ -237,7 +237,7 @@
     <string name="NM_Config_Exported">تنظیمات در فایل ذخیره شد</string>
     <string name="NM_Config_Header">پیکربندی</string>
     <string name="NM_Config_Import">وارد کردن تنظیمات</string>
-    <string name="NM_Config_ImportEmpty">فایل انتخابی پیکربندی SoundGram نیست</string>
+    <string name="NM_Config_ImportEmpty">فایل انتخابی پیکربندی Velora نیست</string>
     <string name="NM_Config_Info">تنظیمات را در یک فایل ذخیره کرده یا در دستگاه دیگری بازیابی کنید.</string>
     <string name="NM_CustomTitle">عنوان برنامه</string>
     <string name="NM_DBG_AudioSource">منبع صوتی میکروفون</string>
@@ -283,7 +283,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">ارسال اموجی‌های پرمیوم بدون اشتراک تلگرام پرمیوم.</string>
     <string name="NM_GEN_MiscHeader">متفرقه</string>
     <string name="NM_GE_UploadSpeedBoost">آپلود سریع‌تر</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">برنامه SoundGram بر پایه تلگرام رسمی ساخته شده و امکانات از SoundGram اضافه شده است.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">کد منبع</string>
     <string name="NM_HideActionBarStatus">پنهان کردن وضعیت در نوار بالا</string>
     <string name="NM_HideBubbleTail">پنهان کردن دم حباب پیام</string>
@@ -439,5 +439,5 @@
     <string name="TranslateMessage">ترجمه</string>
     <string name="UserColorTabProfile">نمایه</string>
     <string name="VibrationDisabled">غیرفعال</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

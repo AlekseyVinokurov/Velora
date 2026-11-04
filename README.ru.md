@@ -1,108 +1,73 @@
-<p align="center">
-  <img src="docs/assets/soundgram-icon.png" width="128" height="128" alt="Иконка SoundGram">
-</p>
+# Velora
 
-<h1 align="center">SoundGram</h1>
+[English](README.md) · [Инструкция по сборке](docs/BUILDING.md) · [Issues](https://github.com/AlekseyVinokurov/Velora/issues)
 
-<p align="center">
-  <a href="README.md">English</a> · <strong>Русский</strong> 
+Velora — самостоятельный открытый неофициальный клиент Telegram для Android. Разработка начинается с существующего кода [SoundGram](https://github.com/soundgram-project/SoundGram), основанного на [Telegram для Android](https://github.com/DrKLO/Telegram). Это продолжение развития клиента с сохранением архитектуры и унаследованной функциональности. Velora не связана с Telegram и не одобрена им.
 
-<p align="center">
-  Открытый неофициальный клиент Telegram для Android с мощными музыкальными возможностями, улучшением звука, расширенной кастомизацией и инструментами приватности.
-</p>
+В исходном коде уже присутствуют:
 
-<p align="center">
-  <img alt="SoundGram 13.1.1" src="https://img.shields.io/badge/SoundGram-13.1.1-ff4fa3">
-  <a href="LICENSE"><img alt="Лицензия GPL-2.0" src="https://img.shields.io/badge/license-GPL--2.0-6f42c1"></a>
-  <img alt="Android 7.0 и новее" src="https://img.shields.io/badge/Android-7.0%2B-3DDC84?logo=android&logoColor=white">
-  <img alt="Telegram 13.1.1" src="https://img.shields.io/badge/Telegram-13.1.1-26A5E4?logo=telegram&logoColor=white">
-</p>
+- Переписка, аккаунты, звонки и работа с медиа Telegram.
+- Музыкальная библиотека и плеер, плейлисты, импорт треков, аудиоэффекты и DSP-эквалайзер.
+- Настройки оформления, цвета Monet, наборы иконок, обои и анимации текста.
+- Дополнительные настройки приватности и чатов, экспорт/импорт настроек клиента и интеграция плагинов.
+- Настройки MTProto-прокси и унаследованная интеграция локального WebSocket-прокси.
 
-<p align="center">
-  <a href="#возможности">Возможности</a> ·
-  <a href="#сборка-из-исходного-кода">Сборка</a> ·
-  <a href="CONTRIBUTING.md">Участие</a> ·
-  <a href="https://github.com/soundgram-project/SoundGram/issues">Ошибки</a>
-</p>
+Это существующие реализации, а не новые функции данного этапа. Внешние музыкальные провайдеры и дополнительные сервисы зависят от их доступности. Проверка на устройстве не выполнялась; фактические результаты проверки приведены в [docs/VELORA_STATUS.md](docs/VELORA_STATUS.md).
 
-> [!IMPORTANT]
-> SoundGram — независимый проект на основе официального исходного кода Telegram для Android. Проект не связан с Telegram Messenger Inc. и не одобрен этой компанией.
+## Сборка
 
-## О проекте
-
-SoundGram расширяет возможности [Telegram для Android](https://github.com/DrKLO/Telegram), сохраняя привычную логику официального клиента. Основные направления проекта — продвинутый музыкальный опыт, аудиохуки и эквалайзер, гибкая настройка интерфейса, улучшенная работа камеры и медиа, инструменты приватности и сети, а также поддержка плагинов.
-
-## Возможности
-
-- **Музыка и звук:** Встроенный продвинутый плеер, хуки для аудио, поиск треков, виджеты музыки в профиле с живой волной и гибкая настройка звука.
-- **Интерфейс и темы:** Цвета Monet, наборы иконок, центрированные заголовки, плавные анимации, настраиваемые вкладки, заголовки чатов и кастомизация профиля.
-- **Приватность и безопасность:** Режим призрака, управление защитой от скриншотов, скрытие номеров телефонов, выборочные отчеты о прочтении и история удаленных сообщений.
-- **Медиа:** Расширенный CameraX, видеосообщения, истории, высококачественная запись и воспроизведение аудио.
-- **Сеть и прокси:** Поддержка WebSocket-прокси, MTProto и гибкая маршрутизация.
-- **Архитектура:** Единый fat/standalone APK с поддержкой ARM64 и ARMv7.
-
-## Сборка из исходного кода
-
-### Требования
-
-| Компонент | Версия |
-| --- | --- |
-| JDK | 17 |
-| Android SDK / Build Tools | 36 / 36.0.0 |
-| Android NDK | 26.3.11579264 |
-| CMake | 3.22.1 |
-| Python | 3.11 для сборки Chaquopy |
-
-Клонируйте репозиторий со всеми субмодулями:
+Основной модуль — `TMessagesProj_AppStandalone`: Android 7.0+ (API 24), ARM64 и ARMv7. Нужны JDK 17 или 21, Gradle 8.13 (wrapper включен), Android SDK 36, Build Tools 36.0.0, NDK 26.3.11579264 и CMake 3.22.1.
 
 ```bash
-git clone --recursive https://github.com/soundgram-project/SoundGram.git
-cd SoundGram
-```
-
-Создайте локальную конфигурацию:
-
-```bash
+git clone --recursive https://github.com/AlekseyVinokurov/Velora.git
+cd Velora
 cp private.properties.example private.properties
 ```
 
-Укажите ваши `TELEGRAM_API_ID` и `TELEGRAM_API_HASH` с сайта [my.telegram.org](https://my.telegram.org).
+В `private.properties` укажите собственные `TELEGRAM_API_ID` и `TELEGRAM_API_HASH` с [my.telegram.org](https://my.telegram.org). Задайте `ANDROID_HOME` или `sdk.dir` в `local.properties`. Локальные настройки и секреты не должны попадать в Git.
 
-Соберите релизный APK:
+Сборка для разработки с локальным debug-ключом:
 
 ```bash
-./gradlew :TMessagesProj_App:assembleAfatRelease
+./gradlew :TMessagesProj_AppStandalone:assembleAfatDebug
 ```
 
-Собранный файл будет находиться в:
+Результат: `TMessagesProj_AppStandalone/build/outputs/apk/afat/debug/app.apk`.
 
-```text
-TMessagesProj_App/build/outputs/apk/afat/release/app.apk
+Основная standalone-конфигурация проекта:
+
+```bash
+./gradlew :TMessagesProj_AppStandalone:assembleAfatStandalone
 ```
 
-## Telegram API
+Результат: `TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk`. Для распространения и установки этой конфигурации настройте собственный release-ключ: готовая release-подпись не предоставляется. Подпись, дополнительные интеграции и остальные варианты описаны в [docs/BUILDING.md](docs/BUILDING.md). Успешная компиляция и создание APK в текущей среде пока не подтверждены.
 
-Каждая независимая сборка должна использовать собственные ключи Telegram API. Ознакомьтесь с документацией по [получению API ID](https://core.telegram.org/api/obtaining_api_id), [Telegram API](https://core.telegram.org/api) и [MTProto](https://core.telegram.org/mtproto).
+## Идентификатор и совместимость
+
+Основной applicationId — `io.github.alekseyvinokurov.velora`. Внутренние Java-пакеты и Gradle namespace сохранены для совместимости с кодом Telegram, JNI и плагинами. Это отдельное Android-приложение: оно не обновляет SoundGram или официальный Telegram, их приватные данные автоматически не переносятся.
+
+До отдельного этапа дизайна сохранены технически корректные исходные и альтернативные иконки. Для совместимости оставлены старые ключи настроек, идентификаторы резервных копий, пути хранения и идентификаторы музыкальных каналов. Автообновления и удаленные значки поддержки требуют явной настройки сервисов Velora; чужие сервисы обновлений и пожертвований по умолчанию не используются. Собственный домен, платежные реквизиты и публикации в магазинах не заявляются.
 
 ## Структура проекта
 
 | Путь | Назначение |
 | --- | --- |
-| `TMessagesProj` | Ядро Telegram, функционал SoundGram и ресурсы Android |
-| `TMessagesProj_App` | Основное приложение SoundGram |
-| `TMessagesProj/jni` | Нативный код и сторонние библиотеки (tgcalls, webrtc и др.) |
-## Участие и безопасность
+| `TMessagesProj` | Общий клиент Telegram, унаследованные расширения и ресурсы Android |
+| `TMessagesProj_AppStandalone` | Основное standalone-приложение |
+| `TMessagesProj_App` | Обычное приложение, в том числе release и beta |
+| `TMessagesProj_AppHuawei`, `TMessagesProj_AppHockeyApp`, `TMessagesProj_AppTests` | Унаследованные альтернативные приложения и тестовый модуль |
+| `buildSrc` | Плагины генерации ресурсов и локализации |
+| `TMessagesProj/jni`, `TMessagesProj_Modules/media`, `TMessagesProj/lib/jlatexmath` | Нативный код и зафиксированные субмодули компонентов |
 
-Сообщения об ошибках и пулл-реквесты приветствуются. Перед отправкой изменений ознакомьтесь с [CONTRIBUTING.md](CONTRIBUTING.md).
+## Авторство и лицензия
 
-## Благодарности
+Velora использует работу авторов SoundGram и Telegram для Android, включая первоначальных авторов Telegram. Сохранены copyright-заголовки, notices, лицензии компонентов и история Git. Унаследованные благодарности также включают:
 
-- [Telegram for Android](https://github.com/DrKLO/Telegram), официальный клиент.
+- [SoundGram](https://github.com/soundgram-project/SoundGram)
+- [Telegram for Android](https://github.com/DrKLO/Telegram)
 - [AyuGram](https://github.com/AyuGram/AyuGram4A)
 - [Cherrygram](https://github.com/arsLan4k1390/Cherrygram)
 - [Nagram](https://github.com/NextAlone/Nagram) / [Nekogram](https://github.com/Nekogram/Nekogram)
 - [exteraGram](https://github.com/exteraSquad/exteraGram)
 
-## Лицензия
-
-SoundGram распространяется на условиях [GNU General Public License v2.0](LICENSE). Telegram и сторонние библиотеки сохраняют свои уведомления об авторских правах и лицензиях.
+Лицензия проекта — [GPL-2.0](LICENSE). У отдельных компонентов сохраняются собственные лицензии и уведомления; ребрендинг не меняет авторство их кода. Перед участием прочтите [CONTRIBUTING.md](CONTRIBUTING.md), перед сообщением об уязвимости — [SECURITY.md](SECURITY.md).

@@ -232,7 +232,7 @@ public class SoundGramStatsManager {
 
         int libraryTracks = ChannelMusicFragment.getLibraryTrackCount(currentAccount);
 
-        return "📊 Статистика SoundGram:\n" +
+        return "📊 Статистика Velora:\n" +
                "🎵 Треков в библиотеке: " + libraryTracks + "\n" +
                "🎧 Прослушано треков: " + listenedTracks + "\n" +
                "⏱ Время прослушивания: " + timeFormatted.toString() + "\n" +

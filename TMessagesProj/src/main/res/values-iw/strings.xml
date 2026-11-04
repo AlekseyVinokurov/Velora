@@ -55,7 +55,7 @@
     <string name="AccDescrGIFs">גיפים</string>
     <string name="AccDescrStickers">מדבקות</string>
     <string name="ActionsChartTitle">פעולות</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">האם אתה בטוח?</string>
     <string name="AvatarPreviewSearchMessages">חיפוש הודעות</string>
     <string name="Back">חזור</string>
@@ -274,7 +274,7 @@
     <string name="NM_Config_Exported">ההגדרות נשמרו בקובץ</string>
     <string name="NM_Config_Header">תצורה</string>
     <string name="NM_Config_Import">ייבוא הגדרות</string>
-    <string name="NM_Config_ImportEmpty">הקובץ שנבחר אינו תצורת SoundGram</string>
+    <string name="NM_Config_ImportEmpty">הקובץ שנבחר אינו תצורת Velora</string>
     <string name="NM_Config_Info">שמור הגדרות לקובץ או שחזר אותן במכשיר אחר.</string>
     <string name="NM_CustomTitle">כותרת אפליקציה</string>
     <string name="NM_DBG_AudioSource">מקור שמע מיקרופון</string>
@@ -320,7 +320,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">שלח אימוג\'י פרימיום ללא מנוי פרימיום.</string>
     <string name="NM_GEN_MiscHeader">שונות</string>
     <string name="NM_GE_UploadSpeedBoost">העלאות מהירות יותר</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram מבוסס על טלגרם הרשמי; תכונות הועברו מ-SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">קוד מקור</string>
     <string name="NM_HideActionBarStatus">הסתר סטטוס בכותרת</string>
     <string name="NM_HideBubbleTail">הסתר זנבות הודעות</string>
@@ -472,5 +472,5 @@
     <string name="TranslateMessage">תרגם</string>
     <string name="UserColorTabProfile">פרופיל</string>
     <string name="VibrationDisabled">מושבת</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

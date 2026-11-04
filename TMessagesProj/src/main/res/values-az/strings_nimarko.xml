@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Telegram Premium UI xüsusiyyətlərini yerli olaraq aktivləşdirir (ikiqat məhdudiyyətlər, qovluq etiketləri və s.)</string>
-    <string name="NimarkoAbout">SoundGram haqqında</string>
-    <string name="NimarkoAboutAuthor">@soundgram_project tərəfindən</string>
+    <string name="NimarkoAbout">Velora haqqında</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">Bildiriş rəngi kimi vurğu</string>
     <string name="NimarkoAdminsShortcut">Administrator qısayolu</string>
     <string name="NimarkoAltOpenAnim">Alternativ açıq animasiya</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">Stikerlər</string>
     <string name="NimarkoSectionTabsTitles">Nişanlar və Başlıqlar</string>
     <string name="NimarkoSectionVoiceTranslation">Səs və Tərcümə</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Fəaliyyət vaxt nişanlarını göstərin</string>
     <string name="NimarkoShowAddToSaved">Saxlanmış Mesajlara əlavə edin</string>
     <string name="NimarkoShowClearHistory">Tarixi sil göstər</string>

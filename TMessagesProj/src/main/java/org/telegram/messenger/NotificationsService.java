@@ -32,7 +32,7 @@ public class NotificationsService extends Service implements NotificationCenter.
         if (allowResidentNotification()) {
             try {
                 NotificationChannelCompat channel = new NotificationChannelCompat.Builder("nimarkoPush", NotificationManagerCompat.IMPORTANCE_DEFAULT)
-                        .setName("SoundGram")
+                        .setName("Velora")
                         .setLightsEnabled(false)
                         .setVibrationEnabled(false)
                         .setSound(null, null)
@@ -102,7 +102,7 @@ public class NotificationsService extends Service implements NotificationCenter.
                 .setLargeIcon(org.telegram.ui.LauncherIconController.getActiveIconBitmap(this))
                 .setShowWhen(false)
                 .setOngoing(true)
-                .setContentText("SoundGram")
+                .setContentText("Velora")
                 .setCategory(NotificationCompat.CATEGORY_STATUS)
                 .setContentIntent(pendingIntent);
         org.telegram.ui.LauncherIconController.applyNotificationAppInfo(bldr, this);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">先進的なオーディオ体験クライアント</string>
-    <string name="SoundGramStyle">SoundGram スタイル＆オーディオエフェクト</string>
-    <string name="SoundGramEqualizer">SoundGram DSPイコライザー</string>
+    <string name="SoundGramStyle">Velora スタイル＆オーディオエフェクト</string>
+    <string name="SoundGramEqualizer">Velora DSPイコライザー</string>
     <string name="SoundGramEQGraph">🎛️ イコライザーグラフ</string>
     <string name="SoundGramEQEffects">✨ エフェクト＆トーン</string>
     <string name="SoundGramPresetFlat">フラット</string>
@@ -108,10 +108,10 @@
     <string name="min">分</string>
     <string name="hour">時間</string>
     <string name="day">日</string>
-    <string name="stat">SoundGramの統計</string>
+    <string name="stat">Veloraの統計</string>
     <string name="imports">トラックをインポート</string>
     <string name="im">インポート (</string>
-    <string name="ims">SoundGramにインポート</string>
+    <string name="ims">Veloraにインポート</string>
     <string name="src">検索</string>
     <string name="chus">チャンネルの @ユーザー名 を入力</string>
     <string name="imm">チャンネルから音楽をインポート</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">アーティスト</string>
     <string name="sg_source_untitled">無題</string>
     <string name="sg_eq_title">オーディオエフェクト＆トーン</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram イコライザー</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram イコライザーを有効化</string>
+    <string name="sg_eq_hero_title">🎛️ Velora イコライザー</string>
+    <string name="sg_eq_hero_switch_descr">Velora イコライザーを有効化</string>
     <string name="sg_eq_status_active">有効・作動中</string>
     <string name="sg_eq_status_disabled">無効</string>
     <string name="sg_eq_section_graph">📈 10バンド インタラクティブEQグラフ</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ コンサート 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 最大低音 (Bass Max)</string>
-    <string name="sg_style_title">SoundGram の外観</string>
+    <string name="sg_style_title">Velora の外観</string>
     <string name="sg_style_section_glass">すりガラススタイル (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">オーディオプレイヤー</string>
     <string name="sg_style_player_subtitle">フルプレイヤーのすりガラス効果</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">トラック一覧</string>
     <string name="sg_style_tracks_subtitle">半透明の区切り線とトラック背景</string>
     <string name="sg_style_eq_title">イコライザー</string>
-    <string name="sg_style_eq_subtitle">SoundGramイコライザーのガラスUI</string>
+    <string name="sg_style_eq_subtitle">VeloraイコライザーのガラスUI</string>
     <string name="sg_sphere_settings">3D球体「マイウェーブ」設定</string>
     <string name="sg_sphere_size_title">球体のサイズ</string>
     <string name="sg_sphere_size_subtitle">3D球体のスケール: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">リピート</string>
     <string name="AccDescrShuffle">シャッフル</string>
     <string name="AccDescrEqualizer">イコライザー</string>
-    <string name="NimarkoGramSettings">SoundGram設定</string>
+    <string name="NimarkoGramSettings">Velora設定</string>
     <string name="NM_Cat_General">一般</string>
     <string name="NM_Cat_Appearance">外観</string>
     <string name="NM_Cat_Chats">チャット</string>

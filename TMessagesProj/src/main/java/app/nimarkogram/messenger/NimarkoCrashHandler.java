@@ -62,7 +62,7 @@ public final class NimarkoCrashHandler {
                 
                 pw.println("Report this crash through the project issue tracker");
                 pw.println();
-                pw.println("=== SoundGram crash ===");
+                pw.println("=== Velora crash ===");
                 pw.println("Time: " + new Date());
                 pw.println("Thread: " + (thread != null ? thread.getName() : "(null)"));
                 pw.println("Build: " + Build.MODEL + " / Android " + Build.VERSION.SDK_INT);
@@ -205,7 +205,7 @@ public final class NimarkoCrashHandler {
             android.content.ClipboardManager cm =
                     (android.content.ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             if (cm != null) {
-                cm.setPrimaryClip(android.content.ClipData.newPlainText("SoundGram crash", text));
+                cm.setPrimaryClip(android.content.ClipData.newPlainText("Velora crash", text));
             }
         } catch (Throwable ignored) {}
     }

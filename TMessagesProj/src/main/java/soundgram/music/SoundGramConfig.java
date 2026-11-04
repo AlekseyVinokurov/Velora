@@ -200,9 +200,10 @@ public class SoundGramConfig {
     }
 
     public static void fetchCustomBadges() {
+        if (org.telegram.messenger.BuildConfig.VELORA_BADGES_URL.isEmpty()) return;
         new Thread(() -> {
             try {
-                String urlString = "https://raw.githubusercontent.com/soundgram-project/SoundGram_donate/main/user.txt?t=" + System.currentTimeMillis();
+                String urlString = org.telegram.messenger.BuildConfig.VELORA_BADGES_URL;
                 URL url = new URL(urlString);
                 URLConnection connection = url.openConnection();
                 connection.setConnectTimeout(4000);

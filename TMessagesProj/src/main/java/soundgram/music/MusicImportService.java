@@ -188,7 +188,7 @@ public class MusicImportService extends Service {
                     "Импорт музыки",
                     NotificationManager.IMPORTANCE_LOW
             );
-            channel.setDescription("Ход импорта треков в SoundGram");
+            channel.setDescription("Ход импорта треков в Velora");
             channel.setShowBadge(false);
             if (notificationManager != null) {
                 notificationManager.createNotificationChannel(channel);

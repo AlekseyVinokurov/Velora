@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">מאפשר תכונות של ממשק המשתמש של Telegram Premium באופן מקומי (מגבלות כפולות, תגיות תיקיות וכו\')</string>
-    <string name="NimarkoAbout">על SoundGram</string>
-    <string name="NimarkoAboutAuthor">מאת @soundgram_project</string>
+    <string name="NimarkoAbout">על Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">הדגשה כצבע הודעה</string>
     <string name="NimarkoAdminsShortcut">קיצור דרך למנהלים</string>
     <string name="NimarkoAltOpenAnim">אנימציה פתוחה חלופית</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">מדבקות</string>
     <string name="NimarkoSectionTabsTitles">כרטיסיות וכותרות</string>
     <string name="NimarkoSectionVoiceTranslation">קול ותרגום</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">הצג חותמות זמן של פעולה</string>
     <string name="NimarkoShowAddToSaved">הוסף להודעות שמורות</string>
     <string name="NimarkoShowClearHistory">הצג נקה היסטוריה</string>

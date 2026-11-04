@@ -177,7 +177,7 @@ object NaConfig {
         addConfig(
             "CustomTitle",
             ConfigItem.configTypeString,
-            "SoundGram"
+            "Velora"
         )
     val dateOfForwardedMsg =
         addConfig(

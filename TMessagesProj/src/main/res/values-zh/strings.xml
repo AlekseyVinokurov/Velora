@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="NM_CP_Header_ChatView">聊天视图</string>
     <string name="NM_CP_Header_Interaction">交互</string>
     <string name="NM_CP_Header_Media">媒体</string>
@@ -10,7 +10,7 @@
     <string name="NM_CP_WeekdayNearDate_Desc">在聊天的日期旁边添加星期。</string>
     <string name="NM_CP_PreReformRussian">俄语旧式拼写法</string>
     <string name="NM_CP_PreReformRussian_Desc">发出的消息使用 1918 年前的旧式拼写（ѣ、і、ѳ、ъ）。</string>
-    <string name="AppNameBeta">SoundGram Beta</string>
+    <string name="AppNameBeta">Velora Beta</string>
     <string name="LanguageName">简体中文</string>
     <string name="English">英语</string>
     <string name="LanguageNameInEnglish">Chinese</string>
@@ -35,20 +35,20 @@
     <string name="WrongNumberFormat">格式错误</string>
     <string name="ShortNumberInfo">您输入的号码对于 **%1$s** 来说过短：\n\n**%2$s**\n\n请输入包含国家代码的正确号码。</string>
     <string name="EditNumber">修改号码</string>
-    <string name="DidNotGetTheCodeInfo">如果您没有通过短信或来电收到验证码，请检查您的**移动数据设置**和手机号码：\n\n**%1$s**\n\n您还可以尝试更换号码或联系 SoundGram 支持团队。点按**帮助**向我们发送技术信息，以便我们排查问题。</string>
+    <string name="DidNotGetTheCodeInfo">如果您没有通过短信或来电收到验证码，请检查您的**移动数据设置**和手机号码：\n\n**%1$s**\n\n您还可以尝试更换号码或联系 Telegram 支持团队。点按**帮助**向我们发送技术信息，以便我们排查问题。</string>
     <string name="DidNotGetTheCodeHelpButton">帮助</string>
     <string name="DidNotGetTheCodeEditNumberButton">修改号码</string>
     <string name="YourCode">手机号验证</string>
     <string name="SentSmsCode">我们已向您的手机 **%1$s** 发送了包含验证码的短信。</string>
-    <string name="SentAppCode">我们已将验证码发送到您另一台设备上的 **SoundGram** 应用。</string>
-    <string name="SentAppCodeWithPhone">我们已将验证码发送到您另一台设备上 %1$s 的 **SoundGram** 应用。</string>
-    <string name="SentAppCodeTitle">请查看您的 SoundGram 消息</string>
+    <string name="SentAppCode">我们已将验证码发送到您另一台设备上的 **Telegram** 应用。</string>
+    <string name="SentAppCodeWithPhone">我们已将验证码发送到您另一台设备上 %1$s 的 **Telegram** 应用。</string>
+    <string name="SentAppCodeTitle">请查看您的 Telegram 消息</string>
     <string name="SentFragmentCode">请在 Fragment 的 Anonymous Numbers 板块获取 %1$s 的验证码。</string>
     <string name="SentSmsCodeTitle">输入验证码</string>
     <string name="OpenFragment">打开 Fragment</string>
-    <string name="SentCallCode">我们正在拨打您的电话 **%1$s**。\n\n无需接听，SoundGram 会自动完成所有操作。</string>
+    <string name="SentCallCode">我们正在拨打您的电话 **%1$s**。\n\n无需接听，Velora 会自动完成所有操作。</string>
     <string name="SentCallOnly">正在拨打您的电话 **%1$s** 以口述验证码。</string>
-    <string name="CallText">SoundGram 将在 %1$d:%2$02d 后致电您</string>
+    <string name="CallText">Velora 将在 %1$d:%2$02d 后致电您</string>
     <string name="SmsText">将在 %1$d:%2$02d 后向您发送短信</string>
     <string name="Calling">正在致电您…</string>
     <string name="SendingSms">正在发送短信…</string>
@@ -59,7 +59,7 @@
     <string name="DidNotGetTheCodeSms">通过短信发送验证码</string>
     <string name="DidNotGetTheCodeFragment">通过 Fragment 获取验证码</string>
     <string name="CancelAccountReset">取消账号重置</string>
-    <string name="CancelAccountResetInfo2">有人通过 **%1$s** 请求删除您的 SoundGram 账号并重置您的两步验证密码。\n\n如果这不是您本人操作，请输入我们刚刚通过短信发送给您的验证码。您也可以通过*更改手机号码*来取消此操作。</string>
+    <string name="CancelAccountResetInfo2">有人通过 **%1$s** 请求删除您的 Telegram 账号并重置您的两步验证密码。\n\n如果这不是您本人操作，请输入我们刚刚通过短信发送给您的验证码。您也可以通过*更改手机号码*来取消此操作。</string>
     <string name="ResetAccount">重置账号</string>
     <string name="ResetAccountInfo">由于账号 **%1$s** 处于活动状态且受密码保护，出于安全考虑，我们将在 1 周后将其删除。\n\n您可以随时取消此操作。</string>
     <string name="ResetAccountStatus">您将可以在以下时间后重置账号：</string>
@@ -68,7 +68,7 @@
     <string name="CancelLinkExpired">链接无效或已过期。</string>
     <string name="CancelLinkSuccessTitle">成功</string>
     <string name="CancelLinkSuccess">您账号 %1$s 的删除操作已取消。您现在可以关闭此窗口。</string>
-    <string name="OtherLoginCode">您的登录验证码是 **%1$s**。请在您尝试登录的 SoundGram 应用中输入它。\n\n请勿将此验证码告知任何人。</string>
+    <string name="OtherLoginCode">您的登录验证码是 **%1$s**。请在您尝试登录的 Telegram 应用中输入它。\n\n请勿将此验证码告知任何人。</string>
     <string name="SmsAvailableIn">您可以在 %1$d:%2$02d 后请求短信</string>
     <string name="ResendSmsAvailableIn">您可以在 %1$d:%2$02d 后重新请求短信</string>
     <string name="RequestSmsButton">通过短信获取验证码</string>
@@ -122,7 +122,7 @@
     <string name="PleaseEnterNewSecondPasswordHint">再次输入新密码</string>
     <string name="RecoveryEmail">恢复邮箱</string>
     <string name="RecoveryEmailTitle">恢复邮箱</string>
-    <string name="RecoveryEmailSubtitle">你可以设置恢复邮箱，以便重置密码并恢复对 SoundGram 账户的访问。</string>
+    <string name="RecoveryEmailSubtitle">你可以设置恢复邮箱，以便重置密码并恢复对 Telegram 账户的访问。</string>
     <string name="YourEmail">你的邮箱</string>
     <string name="YourNewEmail">你的新邮箱</string>
     <string name="YourLoginEmailChangedSuccess">你的邮箱已更改。</string>
@@ -203,7 +203,7 @@
     <string name="VerificationCode">验证码</string>
     <string name="EnterCode">输入验证码</string>
     <string name="ResendCodeInfo">验证码已发送到你的邮箱。</string>
-    <string name="EnabledPasswordText">你已启用两步验证。\n登录你的 SoundGram 账号时需要输入你在此设置的密码。</string>
+    <string name="EnabledPasswordText">你已启用两步验证。\n登录你的 Telegram 账号时需要输入你在此设置的密码。</string>
     <string name="AddEmailTitle">添加邮箱</string>
     <string name="AddEmailSubtitle">请输入有效的邮箱地址以保护你的账号。</string>
     <string name="EnterNewEmail">输入新邮箱</string>
@@ -213,18 +213,18 @@
     <string name="CheckYourNewEmail">查收你的新邮件</string>
     <string name="CheckYourNewEmailSubtitle">请输入我们发送到你新邮箱 %1$s 的验证码。</string>
     <string name="LoginOrSingInWithGoogle">或</string>
-    <string name="Page1Title">SoundGram</string>
+    <string name="Page1Title">Velora</string>
     <string name="Page2Title">快速</string>
     <string name="Page3Title">免费</string>
     <string name="Page4Title">安全</string>
     <string name="Page5Title">强大</string>
     <string name="Page6Title">云端</string>
     <string name="Page1Message">全球**最快**的即时通讯应用。\n它**免费**且**安全**。</string>
-    <string name="Page2Message">**SoundGram** 发送消息的速度\n比任何其他应用都快。</string>
-    <string name="Page3Message">**SoundGram** 为聊天和媒体提供免费无限的云存储。</string>
-    <string name="Page4Message">**SoundGram** 保护你的消息\n免受黑客攻击。</string>
-    <string name="Page5Message">**SoundGram** 对你的媒体和聊天大小\n没有任何限制。</string>
-    <string name="Page6Message">**SoundGram** 让你可以从多个设备\n访问你的消息。</string>
+    <string name="Page2Message">**Velora** 发送消息的速度\n比任何其他应用都快。</string>
+    <string name="Page3Message">**Velora** 为聊天和媒体提供免费无限的云存储。</string>
+    <string name="Page4Message">**Velora** 保护你的消息\n免受黑客攻击。</string>
+    <string name="Page5Message">**Velora** 对你的媒体和聊天大小\n没有任何限制。</string>
+    <string name="Page6Message">**Velora** 让你可以从多个设备\n访问你的消息。</string>
     <string name="StartMessaging">开始使用</string>
     <string name="formatterBoostExpired">yyyy年M月d日</string>
     <string name="formatterGiveawayCard">yyyy年M月d日</string>
@@ -283,7 +283,7 @@
     <string name="PluginsSafeModeInfo2">所有插件已禁用。逐个重新启用以找出问题插件。</string>
     <string name="PluginsDocumentation">文档</string>
     <string name="PluginsTrusted">受信任的插件</string>
-    <string name="ForkedByNimarko">由 SoundGram 分叉</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">插件引擎改编自 <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]>。</string>
     <string name="PluginsNotFound">尚未安装任何插件。</string>
     <string name="PluginNoDescription">无描述</string>
@@ -305,7 +305,7 @@
     <string name="PluginsDisableAll">禁用所有插件</string>
     <string name="PluginsDisableAllConfirm">关闭所有已启用的插件？</string>
     <string name="PluginsDisabledN">已禁用 %1$d 个插件。</string>
-    <string name="PluginsPySdkOffline">SoundGram 中已禁用在线更新。</string>
+    <string name="PluginsPySdkOffline">Velora 中已禁用在线更新。</string>
     <string name="PluginsRestartEngine">重启引擎</string>
     <string name="PluginsRestartingEngine">正在重启插件引擎…</string>
     <string name="PluginsSafeModeOff">安全模式已禁用。</string>
@@ -332,7 +332,7 @@
     <string name="PluginsPySdkAutoUpdate">自动更新 SDK</string>
     <string name="PluginsPySdkEnableBetaVersion">使用测试版 SDK</string>
     <string name="PluginsPySdkCheckUpdates">检查 SDK 更新</string>
-    <string name="NimarkoGramSettings">SoundGram 设置</string>
+    <string name="NimarkoGramSettings">Velora 设置</string>
     <string name="Privacy">隐私</string>
     <string name="ChatTweaks">聊天调整</string>
     <string name="HideProxySponsor">隐藏代理赞助广告</string>
@@ -527,8 +527,8 @@
     <string name="NM_HUB_Header_Misc">杂项</string>
     <string name="NM_HUB_Restart">重启应用</string>
     <string name="NM_HUB_SourceCode">源代码</string>
-    <string name="NM_HUB_ForkedFromCherrygram">SoundGram</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram 基于官方 Telegram 客户端构建；功能移植自 &lt;a href=\"https://github.com/arslan4k1390/SoundGram\"&gt;SoundGram&lt;/a&gt; — 感谢上游项目。</string>
+    <string name="NM_HUB_ForkedFromCherrygram">Velora</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_Debug">调试</string>
     <string name="NM_HUB_Experimental">实验性</string>
     <string name="NM_RestartRequired">需要重启以应用更改</string>
@@ -625,7 +625,7 @@
     <string name="NM_MP_CustomizeProfile">自定义个人资料</string>
     <string name="NM_MP_ShowSeconds">显示时间到秒</string>
     <string name="NM_MP_ShowSeconds_Desc" translatable="false">12:34 -&gt; 12:34:56</string>
-    <string name="NM_MP_PreviewChannelMessage">欢迎使用 SoundGram — 功能丰富的 Telegram 分支。</string>
+    <string name="NM_MP_PreviewChannelMessage">欢迎使用 Velora — 功能丰富的 Telegram 分支。</string>
     <string name="NM_MP_DisablePremiumStatuses">禁用 Premium 状态</string>
     <string name="NM_MP_ReplyBackground">回复中显示背景</string>
     <string name="NM_MP_ReplyCustomColors">回复和链接预览中的自定义颜色</string>
@@ -674,7 +674,7 @@
     <string name="UP_ClearedUpdatesCache">已清除 %1$s 缓存。</string>
     <string name="UP_NothingToClear">没有可清除的内容。</string>
     <string name="UP_CheckForUpdates">检查更新</string>
-    <string name="UP_Not_Found">SoundGram 已是最新版本。</string>
+    <string name="UP_Not_Found">Velora 已是最新版本。</string>
     <string name="UP_CheckFailed">无法检查更新，请稍后重试。</string>
     <string name="UP_Install">安装</string>
     <string name="UP_DownloadFailed">下载失败，点击重试</string>
@@ -689,7 +689,7 @@
     <string name="NM_DownloadMedia_Done">完成</string>
     <string name="NM_DownloadMedia_Error">下载出错</string>
     <string name="NM_DownloadMedia_VideoBy">来自 %1$s 的视频</string>
-    <string name="NM_MediaBuiltIn">**SoundGramMedia** 已内置于客户端中</string>
+    <string name="NM_MediaBuiltIn">**VeloraMedia** 已内置于客户端中</string>
     <string name="NM_BAN_Title">横幅</string>
     <string name="NM_BAN_Enable">横幅系统</string>
     <string name="NM_BAN_Enable_Desc">个人资料中的视频和图片横幅。默认关闭。</string>
@@ -734,7 +734,7 @@
     <string name="NM_Config_Info">将设置保存到文件，或在其他设备上恢复。</string>
     <string name="NM_Config_Exported">设置已保存到文件</string>
     <string name="NM_Config_Error">失败</string>
-    <string name="NM_Config_ImportEmpty">所选文件不是 SoundGram 配置</string>
+    <string name="NM_Config_ImportEmpty">所选文件不是 Velora 配置</string>
     <string name="NM_BAN_GlobalHeader">全局横幅</string>
     <string name="NM_BAN_LocalHeader">本地横幅</string>
     <string name="NM_BAN_ExtraHeader">附加</string>
@@ -798,7 +798,7 @@
     <string name="NM_BAN_QualityHeader">画质</string>
     <string name="NM_BAN_SoundOn">声音已开</string>
     <string name="NM_BAN_SoundOff">声音已关</string>
-    <string name="NM_BAN_PluginIntegrated">**SoundGramBanner** 已内置于客户端</string>
+    <string name="NM_BAN_PluginIntegrated">**VeloraBanner** 已内置于客户端</string>
     <string name="NM_CARDS_Title">快捷信息</string>
     <string name="NM_CARDS_GeneralHeader">常规</string>
     <string name="NM_CARDS_Enable">启用</string>
@@ -825,7 +825,7 @@
     <string name="NM_CARDS_NameProxy">代理</string>
     <string name="NM_CARDS_Footer">拖动排序，点击卡片进行设置。</string>
     <string name="NM_WSBypassBuiltIn">**绕过封锁** 已内置于客户端</string>
-    <string name="NM_NM_Title">SoundGramMedia</string>
+    <string name="NM_NM_Title">VeloraMedia</string>
     <string name="NM_NM_SupportedPlatforms">支持的平台</string>
     <string name="NM_NM_PlatformsList">TikTok、YouTube、SoundCloud、Instagram、Twitter / X、Reddit、VK、Pinterest、Bluesky、Twitch、Vimeo、Dailymotion。</string>
     <string name="NM_NM_HowItWorks">长按包含受支持链接的消息，选择“下载媒体”。文件将在服务器端获取并发送到当前聊天。</string>
@@ -1129,7 +1129,7 @@
     <string name="CG_SendPhotoAsSticker">作为贴纸发送</string>
     <string name="CG_Sleep">睡眠定时器</string>
     <string name="CG_Sleep_Disabled">睡眠定时器已禁用</string>
-    <string name="CG_Sleep_Permission">请允许 SoundGram 设置精确闹钟，以便睡眠定时器正常工作。</string>
+    <string name="CG_Sleep_Permission">请允许 Velora 设置精确闹钟，以便睡眠定时器正常工作。</string>
     <string name="CG_Sleep_Timer">睡眠定时器已设为 **%s**</string>
     <string name="CG_SortByDate">按消息日期排序</string>
     <string name="CG_SortByUnread">未读优先排序</string>
@@ -1241,7 +1241,7 @@
     <string name="NM_WSB_VoIP_Enable">通过绕过封锁转发通话</string>
     <string name="NM_WSB_Subscribe_Header">需要订阅</string>
     <string name="NM_WSB_Subscribe_Info">绕过封锁运行在作者自己的基础设施上。若要继续使用，请至少用一个账号保持订阅该频道。</string>
-    <string name="NM_WSB_Subscribe_Button">订阅 @soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="PluginsRowSubtitle">Python scripts that extend the app</string>
     <string name="NM_CP_LatexRendering">显示 LaTeX 公式</string>
     <string name="NM_CP_LatexRendering_Desc">识别消息中 $…$ 和 $$…$$ 内的公式。</string>
@@ -1338,5 +1338,5 @@
     <string name="TranslateMessage">翻译</string>
     <string name="UserColorTabProfile">个人资料</string>
     <string name="VibrationDisabled">已停用</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

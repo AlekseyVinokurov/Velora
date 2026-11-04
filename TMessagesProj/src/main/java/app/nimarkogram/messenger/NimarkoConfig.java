@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 public final class NimarkoConfig {
-    public static final String APP_NAME = "SoundGram";
+    public static final String APP_NAME = "Velora";
     public static final String VERSION_NAME = org.telegram.messenger.BuildVars.BUILD_VERSION_STRING;
     public static final int VERSION_CODE = 1;
 

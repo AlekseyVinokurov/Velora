@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="XChannel">Canale SoundGram</string>
+    <string name="XChannel">Canale Velora</string>
     <string name="EnableSaveDeletedMessages">Salva i messaggi eliminati</string>
     <string name="DeletedMessage">eliminato</string>
     <string name="EnableSaveEditsHistory">Salva cronologia modifiche</string>
@@ -330,7 +330,7 @@ Non possiamo aiutarti in questo caso; se hai problemi di accesso, contatta il Su
     <string name="sg_chat_list_background">Sfondo della lista chat</string>
     <string name="sg_choose_from_gallery">Scegli dalla galleria</string>
     <string name="sg_delete_background">Elimina sfondo</string>
-    <string name="sg_soundgram_status">💎 Stato SoundGram</string>
+    <string name="sg_soundgram_status">💎 Stato Velora</string>
     <string name="sg_status_member">Membro</string>
     <string name="sg_eq_notice">⚡ Velocità, tono ed effetti si applicano solo alle tracce musicali</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

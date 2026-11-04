@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContactsAccountType xmlns:android="http://schemas.android.com/apk/res/android">
     <ContactsDataKind android:icon="@drawable/ic_launcher_dr"
-        android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile"
+        android:mimeType="@string/velora_contacts_profile_mime"
         android:summaryColumn="data2"
         android:detailColumn="data3"
         android:detailSocialSummary="true"/>
     <ContactsDataKind android:icon="@drawable/ic_launcher_dr"
-        android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"
+        android:mimeType="@string/velora_contacts_call_mime"
         android:summaryColumn="data2"
         android:detailColumn="data3"
         android:detailSocialSummary="true"/>
     <ContactsDataKind android:icon="@drawable/ic_launcher_dr"
-        android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"
+        android:mimeType="@string/velora_contacts_video_mime"
         android:summaryColumn="data2"
         android:detailColumn="data3"
         android:detailSocialSummary="true"/>

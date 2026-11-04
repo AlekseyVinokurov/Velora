@@ -72,17 +72,6 @@ android {
 
     signingConfigs {
         debug {
-            if (rootProject.ext.hasReleaseSigning) {
-                storeFile rootProject.file(rootProject.ext.releaseSigning.storeFile)
-                storePassword rootProject.ext.releaseSigning.storePassword
-                keyAlias rootProject.ext.releaseSigning.keyAlias
-                keyPassword rootProject.ext.releaseSigning.keyPassword
-            } else {
-                storeFile file("../TMessagesProj/config/release.keystore")
-                storePassword "serega070908"
-                keyAlias "key0"
-                keyPassword "serega070908"
-            }
         }
 
         release {
@@ -91,11 +80,6 @@ android {
                 storePassword rootProject.ext.releaseSigning.storePassword
                 keyAlias rootProject.ext.releaseSigning.keyAlias
                 keyPassword rootProject.ext.releaseSigning.keyPassword
-            } else {
-                storeFile file("../TMessagesProj/config/release.keystore")
-                storePassword "serega070908"
-                keyAlias "key0"
-                keyPassword "serega070908"
             }
         }
     }

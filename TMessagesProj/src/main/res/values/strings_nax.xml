@@ -30,7 +30,7 @@
     <string name="dlkey">Click on the key above to delete it.</string>
     <string name="mkkey">Create new key encryption</string>
     <string name="wave_settings">Wave settings</string>
-    <string name="XChannel">SoundGram Channel</string>
+    <string name="XChannel">Velora Channel</string>
     <string name="EnableSaveDeletedMessages">Save Deleted Messages</string>
     <string name="DeletedMessage">deleted</string>
     <string name="EnableSaveEditsHistory">Save Edits History</string>
@@ -364,7 +364,7 @@
     <string name="sg_chat_list_background">Chat list background</string>
     <string name="sg_choose_from_gallery">Choose from Gallery</string>
     <string name="sg_delete_background">Delete background</string>
-    <string name="sg_soundgram_status">💎 SoundGram Status</string>
+    <string name="sg_soundgram_status">💎 Velora Status</string>
     <string name="sg_status_member">Member</string>
     <string name="sg_eq_notice">⚡ Speed, pitch, and effects are applied only to music tracks</string>
 </resources>

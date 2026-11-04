@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="XChannel">SoundGram チャンネル</string>
+    <string name="XChannel">Velora チャンネル</string>
     <string name="EnableSaveDeletedMessages">削除済みメッセージを保存</string>
     <string name="DeletedMessage">削除済み</string>
     <string name="EnableSaveEditsHistory">編集履歴を保存</string>
@@ -326,7 +326,7 @@
     <string name="sg_chat_list_background">チャット一覧の背景</string>
     <string name="sg_choose_from_gallery">ギャラリーから選択</string>
     <string name="sg_delete_background">背景を削除</string>
-    <string name="sg_soundgram_status">💎 SoundGramステータス</string>
+    <string name="sg_soundgram_status">💎 Veloraステータス</string>
     <string name="sg_status_member">メンバー</string>
     <string name="sg_eq_notice">⚡ 速度、ピッチ、エフェクトは音楽トラックにのみ適用されます</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

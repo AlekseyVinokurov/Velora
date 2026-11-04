@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Moderne audio-ervaringsclient</string>
-    <string name="SoundGramStyle">SoundGram-stijl &amp; Audio-effecten</string>
-    <string name="SoundGramEqualizer">SoundGram DSP-equalizer</string>
+    <string name="SoundGramStyle">Velora-stijl &amp; Audio-effecten</string>
+    <string name="SoundGramEqualizer">Velora DSP-equalizer</string>
     <string name="SoundGramEQGraph">🎛️ Equalizer-grafiek</string>
     <string name="SoundGramEQEffects">✨ Effecten &amp; Toon</string>
     <string name="SoundGramPresetFlat">Vlak</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">u</string>
     <string name="day">dagen</string>
-    <string name="stat">SoundGram-statistieken</string>
+    <string name="stat">Velora-statistieken</string>
     <string name="imports">Nummers importeren</string>
     <string name="im">Importeren (</string>
-    <string name="ims">Importeren naar SoundGram</string>
+    <string name="ims">Importeren naar Velora</string>
     <string name="src">Zoeken</string>
     <string name="chus">Kanaal-@gebruikersnaam invoeren</string>
     <string name="imm">Muziek importeren uit kanaal</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Artiest</string>
     <string name="sg_source_untitled">Naamloos</string>
     <string name="sg_eq_title">AudioFX &amp; Toonhoogte</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram-equalizer</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram-equalizer inschakelen</string>
+    <string name="sg_eq_hero_title">🎛️ Velora-equalizer</string>
+    <string name="sg_eq_hero_switch_descr">Velora-equalizer inschakelen</string>
     <string name="sg_eq_status_active">Ingeschakeld en actief</string>
     <string name="sg_eq_status_disabled">Uitgeschakeld</string>
     <string name="sg_eq_section_graph">📈 10-BANDS EQUALIZERGRAFIEK</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Nummerlijst</string>
     <string name="sg_style_tracks_subtitle">Doorschijnende scheiders en achtergrond</string>
     <string name="sg_style_eq_title">Equalizer</string>
-    <string name="sg_style_eq_subtitle">Glazen interface voor SoundGram-equalizer</string>
+    <string name="sg_style_eq_subtitle">Glazen interface voor Velora-equalizer</string>
     <string name="sg_sphere_settings">SFEERINSTELLINGEN „MIJN GOLF”</string>
     <string name="sg_sphere_size_title">Sfeergrootte</string>
     <string name="sg_sphere_size_subtitle">3D-sfeerschaal: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Herhalen</string>
     <string name="AccDescrShuffle">Willekeurige volgorde</string>
     <string name="AccDescrEqualizer">Equalizer</string>
-    <string name="NimarkoGramSettings">SoundGram-instellingen</string>
+    <string name="NimarkoGramSettings">Velora-instellingen</string>
     <string name="NM_Cat_General">Algemeen</string>
     <string name="NM_Cat_Appearance">Uiterlijk</string>
     <string name="NM_Cat_Chats">Chats</string>

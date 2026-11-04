@@ -524,7 +524,7 @@ public class GeneralPreferencesActivity extends NimarkoUniversalPreferencesActiv
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
-            intent.putExtra(Intent.EXTRA_TITLE, "soundgram_config.json");
+            intent.putExtra(Intent.EXTRA_TITLE, "velora_config.json");
             startActivityForResult(intent, REQ_EXPORT_CONFIG);
         } catch (Throwable t) {
             Toast.makeText(getContext(), getString(R.string.NM_Config_Error), Toast.LENGTH_SHORT).show();

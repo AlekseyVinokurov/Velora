@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">לקוח חוויית שמע מתקדמת</string>
-    <string name="SoundGramStyle">סגנון ואפקטי שמע של SoundGram</string>
-    <string name="SoundGramEqualizer">אקולייזר DSP של SoundGram</string>
+    <string name="SoundGramStyle">סגנון ואפקטי שמע של Velora</string>
+    <string name="SoundGramEqualizer">אקולייזר DSP של Velora</string>
     <string name="SoundGramEQGraph">🎛️ גרף אקולייזר</string>
     <string name="SoundGramEQEffects">✨ אפקטים וגוון צליל</string>
     <string name="SoundGramPresetFlat">שטוח</string>
@@ -108,10 +108,10 @@
     <string name="min">דקות</string>
     <string name="hour">שעות</string>
     <string name="day">ימים</string>
-    <string name="stat">סטטיסטיקת SoundGram</string>
+    <string name="stat">סטטיסטיקת Velora</string>
     <string name="imports">ייבוא רצועות</string>
     <string name="im">ייבוא (</string>
-    <string name="ims">ייבוא ל-SoundGram</string>
+    <string name="ims">ייבוא ל-Velora</string>
     <string name="src">חיפוש</string>
     <string name="chus">הזן שם משתמש @ של ערוץ</string>
     <string name="imm">ייבא מוזיקה מהערוץ</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">אמן</string>
     <string name="sg_source_untitled">ללא כותרת</string>
     <string name="sg_eq_title">אפקטי שמע וגוון צליל</string>
-    <string name="sg_eq_hero_title">🎛️ אקולייזר SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">הפעל אקולייזר SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ אקולייזר Velora</string>
+    <string name="sg_eq_hero_switch_descr">הפעל אקולייזר Velora</string>
     <string name="sg_eq_status_active">מופעל ופעיל</string>
     <string name="sg_eq_status_disabled">מושבת</string>
     <string name="sg_eq_section_graph">📈 גרף אקולייזר אינטראקטיבי של 10 ערוצים</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ הופעה בתלת-ממד</string>
     <string name="sg_eq_rule_bassmax">🔊 מקסימום בס</string>
-    <string name="sg_style_title">מראה SoundGram</string>
+    <string name="sg_style_title">מראה Velora</string>
     <string name="sg_style_section_glass">סגנון זכוכית חלבית (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">נגן מוזיקה</string>
     <string name="sg_style_player_subtitle">אפקט זכוכית חלבית לנגן המלא</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">רשימת רצועות</string>
     <string name="sg_style_tracks_subtitle">מפרידים ורקע רצועות חצי-שקופים</string>
     <string name="sg_style_eq_title">אקולייזר</string>
-    <string name="sg_style_eq_subtitle">ממשק זכוכית עבור אקולייזר SoundGram</string>
+    <string name="sg_style_eq_subtitle">ממשק זכוכית עבור אקולייזר Velora</string>
     <string name="sg_sphere_settings">הגדרות כדור תלת-ממד «הגל שלי»</string>
     <string name="sg_sphere_size_title">גודל הכדור</string>
     <string name="sg_sphere_size_subtitle">קנה מידה של כדור תלת-ממד: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">סמן</string>
     <string name="sg_ta_cursor_smooth">סמן חלק</string>
     <string name="sg_ta_cursor_liquid">סמן נוזלי</string>
-    <string name="TelegramVersion">SoundGram לאנדרואיד %1$s</string>
+    <string name="TelegramVersion">Velora לאנדרואיד %1$s</string>
     <string name="CG_LastSeenNow">נראה לאחרונה הרגע</string>
     <string name="CG_LastSeenMinutes_one">נראה לאחרונה לפני דקה %1$d</string>
     <string name="CG_LastSeenMinutes_few">נראה לאחרונה לפני %1$d דקות</string>
@@ -361,10 +361,10 @@
     <string name="NM_WSB_VoIP_Enable">העבר שיחות דרך עקיפה</string>
     <string name="NM_WSB_Subscribe_Header">נדרש מנוי</string>
     <string name="NM_WSB_Subscribe_Info">העקיפה פועלת על תשתית היוצר. כדי להמשיך להשתמש בה, הישאר רשום לערוץ לפחות בחשבון אחד.</string>
-    <string name="NM_WSB_Subscribe_Button">הירשם ל-@soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="NM_CP_LatexRendering">הצג נוסחאות LaTeX</string>
     <string name="NM_CP_LatexRendering_Desc">מזהה נוסחאות בתוך $…$ ו-$$…$$ בהודעות.</string>
-    <string name="NimarkoGramSettings">הגדרות SoundGram</string>
+    <string name="NimarkoGramSettings">הגדרות Velora</string>
     <string name="NM_Cat_General">כללי</string>
     <string name="NM_Cat_Appearance">מראה</string>
     <string name="NM_Cat_Chats">צ\'אטים</string>

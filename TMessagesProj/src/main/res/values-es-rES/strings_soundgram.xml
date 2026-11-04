@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Cliente de audio premium moderno</string>
-    <string name="SoundGramStyle">Estilo &amp; Efectos SoundGram</string>
-    <string name="SoundGramEqualizer">Ecualizador DSP SoundGram</string>
+    <string name="SoundGramStyle">Estilo &amp; Efectos Velora</string>
+    <string name="SoundGramEqualizer">Ecualizador DSP Velora</string>
     <string name="SoundGramEQGraph">🎛️ Gráfico del ecualizador</string>
     <string name="SoundGramEQEffects">✨ Efectos &amp; Tonalidad</string>
     <string name="SoundGramPresetFlat">Plano</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">h</string>
     <string name="day">días</string>
-    <string name="stat">Estadísticas SoundGram</string>
+    <string name="stat">Estadísticas Velora</string>
     <string name="imports">Importar pistas</string>
     <string name="im">Importar (</string>
-    <string name="ims">Importar a SoundGram</string>
+    <string name="ims">Importar a Velora</string>
     <string name="src">Buscar</string>
     <string name="chus">Introduce el @nombre del canal</string>
     <string name="imm">Importar música del canal</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Artista</string>
     <string name="sg_source_untitled">Sin título</string>
     <string name="sg_eq_title">AudioFX &amp; Tonalidad</string>
-    <string name="sg_eq_hero_title">🎛️ Ecualizador SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Activar ecualizador SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Ecualizador Velora</string>
+    <string name="sg_eq_hero_switch_descr">Activar ecualizador Velora</string>
     <string name="sg_eq_status_active">Activado y activo</string>
     <string name="sg_eq_status_disabled">Desactivado</string>
     <string name="sg_eq_section_graph">📈 GRÁFICO INTERACTIVO DE 10 BANDAS</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Lista de pistas</string>
     <string name="sg_style_tracks_subtitle">Separadores y fondo translúcidos</string>
     <string name="sg_style_eq_title">Ecualizador</string>
-    <string name="sg_style_eq_subtitle">Interfaz de cristal para el ecualizador SoundGram</string>
+    <string name="sg_style_eq_subtitle">Interfaz de cristal para el ecualizador Velora</string>
     <string name="sg_sphere_settings">AJUSTES DE LA ESFERA «MI ONDA»</string>
     <string name="sg_sphere_size_title">Tamaño de la esfera</string>
     <string name="sg_sphere_size_subtitle">Escala de la esfera 3D: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Repetir</string>
     <string name="AccDescrShuffle">Orden aleatorio</string>
     <string name="AccDescrEqualizer">Ecualizador</string>
-    <string name="NimarkoGramSettings">Ajustes de SoundGram</string>
+    <string name="NimarkoGramSettings">Ajustes de Velora</string>
     <string name="NM_Cat_General">General</string>
     <string name="NM_Cat_Appearance">Apariencia</string>
     <string name="NM_Cat_Chats">Chats</string>

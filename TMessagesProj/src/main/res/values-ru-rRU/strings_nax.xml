@@ -30,7 +30,7 @@
     <string name="dlkey">Нажмите на ключ выше для удаления.</string>
     <string name="mkkey">Создать новый ключ шифрования</string>
     <string name="wave_settings">Настройки волны</string>
-    <string name="XChannel">Канал SoundGram</string>
+    <string name="XChannel">Канал Velora</string>
     <string name="EnableSaveDeletedMessages">Сохранять удалённые сообщения</string>
     <string name="DeletedMessage">удалено</string>
     <string name="EnableSaveEditsHistory">Сохранять историю изменений</string>
@@ -356,7 +356,7 @@
     <string name="sg_chat_list_background">Задний фон списка чатов</string>
     <string name="sg_choose_from_gallery">Выбрать из галереи</string>
     <string name="sg_delete_background">Удалить фон</string>
-    <string name="sg_soundgram_status">💎 Статус SoundGram</string>
+    <string name="sg_soundgram_status">💎 Статус Velora</string>
     <string name="sg_status_member">Участник</string>
     <string name="sg_eq_notice">⚡ Скорость, тон и эффекты применяются только к музыкальным трекам</string>
     <string name="LlmApiUrlHint">https://api.openai.com/v1</string>

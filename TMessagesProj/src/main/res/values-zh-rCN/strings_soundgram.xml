@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">现代极致音频体验客户端</string>
-    <string name="SoundGramStyle">SoundGram 视觉风格与音频特效</string>
-    <string name="SoundGramEqualizer">SoundGram DSP 均衡器</string>
+    <string name="SoundGramStyle">Velora 视觉风格与音频特效</string>
+    <string name="SoundGramEqualizer">Velora DSP 均衡器</string>
     <string name="SoundGramEQGraph">🎛️ 均衡器频响图</string>
     <string name="SoundGramEQEffects">✨ 效果与音调</string>
     <string name="SoundGramPresetFlat">平直 (默认)</string>
@@ -108,10 +108,10 @@
     <string name="min">分</string>
     <string name="hour">小时</string>
     <string name="day">天</string>
-    <string name="stat">SoundGram 听歌统计</string>
+    <string name="stat">Velora 听歌统计</string>
     <string name="imports">导入歌曲</string>
     <string name="im">导入 (</string>
-    <string name="ims">导入到 SoundGram</string>
+    <string name="ims">导入到 Velora</string>
     <string name="src">搜索</string>
     <string name="chus">输入频道的 @用户名</string>
     <string name="imm">从频道导入音乐</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">歌手</string>
     <string name="sg_source_untitled">未命名</string>
     <string name="sg_eq_title">音频音效与音调</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram 均衡器</string>
-    <string name="sg_eq_hero_switch_descr">启用 SoundGram 均衡器</string>
+    <string name="sg_eq_hero_title">🎛️ Velora 均衡器</string>
+    <string name="sg_eq_hero_switch_descr">启用 Velora 均衡器</string>
     <string name="sg_eq_status_active">已开启并生效</string>
     <string name="sg_eq_status_disabled">已关闭</string>
     <string name="sg_eq_section_graph">📈 10段交互式频响图</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ 欢快加速 (Nightcore)</string>
     <string name="sg_eq_rule_concert">🏛️ 3D 现场音乐会</string>
     <string name="sg_eq_rule_bassmax">🔊 极限超重低音</string>
-    <string name="sg_style_title">SoundGram 外观</string>
+    <string name="sg_style_title">Velora 外观</string>
     <string name="sg_style_section_glass">磨砂玻璃拟态风格 (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">音乐播放器</string>
     <string name="sg_style_player_subtitle">全屏播放器界面的磨砂毛玻璃效果</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">曲目列表</string>
     <string name="sg_style_tracks_subtitle">半透明分割线与曲目列表底色</string>
     <string name="sg_style_eq_title">均衡器界面</string>
-    <string name="sg_style_eq_subtitle">SoundGram 均衡器的毛玻璃交互界面</string>
+    <string name="sg_style_eq_subtitle">Velora 均衡器的毛玻璃交互界面</string>
     <string name="sg_sphere_settings">3D「我的波浪」光球设置</string>
     <string name="sg_sphere_size_title">光球尺寸</string>
     <string name="sg_sphere_size_subtitle">3D 光球屏幕比例: %d%%</string>

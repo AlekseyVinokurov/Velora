@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="NekoSettings">SoundGram-設定</string>
+    <string name="NekoSettings">Velora-設定</string>
     <string name="IPv6">偏好 IPv6</string>
     <string name="MessageMenu">訊息選單</string>
     <string name="HidePhone">隱藏手機號碼</string>
@@ -110,10 +110,10 @@
     <string name="enhancedFileLoader">下載加速</string>
     <string name="mapDriftingFixForGoogleMaps">修正在中國使用 Google 地圖時的定位飄移問題</string>
     <string name="useOSMDroidMap">使用 OSMDroid 地圖</string>
-    <string name="UnknownNekoSettingsOption">找不到這個 SoundGram-設定選項。</string>
+    <string name="UnknownNekoSettingsOption">找不到這個 Velora-設定選項。</string>
     <string name="PasscodeNeeded">您必須先啟用密碼鎖</string>
     <string name="PasscodeNeko">密碼鎖</string>
-    <string name="PasscodeShowInSettings">在 SoundGram-設定中顯示</string>
+    <string name="PasscodeShowInSettings">在 Velora-設定中顯示</string>
     <string name="PasscodeShowInSettingsAbout">隱藏後，您**只能**透過此連結開啟此頁面：</string>
     <string name="PasscodeSet">設定解鎖密碼</string>
     <string name="PasscodeEdit">設定解鎖碼</string>
