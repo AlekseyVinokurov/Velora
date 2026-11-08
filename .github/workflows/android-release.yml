@@ -31,7 +31,6 @@ jobs:
         shell: bash
     env:
       # Never restore/save release build caches: generated BuildConfig contains API credentials.
-      GRADLE_USER_HOME: ${{ runner.temp }}/velora-gradle
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=false
 
     steps:
@@ -132,6 +131,7 @@ jobs:
 
       - name: Build and verify with the existing permanent release key
         env:
+          GRADLE_USER_HOME: ${{ runner.temp }}/velora-gradle
           APK_ABI: ${{ inputs.abi }}
           VELORA_KEYSTORE_BASE64: ${{ secrets.VELORA_KEYSTORE_BASE64 }}
           # Map secret names to the existing Gradle contract, without duplicate secrets.
@@ -173,7 +173,7 @@ jobs:
         run: |
           set -euo pipefail
           [[ "$GITHUB_ACTIONS" == true && "$RUNNER_ENVIRONMENT" == github-hosted ]]
-          rm -rf -- "$RUNNER_TEMP/velora-signing" "$GRADLE_USER_HOME"
+          rm -rf -- "$RUNNER_TEMP/velora-signing" "$RUNNER_TEMP/velora-gradle"
           # No cache or build-directory artifact is uploaded.
           find . -type f -name '*.hprof' -delete
 
