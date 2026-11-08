@@ -3675,8 +3675,8 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
         if (isForeignLibrary) {
             updateForeignHeaderTitle();
         } else {
-            headerTitle.setText("soundgram");
-            headerTitle.setContentDescription("soundgram");
+            headerTitle.setText("Velora");
+            headerTitle.setContentDescription("Velora");
         }
         headerTitle.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
         headerTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
@@ -5159,7 +5159,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
         String channelName = "id" + userId + "soundgram";
 
         TLRPC.TL_channels_createChannel req = new TLRPC.TL_channels_createChannel();
-        req.title = channelName; req.about = "SoundGram Storage"; req.broadcast = true; req.megagroup = false;
+        req.title = channelName; req.about = "Velora Storage"; req.broadcast = true; req.megagroup = false;
         ConnectionsManager.getInstance(currentAccount).sendRequest(req, (response, error) -> {
             if (error == null && response instanceof TLRPC.Updates) {
                 TLRPC.Updates updates = (TLRPC.Updates) response;

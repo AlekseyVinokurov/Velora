@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">차세대 프리미엄 오디오 클라이언트</string>
-    <string name="SoundGramStyle">SoundGram 스타일 및 오디오 FX</string>
-    <string name="SoundGramEqualizer">SoundGram DSP 이퀄라이저</string>
+    <string name="SoundGramStyle">Velora 스타일 및 오디오 FX</string>
+    <string name="SoundGramEqualizer">Velora DSP 이퀄라이저</string>
     <string name="SoundGramEQGraph">🎛️ 이퀄라이저 그래프</string>
     <string name="SoundGramEQEffects">✨ 효과 및 음색</string>
     <string name="SoundGramPresetFlat">플랫 (기본)</string>
@@ -108,10 +108,10 @@
     <string name="min">분</string>
     <string name="hour">시간</string>
     <string name="day">일</string>
-    <string name="stat">SoundGram 통계</string>
+    <string name="stat">Velora 통계</string>
     <string name="imports">트랙 가져오기</string>
     <string name="im">가져오기 (</string>
-    <string name="ims">SoundGram으로 가져오기</string>
+    <string name="ims">Velora으로 가져오기</string>
     <string name="src">검색</string>
     <string name="chus">채널 @사용자명 입력</string>
     <string name="imm">채널에서 음악 가져오기</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">아티스트</string>
     <string name="sg_source_untitled">제목 없음</string>
     <string name="sg_eq_title">오디오 효과 및 음색</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram 이퀄라이저</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram 이퀄라이저 활성화</string>
+    <string name="sg_eq_hero_title">🎛️ Velora 이퀄라이저</string>
+    <string name="sg_eq_hero_switch_descr">Velora 이퀄라이저 활성화</string>
     <string name="sg_eq_status_active">활성화됨 및 작동 중</string>
     <string name="sg_eq_status_disabled">비활성화됨</string>
     <string name="sg_eq_section_graph">📈 10밴드 인터랙티브 EQ 그래프</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ 콘서트 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 최대 베이스</string>
-    <string name="sg_style_title">SoundGram 디자인 외관</string>
+    <string name="sg_style_title">Velora 디자인 외관</string>
     <string name="sg_style_section_glass">반투명 글래스모피즘 스타일</string>
     <string name="sg_style_player_title">오디오 플레이어</string>
     <string name="sg_style_player_subtitle">전체 플레이어의 반투명 무광 글래스 효과</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">트랙 목록</string>
     <string name="sg_style_tracks_subtitle">반투명 구분선 및 트랙 배경</string>
     <string name="sg_style_eq_title">이퀄라이저</string>
-    <string name="sg_style_eq_subtitle">SoundGram 이퀄라이저의 글래스 UI</string>
+    <string name="sg_style_eq_subtitle">Velora 이퀄라이저의 글래스 UI</string>
     <string name="sg_sphere_settings">3D «마이 웨이브» 구체 설정</string>
     <string name="sg_sphere_size_title">구체 크기</string>
     <string name="sg_sphere_size_subtitle">3D 구체 비율: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">반복</string>
     <string name="AccDescrShuffle">셔플</string>
     <string name="AccDescrEqualizer">이퀄라이저</string>
-    <string name="NimarkoGramSettings">SoundGram 설정</string>
+    <string name="NimarkoGramSettings">Velora 설정</string>
     <string name="NM_Cat_General">일반</string>
     <string name="NM_Cat_Appearance">화면 설정</string>
     <string name="NM_Cat_Chats">대화</string>

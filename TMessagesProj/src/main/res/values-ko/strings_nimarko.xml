@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Telegram 프리미엄 UI 기능을 로컬에서 활성화합니다(이중 제한, 폴더 태그 등).</string>
-    <string name="NimarkoAbout">사운드그램 소개</string>
-    <string name="NimarkoAboutAuthor">작성자: @soundgram_project</string>
+    <string name="NimarkoAbout">Velora 소개</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">알림 색상으로 악센트</string>
     <string name="NimarkoAdminsShortcut">관리자 바로가기</string>
     <string name="NimarkoAltOpenAnim">대체 오픈 애니메이션</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">스티커</string>
     <string name="NimarkoSectionTabsTitles">탭 및 제목</string>
     <string name="NimarkoSectionVoiceTranslation">음성 및 번역</string>
-    <string name="NimarkoSettingsTitle">사운드그램</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">작업 타임스탬프 표시</string>
     <string name="NimarkoShowAddToSaved">저장된 메시지에 추가</string>
     <string name="NimarkoShowClearHistory">기록 지우기 표시</string>

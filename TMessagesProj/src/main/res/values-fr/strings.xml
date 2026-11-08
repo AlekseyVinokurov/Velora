@@ -14,7 +14,7 @@
     <string name="PluginsSafeModeInfo2">Toutes les extensions sont désactivées. Réactivez-les une par une pour identifier la fautive.</string>
     <string name="PluginsDocumentation">Documentation</string>
     <string name="PluginsTrusted">Extensions de confiance</string>
-    <string name="ForkedByNimarko">Forké par SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">Propulsé par <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]>.</string>
     <string name="PluginsNotFound">Aucune extension installée pour le moment.</string>
     <string name="PluginNoDescription">Aucune description</string>
@@ -30,7 +30,7 @@
     <string name="PluginInstalled">Extension installée</string>
     <string name="PluginUpdated">Extension mise à jour</string>
     <string name="PluginInstallError">Échec de l\'installation de l\'extension</string>
-<string name="EnablePluginsEngine">Activer le moteur de plugins</string><string name="PluginDelete">Supprimer le plugin</string><string name="PluginDeleteInfo">Êtes-vous sûr de vouloir supprimer %s ?</string><string name="PluginDisableError">Échec de la désactivation du plugin : %s</string><string name="PluginEnableError">Échec de l\'activation du plugin : %s</string><string name="PluginEngineNotEnabled">Le moteur de plugins est désactivé. Activez-le pour utiliser %s.</string><string name="PluginHasNoSettings">%s n\'a pas de paramètres.</string><string name="PluginInstalledButFailedToEnable">Installé, mais échec de l\'activation du plugin.</string><string name="PluginIsNotRespondingAlert">Le plugin "%s" ne répond pas</string><string name="PluginNotEnabled">Le plugin %s n\'est pas activé.</string><string name="PluginNotFound">Plugin %s introuvable.</string><string name="PluginsDevMode">Mode développeur</string><string name="PluginsDevServerLaunched">Serveur de développement lancé.</string><string name="PluginsDevServerStopped">Serveur de développement arrêté.</string><string name="PluginsDisableAll">Désactiver tous</string><string name="PluginsDisableAllConfirm">Désactiver tous les plugins activés ?</string><string name="PluginsDisabledN">%1$d plugins désactivés.</string><string name="PluginsPySdkAutoUpdate">Mise à jour automatique du SDK</string><string name="PluginsPySdkCheckUpdates">Vérifier les mises à jour du SDK</string><string name="PluginsPySdkEnableBetaVersion">Utiliser le SDK bêta</string><string name="PluginsPySdkHeader">SDK Python</string><string name="PluginsPySdkOffline">Mises à jour en ligne désactivées dans SoundGram.</string><string name="PluginsRestartEngine">Redémarrer le moteur</string><string name="PluginsRestartingEngine">Redémarrage du moteur de plugins…</string><string name="PluginsRowSubtitle">Scripts Python qui étendent l\'application</string><string name="PluginsSafeModeOff">Mode sans échec désactivé.</string><string name="PluginsSafeModeOn">Mode sans échec activé. Les plugins ne se chargeront pas automatiquement.</string>    <string name="AP_CenterTitle">Titre centré</string>
+<string name="EnablePluginsEngine">Activer le moteur de plugins</string><string name="PluginDelete">Supprimer le plugin</string><string name="PluginDeleteInfo">Êtes-vous sûr de vouloir supprimer %s ?</string><string name="PluginDisableError">Échec de la désactivation du plugin : %s</string><string name="PluginEnableError">Échec de l\'activation du plugin : %s</string><string name="PluginEngineNotEnabled">Le moteur de plugins est désactivé. Activez-le pour utiliser %s.</string><string name="PluginHasNoSettings">%s n\'a pas de paramètres.</string><string name="PluginInstalledButFailedToEnable">Installé, mais échec de l\'activation du plugin.</string><string name="PluginIsNotRespondingAlert">Le plugin "%s" ne répond pas</string><string name="PluginNotEnabled">Le plugin %s n\'est pas activé.</string><string name="PluginNotFound">Plugin %s introuvable.</string><string name="PluginsDevMode">Mode développeur</string><string name="PluginsDevServerLaunched">Serveur de développement lancé.</string><string name="PluginsDevServerStopped">Serveur de développement arrêté.</string><string name="PluginsDisableAll">Désactiver tous</string><string name="PluginsDisableAllConfirm">Désactiver tous les plugins activés ?</string><string name="PluginsDisabledN">%1$d plugins désactivés.</string><string name="PluginsPySdkAutoUpdate">Mise à jour automatique du SDK</string><string name="PluginsPySdkCheckUpdates">Vérifier les mises à jour du SDK</string><string name="PluginsPySdkEnableBetaVersion">Utiliser le SDK bêta</string><string name="PluginsPySdkHeader">SDK Python</string><string name="PluginsPySdkOffline">Mises à jour en ligne désactivées dans Velora.</string><string name="PluginsRestartEngine">Redémarrer le moteur</string><string name="PluginsRestartingEngine">Redémarrage du moteur de plugins…</string><string name="PluginsRowSubtitle">Scripts Python qui étendent l\'application</string><string name="PluginsSafeModeOff">Mode sans échec désactivé.</string><string name="PluginsSafeModeOn">Mode sans échec activé. Les plugins ne se chargeront pas automatiquement.</string>    <string name="AP_CenterTitle">Titre centré</string>
     <string name="AP_DisableDividers">Masquer les séparateurs</string>
     <string name="AP_GlareOnElements">Reflets sur les éléments</string>
     <string name="AP_GlareOnElementsInfo">Afficher les reflets supérieurs et inférieurs sur les éléments en verre liquide.</string>
@@ -48,7 +48,7 @@
     <string name="AccDescrGIFs">GIFs</string>
     <string name="AccDescrStickers">Autocollants</string>
     <string name="ActionsChartTitle">Actions</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Êtes-vous sûr ?</string>
     <string name="AvatarPreviewSearchMessages">Rechercher des messages</string>
     <string name="Back">Retour</string>
@@ -266,7 +266,7 @@
     <string name="NM_Config_Exported">Paramètres enregistrés dans le fichier</string>
     <string name="NM_Config_Header">Configuration</string>
     <string name="NM_Config_Import">Importer les paramètres</string>
-    <string name="NM_Config_ImportEmpty">Le fichier sélectionné n\'est pas une configuration SoundGram</string>
+    <string name="NM_Config_ImportEmpty">Le fichier sélectionné n\'est pas une configuration Velora</string>
     <string name="NM_Config_Info">Enregistrer les paramètres dans un fichier ou les restaurer sur un autre appareil.</string>
     <string name="NM_CustomTitle">Titre de l\'application</string>
     <string name="NM_DBG_AudioSource">Source audio du microphone</string>
@@ -312,7 +312,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Envoyez des émojis premium sans abonnement Premium.</string>
     <string name="NM_GEN_MiscHeader">Divers</string>
     <string name="NM_GE_UploadSpeedBoost">Téléversements plus rapides</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram est basé sur Telegram officiel ; fonctionnalités portées depuis SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Code source</string>
     <string name="NM_HideActionBarStatus">Masquer le statut d\'en-tête</string>
     <string name="NM_HideBubbleTail">Masquer les queues de bulles</string>
@@ -464,5 +464,5 @@
     <string name="TranslateMessage">Traduire</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">Désactivée</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

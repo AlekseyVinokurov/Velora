@@ -1468,7 +1468,7 @@ public class LocaleController {
     private static boolean isNimarkoBrandedKey(String key) {
         if (key == null) return false;
         if (key.startsWith("CG_") || key.startsWith("NM_")
-                || key.startsWith("SoundGram") || key.startsWith("WsProxy")
+                || key.startsWith("Velora") || key.startsWith("SoundGram") || key.startsWith("WsProxy")
                 || key.startsWith("BypassNetwork") || key.startsWith("TextAnimation")
                 || key.startsWith("ChatListWallpaper") || key.startsWith("ChatWallpaper")
                 || key.startsWith("PasscodePanic") || key.startsWith("LocalTelegramPremium")

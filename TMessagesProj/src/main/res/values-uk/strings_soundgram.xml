@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Мобільний клієнт із преміальним звуком</string>
-    <string name="SoundGramStyle">Стиль та Ефекти SoundGram</string>
-    <string name="SoundGramEqualizer">DSP Еквалайзер SoundGram</string>
+    <string name="SoundGramStyle">Стиль та Ефекти Velora</string>
+    <string name="SoundGramEqualizer">DSP Еквалайзер Velora</string>
     <string name="SoundGramEQGraph">🎛️ Графік АЧХ</string>
     <string name="SoundGramEQEffects">✨ Ефекти та Тон</string>
     <string name="SoundGramPresetFlat">Плоский</string>
@@ -108,10 +108,10 @@
     <string name="min">хв</string>
     <string name="hour">год</string>
     <string name="day">дн</string>
-    <string name="stat">Статистика SoundGram</string>
+    <string name="stat">Статистика Velora</string>
     <string name="imports">Імпорт треків</string>
     <string name="im">Імпорт (</string>
-    <string name="ims">Імпорт у SoundGram</string>
+    <string name="ims">Імпорт у Velora</string>
     <string name="src">Пошук</string>
     <string name="chus">Введіть @юзернейм каналу</string>
     <string name="imm">Імпортувати музику з каналу</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Виконавець</string>
     <string name="sg_source_untitled">Без назви</string>
     <string name="sg_eq_title">AudioFX та Тон</string>
-    <string name="sg_eq_hero_title">🎛️ Еквалайзер SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Увімкнути еквалайзер SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Еквалайзер Velora</string>
+    <string name="sg_eq_hero_switch_descr">Увімкнути еквалайзер Velora</string>
     <string name="sg_eq_status_active">Увімкнений та активний</string>
     <string name="sg_eq_status_disabled">Вимкнений</string>
     <string name="sg_eq_section_graph">📈 10-СМУГОВИЙ ІНТЕРАКТИВНИЙ ГРАФІК АЧХ</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Список треків</string>
     <string name="sg_style_tracks_subtitle">Напівпрозорі роздільники та фон треків</string>
     <string name="sg_style_eq_title">Еквалайзер</string>
-    <string name="sg_style_eq_subtitle">Скляний інтерфейс еквалайзера SoundGram</string>
+    <string name="sg_style_eq_subtitle">Скляний інтерфейс еквалайзера Velora</string>
     <string name="sg_sphere_settings">НАЛАШТУВАННЯ СФЕРИ «МОЯ ХВИЛЯ»</string>
     <string name="sg_sphere_size_title">Розмір сфери</string>
     <string name="sg_sphere_size_subtitle">Масштаб 3D сфери відносно екрана: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Повтор</string>
     <string name="AccDescrShuffle">Випадковий порядок</string>
     <string name="AccDescrEqualizer">Еквалайзер</string>
-    <string name="NimarkoGramSettings">Налаштування SoundGram</string>
+    <string name="NimarkoGramSettings">Налаштування Velora</string>
     <string name="NM_Cat_General">Основні</string>
     <string name="NM_Cat_Appearance">Вигляд</string>
     <string name="NM_Cat_Chats">Чати</string>

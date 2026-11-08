@@ -220,7 +220,7 @@ public class NimarkoUpdaterSheet extends BottomSheet implements NimarkoUpdater.D
                 if (!downloadButtonClicked) {
                     downloadButtonClicked = true;
                     NimarkoUpdater.downloadApk(getContext(), update.downloadURL,
-                            "SoundGram " + update.version, downloadBindingToken);
+                            "Velora " + update.version, downloadBindingToken);
                 }
             });
             footerLayout.addView(downloadButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 14, 16, 0));
@@ -577,6 +577,14 @@ public class NimarkoUpdaterSheet extends BottomSheet implements NimarkoUpdater.D
     public static void showAlert(BaseFragment fragment, boolean available, NimarkoUpdater.Update update) {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
         if (fragment == null || fragment.getParentActivity() == null || fragment.getContext() == null) {
+            return;
+        }
+        if (org.telegram.messenger.BuildConfig.VELORA_UPDATE_CHANNEL.isEmpty()) {
+            fragment.showDialog(new org.telegram.ui.ActionBar.AlertDialog.Builder(fragment.getParentActivity())
+                    .setTitle(LocaleController.getString(R.string.VeloraProject))
+                    .setMessage(LocaleController.getString(R.string.VeloraUpdateUnavailable))
+                    .setPositiveButton(LocaleController.getString(R.string.OK), null)
+                    .create());
             return;
         }
         showPreparedAlert(fragment, available, update);

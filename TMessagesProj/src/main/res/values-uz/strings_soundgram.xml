@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Zamonaviy Audio Tajribasi Klienti</string>
-    <string name="SoundGramStyle">SoundGram Uslubi va Audio Effektlari</string>
-    <string name="SoundGramEqualizer">SoundGram DSP Ekvayzeri</string>
+    <string name="SoundGramStyle">Velora Uslubi va Audio Effektlari</string>
+    <string name="SoundGramEqualizer">Velora DSP Ekvayzeri</string>
     <string name="SoundGramEQGraph">🎛️ Ekvayzer Grafigi</string>
     <string name="SoundGramEQEffects">✨ Effektlar va Ohang</string>
     <string name="SoundGramPresetFlat">Tekis</string>
@@ -108,10 +108,10 @@
     <string name="min">daq</string>
     <string name="hour">soat</string>
     <string name="day">kun</string>
-    <string name="stat">SoundGram Statistikasi</string>
+    <string name="stat">Velora Statistikasi</string>
     <string name="imports">Treklarni Import Qilish</string>
     <string name="im">Import (</string>
-    <string name="ims">SoundGram-ga Import Qilish</string>
+    <string name="ims">Velora-ga Import Qilish</string>
     <string name="src">Qidirish</string>
     <string name="chus">Kanalning @foydalanuvchi nomini kiriting</string>
     <string name="imm">Kanaldan musiqa import qilish</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Ijrochi</string>
     <string name="sg_source_untitled">Nomsiz</string>
     <string name="sg_eq_title">Audio Effektlari va Ohang</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram Ekvayzeri</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram Ekvayzerini Yoqish</string>
+    <string name="sg_eq_hero_title">🎛️ Velora Ekvayzeri</string>
+    <string name="sg_eq_hero_switch_descr">Velora Ekvayzerini Yoqish</string>
     <string name="sg_eq_status_active">Yoqilgan va ishlamoqda</string>
     <string name="sg_eq_status_disabled">O‘chirilgan</string>
     <string name="sg_eq_section_graph">📈 10 POLOSALI INTERAKTIV EKVAYZER GRAFIGI</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Konsert 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Maksimal Bass</string>
-    <string name="sg_style_title">SoundGram Ko‘rinishi</string>
+    <string name="sg_style_title">Velora Ko‘rinishi</string>
     <string name="sg_style_section_glass">XIRA SHISHA USLUBI (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">Audio Pleyer</string>
     <string name="sg_style_player_subtitle">To‘liq pleyer uchun xira shisha effekti</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Treklar Ro‘yxati</string>
     <string name="sg_style_tracks_subtitle">Yarim shaffof ajratgichlar va trek foni</string>
     <string name="sg_style_eq_title">Ekvayzer</string>
-    <string name="sg_style_eq_subtitle">SoundGram Ekvayzeri uchun shisha interfeys</string>
+    <string name="sg_style_eq_subtitle">Velora Ekvayzeri uchun shisha interfeys</string>
     <string name="sg_sphere_settings">«MENING TO‘LQINIM» SFERASI SOZLAMALARI</string>
     <string name="sg_sphere_size_title">Sfera O‘lchami</string>
     <string name="sg_sphere_size_subtitle">3D sfera masshtabi: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Takrorlash</string>
     <string name="AccDescrShuffle">Aralashtirish</string>
     <string name="AccDescrEqualizer">Ekvayzer</string>
-    <string name="NimarkoGramSettings">SoundGram Sozlamalari</string>
+    <string name="NimarkoGramSettings">Velora Sozlamalari</string>
     <string name="NM_Cat_General">Umumiy</string>
     <string name="NM_Cat_Appearance">Ko‘rinish</string>
     <string name="NM_Cat_Chats">Chatlar</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="XChannel">SoundGram 频道</string>
+    <string name="XChannel">Velora 频道</string>
     <string name="EnableSaveDeletedMessages">保存已删除消息</string>
     <string name="DeletedMessage">已删除</string>
     <string name="EnableSaveEditsHistory">保存编辑历史</string>
@@ -326,7 +326,7 @@
     <string name="sg_chat_list_background">聊天列表背景</string>
     <string name="sg_choose_from_gallery">从相册选择</string>
     <string name="sg_delete_background">删除背景</string>
-    <string name="sg_soundgram_status">💎 SoundGram 状态</string>
+    <string name="sg_soundgram_status">💎 Velora 状态</string>
     <string name="sg_status_member">成员</string>
     <string name="sg_eq_notice">⚡ 速度、音调和音效仅适用于音乐曲目</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

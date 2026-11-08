@@ -41,7 +41,7 @@
     <string name="ResetPluginSettingsInfo">Czy na pewno chcesz przywrócić domyślne ustawienia dla **%1$s**?</string>
     <string name="RestartRequired">Uruchom ponownie aplikację, aby zmiany zaczęły obowiązywać.</string>
     <string name="UpdatePlugin">Aktualizuj</string>
-<string name="ForkedByNimarko">Fork autorstwa SoundGram</string><string name="PluginIncompatible">Niezgodny plugin</string><string name="PluginIncompatibleInfo">Ten plugin wymaga nowszej wersji aplikacji.</string><string name="PluginsDevMode">Tryb dewelopera</string><string name="PluginsDevServerLaunched">Serwer deweloperski uruchomiony.</string><string name="PluginsDevServerStopped">Serwer deweloperski zatrzymany.</string><string name="PluginsDisableAll">Wyłącz wszystkie</string><string name="PluginsDisableAllConfirm">Wyłączyć wszystkie aktywne pluginy?</string><string name="PluginsDisabledN">Wyłączono %1$d pluginów.</string><string name="PluginsPoweredBy">Oparte na <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]> engine pluginów.</string><string name="PluginsPySdkAutoUpdate">Automatyczna aktualizacja SDK</string><string name="PluginsPySdkCheckUpdates">Sprawdź aktualizacje SDK</string><string name="PluginsPySdkEnableBetaVersion">Użyj SDK beta</string><string name="PluginsPySdkHeader">SDK Python</string><string name="PluginsPySdkOffline">Aktualizacje online wyłączone w SoundGram.</string><string name="PluginsRestartEngine">Uruchom ponownie engine</string><string name="PluginsRestartingEngine">Ponowne uruchamianie engine pluginów…</string><string name="PluginsRowSubtitle">Skrypty Python rozszerzające aplikację</string><string name="PluginsSafeModeInfo2">Wszystkie pluginy zostały wyłączone. Włączaj je pojedynczo, aby znaleźć źródło problemu.</string><string name="PluginsSafeModeOff">Tryb awaryjny wyłączony.</string><string name="PluginsSafeModeOn">Tryb awaryjny włączony. Pluginy nie będą ładowane automatycznie.</string>    <string name="AP_CenterTitle">Wyśrodkowany tytuł</string>
+<string name="ForkedByNimarko">Velora based on SoundGram</string><string name="PluginIncompatible">Niezgodny plugin</string><string name="PluginIncompatibleInfo">Ten plugin wymaga nowszej wersji aplikacji.</string><string name="PluginsDevMode">Tryb dewelopera</string><string name="PluginsDevServerLaunched">Serwer deweloperski uruchomiony.</string><string name="PluginsDevServerStopped">Serwer deweloperski zatrzymany.</string><string name="PluginsDisableAll">Wyłącz wszystkie</string><string name="PluginsDisableAllConfirm">Wyłączyć wszystkie aktywne pluginy?</string><string name="PluginsDisabledN">Wyłączono %1$d pluginów.</string><string name="PluginsPoweredBy">Oparte na <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]> engine pluginów.</string><string name="PluginsPySdkAutoUpdate">Automatyczna aktualizacja SDK</string><string name="PluginsPySdkCheckUpdates">Sprawdź aktualizacje SDK</string><string name="PluginsPySdkEnableBetaVersion">Użyj SDK beta</string><string name="PluginsPySdkHeader">SDK Python</string><string name="PluginsPySdkOffline">Aktualizacje online wyłączone w Velora.</string><string name="PluginsRestartEngine">Uruchom ponownie engine</string><string name="PluginsRestartingEngine">Ponowne uruchamianie engine pluginów…</string><string name="PluginsRowSubtitle">Skrypty Python rozszerzające aplikację</string><string name="PluginsSafeModeInfo2">Wszystkie pluginy zostały wyłączone. Włączaj je pojedynczo, aby znaleźć źródło problemu.</string><string name="PluginsSafeModeOff">Tryb awaryjny wyłączony.</string><string name="PluginsSafeModeOn">Tryb awaryjny włączony. Pluginy nie będą ładowane automatycznie.</string>    <string name="AP_CenterTitle">Wyśrodkowany tytuł</string>
     <string name="AP_DisableDividers">Ukryj separatory</string>
     <string name="AP_GlareOnElements">Odblaski na elementach</string>
     <string name="AP_GlareOnElementsInfo">Pokaż górne i dolne odblaski na elementach płynnego szkła.</string>
@@ -59,7 +59,7 @@
     <string name="AccDescrGIFs">GIF-y</string>
     <string name="AccDescrStickers">Naklejki</string>
     <string name="ActionsChartTitle">Działania</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Czy na pewno?</string>
     <string name="AvatarPreviewSearchMessages">Szukaj wiadomości</string>
     <string name="Back">Wstecz</string>
@@ -278,7 +278,7 @@
     <string name="NM_Config_Exported">Ustawienia zapisane do pliku</string>
     <string name="NM_Config_Header">Konfiguracja</string>
     <string name="NM_Config_Import">Importuj ustawienia</string>
-    <string name="NM_Config_ImportEmpty">Wybrany plik nie jest konfiguracją SoundGram</string>
+    <string name="NM_Config_ImportEmpty">Wybrany plik nie jest konfiguracją Velora</string>
     <string name="NM_Config_Info">Zapisz ustawienia do pliku lub przywróć je na innym urządzeniu.</string>
     <string name="NM_CustomTitle">Tytuł aplikacji</string>
     <string name="NM_DBG_AudioSource">Źródło dźwięku mikrofonu</string>
@@ -324,7 +324,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Wysyłaj emoji premium bez subskrypcji.</string>
     <string name="NM_GEN_MiscHeader">Różne</string>
     <string name="NM_GE_UploadSpeedBoost">Szybsze wysyłanie</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram bazuje na Telegramie; funkcje z SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Kod źródłowy</string>
     <string name="NM_HideActionBarStatus">Ukryj status w nagłówku</string>
     <string name="NM_HideBubbleTail">Ukryj ogonki dymków</string>
@@ -476,5 +476,5 @@
     <string name="TranslateMessage">Przetłumacz</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">Wyłączona</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

@@ -126,7 +126,7 @@ public abstract class LocaleUtils {
         try {
             return ApplicationLoader.applicationContext.getString(R.string.AppName);
         } catch (Exception unused) {
-            return "SoundGram";
+            return "Velora";
         }
     }
 

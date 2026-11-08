@@ -2,8 +2,8 @@
 <resources>
     <string name="NM_Menu_TelegramPlus">Menú de mensajes moderno</string>
     <string name="NM_Menu_TelegramPlus_Desc">Un menú compacto con efecto Liquid Glass, acciones agrupadas, animaciones elásticas y efectos interactivos. El diseño compacto sigue disponible.</string>
-    <string name="AppName">SoundGram</string>
-    <string name="AppNameBeta">SoundGram Beta</string>
+    <string name="AppName">Velora</string>
+    <string name="AppNameBeta">Velora Beta</string>
     <string name="LanguageName">Español</string>
     <string name="English">Inglés</string>
     <string name="LanguageNameInEnglish">Spanish</string>
@@ -29,21 +29,21 @@
     <string name="WrongNumberFormat">Formato incorrecto</string>
     <string name="ShortNumberInfo">El número que nos diste es demasiado corto para **%1$s**:\n\n**%2$s**\n\nPon el número correcto incluyendo tu código de país.</string>
     <string name="EditNumber">Editar número</string>
-    <string name="DidNotGetTheCodeInfo">Si no recibiste el código por SMS o llamada, comprueba tus **ajustes de datos móviles** y número de teléfono:\n\n**%1$s**\n\nLas opciones restantes son probar con otro número o contactar al soporte de SoundGram. Toca **Ayuda** para enviarnos los detalles técnicos y así poder identificar el problema.</string>
+    <string name="DidNotGetTheCodeInfo">Si no recibiste el código por SMS o llamada, comprueba tus **ajustes de datos móviles** y número de teléfono:\n\n**%1$s**\n\nLas opciones restantes son probar con otro número o contactar al soporte de Telegram. Toca **Ayuda** para enviarnos los detalles técnicos y así poder identificar el problema.</string>
     <string name="DidNotGetTheCodeHelpButton">Ayuda</string>
     <string name="DidNotGetTheCodeEditNumberButton">Editar número</string>
     
     <string name="YourCode">Verificación</string>
     <string name="SentSmsCode">Enviamos un SMS con un código de activación a tu teléfono **%1$s**.</string>
-    <string name="SentAppCode">Enviamos el código a la app de **SoundGram** en tu otro dispositivo.</string>
-    <string name="SentAppCodeWithPhone">Enviamos el código a la **app de SoundGram** para %1$s en tu otro dispositivo.</string>
-    <string name="SentAppCodeTitle">Revisa tus mensajes en SoundGram</string>
+    <string name="SentAppCode">Enviamos el código a la app de **Telegram** en tu otro dispositivo.</string>
+    <string name="SentAppCodeWithPhone">Enviamos el código a la **app de Telegram** para %1$s en tu otro dispositivo.</string>
+    <string name="SentAppCodeTitle">Revisa tus mensajes en Telegram</string>
     <string name="SentFragmentCode">Obtén el código de %1$s en la sección Anonymous Numbers en Fragment.</string>
     <string name="SentSmsCodeTitle">Pon el código</string>
     <string name="OpenFragment">Abrir Fragment</string>
-    <string name="SentCallCode">Estamos llamando al número **%1$s**.\n\nNo contestes. SoundGram hará todo el proceso automáticamente.</string>
+    <string name="SentCallCode">Estamos llamando al número **%1$s**.\n\nNo contestes. Velora hará todo el proceso automáticamente.</string>
     <string name="SentCallOnly">Llamando a tu número **%1$s** para dictar el código.</string>
-    <string name="CallText">SoundGram te llamará en %1$d:%2$02d</string>
+    <string name="CallText">Velora te llamará en %1$d:%2$02d</string>
     <string name="SmsText">Enviándote un SMS en %1$d:%2$02d</string>
     <string name="Calling">Te estamos llamando...</string>
     <string name="SendingSms">Enviando SMS...</string>
@@ -54,7 +54,7 @@
     <string name="DidNotGetTheCodeSms">Toca para recibir el código por SMS</string>
     <string name="DidNotGetTheCodeFragment">Obtener un código por Fragment</string>
     <string name="CancelAccountReset">No restablecer la cuenta</string>
-    <string name="CancelAccountResetInfo2">Alguien con acceso a **%1$s** solicitó eliminar tu cuenta de SoundGram y restablecer tu contraseña de la verificación en dos pasos.\n\nSi no fuiste tú, por favor, escribe el código que enviamos por SMS. También puedes cancelar la solicitud *cambiando tu número de teléfono*.</string>
+    <string name="CancelAccountResetInfo2">Alguien con acceso a **%1$s** solicitó eliminar tu cuenta de Telegram y restablecer tu contraseña de la verificación en dos pasos.\n\nSi no fuiste tú, por favor, escribe el código que enviamos por SMS. También puedes cancelar la solicitud *cambiando tu número de teléfono*.</string>
     <string name="ResetAccount">Restablecer la cuenta</string>
     <string name="ResetAccountInfo">Como la cuenta **%1$s** está activa y protegida con una contraseña, la eliminaremos en 1 semana. Esta espera es necesaria por razones de seguridad.\n\nPuedes cancelar este proceso en cualquier momento.</string>
     <string name="ResetAccountStatus">Podrás restablecer tu cuenta en:</string>
@@ -62,7 +62,7 @@
     <string name="CancelLinkExpired">El enlace no es válido o expiró.</string>
     <string name="CancelLinkSuccessTitle">¡Listo!</string>
     <string name="CancelLinkSuccess">El proceso de eliminación de tu cuenta %1$s fue cancelado. Puedes cerrar esta ventana.</string>
-    <string name="OtherLoginCode">Tu código de inicio de sesión es **%1$s**. Ponlo en la app de SoundGram en la que estás intentando iniciar sesión.\n\nNo le des este código a nadie.</string>
+    <string name="OtherLoginCode">Tu código de inicio de sesión es **%1$s**. Ponlo en la app de Telegram en la que estás intentando iniciar sesión.\n\nNo le des este código a nadie.</string>
     <string name="SmsAvailableIn">Puedes solicitar un SMS en %1$d:%2$02d</string>
     <string name="ResendSmsAvailableIn">Puedes solicitar un nuevo SMS en %1$d:%2$02d</string>
     <string name="RequestSmsButton">Recibir código por SMS</string>
@@ -182,8 +182,8 @@
     <string name="NotificationGroupFew">%1$s envió %3$s al grupo %2$s</string>
     <string name="NotificationGroupAlbum">%1$s envió un álbum al grupo %2$s</string>
     <string name="NotificationGroupForwardedFew">%1$s reenvió %3$s al grupo %2$s</string>
-    <string name="NotificationHiddenName">SoundGram</string>
-    <string name="NotificationHiddenChatName">SoundGram</string>
+    <string name="NotificationHiddenName">Velora</string>
+    <string name="NotificationHiddenChatName">Velora</string>
     <string name="NotificationHiddenChatUserName">Usuario</string>
     <string name="NotificationHiddenMessage">Mensaje nuevo</string>
     <string name="Reply">Responder</string>
@@ -247,7 +247,7 @@
     <string name="NotificationActionPinnedGeoLiveUser">%1$s fijó una ubicación en tiempo real</string>
     <string name="NotificationActionPinnedGifUser">%1$s fijó un GIF</string>
     <string name="NotificationActionPinnedMusicUser">%1$s fijó un audio</string>
-    <string name="SecretChatName">SoundGram</string>
+    <string name="SecretChatName">Velora</string>
     
     <string name="Username">Nombre de usuario</string>
     <string name="UsernameAlso">también %1$s</string>
@@ -403,11 +403,11 @@
     <string name="LanguageUnsupportedError">Idioma no encontrado.</string>
     <string name="LanguageSame">Ya estás usando este pack de idioma (**%1$s**). Puedes cambiar el idioma cuando quieras en Ajustes.</string>
     <string name="LanguageUnknownCustomAlert">Lamentablemente, este pack de idioma personalizado (**%1$s**) no contiene datos para Telegram Android.</string>
-    <string name="AskAQuestionInfo">Ten en cuenta que el soporte de SoundGram está en manos de voluntarios. Respondemos lo antes posible, pero puede tomar tiempo.\n\nPuedes mirar las &lt;a href=\"https://telegram.org/faq/es#preguntas-generales\"&gt;preguntas frecuentes de SoundGram&lt;/a&gt;: tienen &lt;a href=\"https://telegram.org/faq/es#solucion-de-problemas\"&gt;soluciones a problemas&lt;/a&gt; y respuestas a muchas preguntas.</string>
+    <string name="AskAQuestionInfo">Ten en cuenta que el soporte de Telegram está en manos de voluntarios. Respondemos lo antes posible, pero puede tomar tiempo.\n\nPuedes mirar las &lt;a href=\"https://telegram.org/faq/es#preguntas-generales\"&gt;preguntas frecuentes de Telegram&lt;/a&gt;: tienen &lt;a href=\"https://telegram.org/faq/es#solucion-de-problemas\"&gt;soluciones a problemas&lt;/a&gt; y respuestas a muchas preguntas.</string>
     <string name="AskButton">Preguntar</string>
     <string name="TelegramFAQ">Preguntas frecuentes</string>
     <string name="TelegramFaq">Preguntas frecuentes</string>
-    <string name="TelegramFeatures">Aprende sobre SoundGram</string>
+    <string name="TelegramFeatures">Aprende sobre Telegram</string>
     <string name="TelegramFeaturesUrl">https://t.me/TelegramTipsES</string>
     <string name="AddAccount">Añadir cuenta</string>
     <string name="SelectAccount">Elige una cuenta</string>
@@ -554,7 +554,7 @@
     <string name="DirectShareInfo">Chats recientes al compartir en Android</string>
     <string name="Emoji">Emojis</string>
     <string name="LargeEmoji">Emojis grandes</string>
-    <string name="TelegramVersion">SoundGram para Android %1$s</string>
+    <string name="TelegramVersion">Velora para Android %1$s</string>
     <string name="ChangeLanguageLater">Puedes cambiar el idioma más tarde en Ajustes.</string>
     <string name="ChooseYourLanguage">Elige tu idioma</string>
     <string name="ChooseYourLanguageOther">Otro</string>
@@ -850,7 +850,7 @@
     <string name="PleaseEnterNewSecondPasswordHint">Repite la nueva contraseña</string>
     <string name="RecoveryEmail">Correo de recuperación</string>
     <string name="RecoveryEmailTitle">Correo de recuperación</string>
-    <string name="RecoveryEmailSubtitle">Puedes configurar un correo de recuperación para restablecer tu contraseña y restaurar el acceso a tu cuenta de SoundGram.</string>
+    <string name="RecoveryEmailSubtitle">Puedes configurar un correo de recuperación para restablecer tu contraseña y restaurar el acceso a tu cuenta de Telegram.</string>
     <string name="YourEmail">Tu correo</string>
     <string name="YourNewEmail">Tu nuevo correo</string>
     <string name="YourLoginEmailChangedSuccess">Tu correo ha sido cambiado.</string>
@@ -926,9 +926,9 @@
     <string name="VerificationCode">Código de verificación</string>
     <string name="EnterCode">Pon el código</string>
     <string name="ResendCodeInfo">El código de verificación fue enviado a tu correo.</string>
-    <string name="EnabledPasswordText">Tienes activada la verificación en dos pasos.\nNecesitarás la contraseña que configuraste para iniciar tu sesión en SoundGram.</string>
+    <string name="EnabledPasswordText">Tienes activada la verificación en dos pasos.\nNecesitarás la contraseña que configuraste para iniciar tu sesión en Telegram.</string>
     <string name="AddEmailTitle">Elige un correo de acceso</string>
-    <string name="AddEmailSubtitle">Recibirás los códigos de inicio de sesión de SoundGram por correo y no por SMS. Pon una dirección de correo a la que tengas acceso.</string>
+    <string name="AddEmailSubtitle">Recibirás los códigos de inicio de sesión de Velora por correo y no por SMS. Pon una dirección de correo a la que tengas acceso.</string>
     <string name="EnterNewEmail">Pon el nuevo correo</string>
     <string name="VerificationCodeSubtitle">Por favor, revisa tu correo %1$s (no olvides la carpeta de spam) y pon el código que te enviamos.</string>
     <string name="CheckYourEmail">Revisa tu correo</string>
@@ -1245,14 +1245,14 @@
     <string name="PermissionNoAudioVideoWithHint">**Telegram** necesita acceso al micrófono para que puedas enviar mensajes de voz. Toca Ajustes &gt; Permisos, y activa **Micrófono**.</string>
     <string name="PermissionNoCameraWithHint">**Telegram** necesita acceso a la cámara para que puedas tomar fotos y videos. Toca Ajustes &gt; Permisos, y activa **Cámara**.</string>
     <string name="PermissionNoCameraMicVideo">**Telegram** necesita acceso a la cámara y al micrófono para que puedas enviar videomensajes. Toca Ajustes &gt; Permisos, y activa **Micrófono** y **Cámara**.</string>
-    <string name="PermissionNoLocation">SoundGram necesita acceso a tu ubicación para que puedas compartirla con tus amigos.</string>
-    <string name="PermissionNoLocationStory">SoundGram necesita acceso a tu ubicación para que puedas añadir el widget del clima a tus historias.</string>
+    <string name="PermissionNoLocation">Velora necesita acceso a tu ubicación para que puedas compartirla con tus amigos.</string>
+    <string name="PermissionNoLocationStory">Velora necesita acceso a tu ubicación para que puedas añadir el widget del clima a tus historias.</string>
     <string name="PermissionNoLocationFriends">**Telegram** necesita acceso a la ubicación para que puedas compartirla con tus amigos. Toca Ajustes &gt; Permisos, y activa **Ubicación**.</string>
     <string name="PermissionNoLocationNavigation">**Telegram** necesita acceso a la ubicación para que puedas saber cómo llegar. Toca Ajustes &gt; Permisos, y activa **Ubicación**.</string>
     <string name="PermissionNoContactsSharing">**Telegram** necesita acceso a los contactos para que puedas compartirlos con tus amigos. Toca Ajustes &gt; Permisos, y activa **Contactos**.</string>
     <string name="PermissionNoStorageAvatar">**Telegram** necesita acceso al almacenamiento para que puedas subir fotos de perfil. Toca Ajustes &gt; Permisos, y activa **Archivos y contenido multimedia**.</string>
     <string name="PermissionNoAudioStorageStory">**Telegram** necesita acceso a tus archivos de música para que puedas añadirlos a tu historia. Toca Ajustes &gt; Permisos, y activa **Música y audio**.</string>
-    <string name="PermissionDrawAboveOtherApps">SoundGram necesita acceso a mostrarse sobre otras aplicaciones para usar el modo imagen en imagen.</string>
+    <string name="PermissionDrawAboveOtherApps">Velora necesita acceso a mostrarse sobre otras aplicaciones para usar el modo imagen en imagen.</string>
     <string name="PermissionDrawAboveOtherAppsGroupCall">El modo de superposición te permite usar la opción de pulsar para hablar y ver quién está hablando aunque estés fuera de Telegram.</string>
     <string name="PermissionOpenSettings">Ajustes</string>
     <string name="PermissionXiaomiLockscreen">Por favor, permite a Telegram aparecer en la pantalla bloqueada para que las llamadas funcionen correctamente.</string>
@@ -1260,18 +1260,18 @@
     <string name="PermissionDrawAboveOtherAppsTitle">Modo imagen en imagen</string>
     <string name="PermissionDrawAboveOtherAppsGroupCallTitle">Superposición del videochat</string>
     
-    <string name="Page1Title">SoundGram</string>
+    <string name="Page1Title">Velora</string>
     <string name="Page2Title">Rápido</string>
     <string name="Page3Title">Gratuito</string>
     <string name="Page4Title">Seguro</string>
     <string name="Page5Title">Poderoso</string>
     <string name="Page6Title">Basado en la nube</string>
     <string name="Page1Message">La app de mensajería **más rápida**\ndel mundo. Es **gratis** y **segura**.</string>
-    <string name="Page2Message">**SoundGram** entrega mensajes más\nrápido que cualquier otra aplicación.</string>
-    <string name="Page3Message">**SoundGram** da almacenamiento gratuito e\nilimitado en la nube para chats y multimedia.</string>
-    <string name="Page4Message">**SoundGram** mantiene tus mensajes\na salvo del ataque de hackers.</string>
-    <string name="Page5Message">**SoundGram** no tiene límite de espacio\npara tus archivos multimedia y chats.</string>
-    <string name="Page6Message">**SoundGram** te permite acceder a tus\nmensajes desde múltiples dispositivos.</string>
+    <string name="Page2Message">**Velora** entrega mensajes más\nrápido que cualquier otra aplicación.</string>
+    <string name="Page3Message">**Velora** da almacenamiento gratuito e\nilimitado en la nube para chats y multimedia.</string>
+    <string name="Page4Message">**Velora** mantiene tus mensajes\na salvo del ataque de hackers.</string>
+    <string name="Page5Message">**Velora** no tiene límite de espacio\npara tus archivos multimedia y chats.</string>
+    <string name="Page6Message">**Velora** te permite acceder a tus\nmensajes desde múltiples dispositivos.</string>
     <string name="StartMessaging">Empezar a chatear</string>
     
     <string name="ContactShortcutMessage">Mensaje al %1$s</string>
@@ -1330,7 +1330,7 @@
     <string name="PluginsSafeModeInfo2">Todos los complementos están desactivados. Actívalos uno a uno para identificar el culpable.</string>
     <string name="PluginsDocumentation">Documentación</string>
     <string name="PluginsTrusted">Complementos de confianza</string>
-    <string name="ForkedByNimarko">Bifurcado por SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">Con tecnología de &lt;a href="https://github.com/exteraSquad/exteraGram"&gt;exteraGram&lt;/a&gt;.</string>
     <string name="PluginsNotFound">Aún no hay complementos instalados.</string>
     <string name="PluginNoDescription">Sin descripción</string>
@@ -1346,7 +1346,7 @@
     <string name="PluginInstalled">Complemento instalado</string>
     <string name="PluginUpdated">Complemento actualizado</string>
     <string name="PluginInstallError">Error al instalar el complemento</string>
-<string name="Preferences">Preferencias de exteraGram</string><string name="Links">Enlaces</string><string name="EnablePluginsEngine">Habilitar el motor de complementos</string><string name="PluginNotEnabled">Habilite el **Motor de complementos** para instalar **%1$s**.</string><string name="PluginInstalledButFailedToEnable">%1$s Se instaló, pero se produjo un error al habilitarlo.</string><string name="PluginEnableError">No se pudo habilitar **%1$s**.</string><string name="PluginDisableError">%1$s No se pudo desactivar.</string><string name="EnterValue">Enter a value</string><string name="PluginDelete">Eliminar complemento</string><string name="PluginDeleteInfo">¿Estás seguro de que deseas eliminar **%1$s**?</string><string name="ResetPluginSettings">**%1$s** se han restablecido las configuraciones.</string><string name="ResetPluginSettingsInfo">¿Estás seguro de que deseas restablecer la configuración de **%1$s** a los valores predeterminados?</string><string name="PluginEngineNotEnabled">Habilite el **Motor de complementos** para abrir la configuración de **%1$s**.</string><string name="PluginNotFound">**%1$s** no se encontró.</string><string name="PluginHasNoSettings">**%1$s** no tiene configuración.</string><string name="PluginIsNotRespondingAlert">El plugin "%s" no responde</string><string name="PluginsDevMode">Modo desarrollador</string><string name="PluginsDevServerLaunched">Servidor de desarrollo iniciado.</string><string name="PluginsDevServerStopped">Servidor de desarrollo detenido.</string><string name="PluginsDisableAll">Desactivar todos</string><string name="PluginsDisableAllConfirm">¿Desactivar todos los plugins activos?</string><string name="PluginsDisabledN">%1$d plugins desactivados.</string><string name="PluginsPySdkAutoUpdate">Actualización automática del SDK</string><string name="PluginsPySdkCheckUpdates">Buscar actualizaciones del SDK</string><string name="PluginsPySdkEnableBetaVersion">Usar SDK beta</string><string name="PluginsPySdkHeader">SDK de Python</string><string name="PluginsPySdkOffline">Actualizaciones en línea desactivadas en SoundGram.</string><string name="PluginsRestartEngine">Reiniciar motor</string><string name="PluginsRestartingEngine">Reiniciando motor de plugins…</string><string name="PluginsRowSubtitle">Scripts Python que amplían la app</string><string name="PluginsSafeModeOff">Modo seguro desactivado.</string><string name="PluginsSafeModeOn">Modo seguro activado. Los plugins no se cargarán automáticamente.</string>    <string name="AP_CenterTitle">Título centrado</string>
+<string name="Preferences">Preferencias de exteraGram</string><string name="Links">Enlaces</string><string name="EnablePluginsEngine">Habilitar el motor de complementos</string><string name="PluginNotEnabled">Habilite el **Motor de complementos** para instalar **%1$s**.</string><string name="PluginInstalledButFailedToEnable">%1$s Se instaló, pero se produjo un error al habilitarlo.</string><string name="PluginEnableError">No se pudo habilitar **%1$s**.</string><string name="PluginDisableError">%1$s No se pudo desactivar.</string><string name="EnterValue">Enter a value</string><string name="PluginDelete">Eliminar complemento</string><string name="PluginDeleteInfo">¿Estás seguro de que deseas eliminar **%1$s**?</string><string name="ResetPluginSettings">**%1$s** se han restablecido las configuraciones.</string><string name="ResetPluginSettingsInfo">¿Estás seguro de que deseas restablecer la configuración de **%1$s** a los valores predeterminados?</string><string name="PluginEngineNotEnabled">Habilite el **Motor de complementos** para abrir la configuración de **%1$s**.</string><string name="PluginNotFound">**%1$s** no se encontró.</string><string name="PluginHasNoSettings">**%1$s** no tiene configuración.</string><string name="PluginIsNotRespondingAlert">El plugin "%s" no responde</string><string name="PluginsDevMode">Modo desarrollador</string><string name="PluginsDevServerLaunched">Servidor de desarrollo iniciado.</string><string name="PluginsDevServerStopped">Servidor de desarrollo detenido.</string><string name="PluginsDisableAll">Desactivar todos</string><string name="PluginsDisableAllConfirm">¿Desactivar todos los plugins activos?</string><string name="PluginsDisabledN">%1$d plugins desactivados.</string><string name="PluginsPySdkAutoUpdate">Actualización automática del SDK</string><string name="PluginsPySdkCheckUpdates">Buscar actualizaciones del SDK</string><string name="PluginsPySdkEnableBetaVersion">Usar SDK beta</string><string name="PluginsPySdkHeader">SDK de Python</string><string name="PluginsPySdkOffline">Actualizaciones en línea desactivadas en Velora.</string><string name="PluginsRestartEngine">Reiniciar motor</string><string name="PluginsRestartingEngine">Reiniciando motor de plugins…</string><string name="PluginsRowSubtitle">Scripts Python que amplían la app</string><string name="PluginsSafeModeOff">Modo seguro desactivado.</string><string name="PluginsSafeModeOn">Modo seguro activado. Los plugins no se cargarán automáticamente.</string>    <string name="AP_CenterTitle">Título centrado</string>
     <string name="AP_DisableDividers">Ocultar divisores</string>
     <string name="AP_GlareOnElements">Brillo en elementos</string>
     <string name="AP_GlareOnElementsInfo">Mostrar reflejos superiores e inferiores en elementos de cristal líquido.</string>
@@ -1554,7 +1554,7 @@
     <string name="NM_Config_Exported">Ajustes guardados en el archivo</string>
     <string name="NM_Config_Header">Configuración</string>
     <string name="NM_Config_Import">Importar ajustes</string>
-    <string name="NM_Config_ImportEmpty">El archivo seleccionado no es una configuración de SoundGram</string>
+    <string name="NM_Config_ImportEmpty">El archivo seleccionado no es una configuración de Velora</string>
     <string name="NM_Config_Info">Guarda los ajustes en un archivo o restáuralos en otro dispositivo.</string>
     <string name="NM_CustomTitle">Título de la app</string>
     <string name="NM_DBG_AudioSource">Fuente de audio del micrófono</string>
@@ -1600,7 +1600,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Envía emojis premium sin suscripción Premium.</string>
     <string name="NM_GEN_MiscHeader">Varios</string>
     <string name="NM_GE_UploadSpeedBoost">Subidas más rápidas</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram está basado en Telegram; funciones adaptadas de SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Código fuente</string>
     <string name="NM_HideActionBarStatus">Ocultar estado en barra superior</string>
     <string name="NM_HideBubbleTail">Ocultar colas de mensajes</string>
@@ -1744,5 +1744,5 @@
     <string name="TelegramPremium">Telegram Premium</string>
     <string name="TranslateMessage">Traducir</string>
     <string name="UserColorTabProfile">Perfil</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

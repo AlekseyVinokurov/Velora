@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible NimarkoGram problem
+description: Report a reproducible Velora problem
 title: "[Bug]: "
 labels:
   - bug
@@ -7,11 +7,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping improve NimarkoGram. Remove account identifiers and other private data from logs and screenshots.
+        Thank you for helping improve Velora. Remove account identifiers and other private data from logs and screenshots.
   - type: input
     id: version
     attributes:
-      label: NimarkoGram version
+      label: Velora version
       placeholder: 12.9.2 (build 75500)
     validations:
       required: true

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">Pengaturan-SoundGram</string>
+    <string name="NekoSettings">Pengaturan-Velora</string>
     <string name="IPv6">Lebih suka IPv6</string>
     <string name="MessageMenu">Menu Pesan</string>
     <string name="HidePhone">Sembunyikan Nomor Telepon</string>
@@ -110,10 +110,10 @@
     <string name="enhancedFileLoader">Peningkatan Kecepatan Unduhan</string>
     <string name="mapDriftingFixForGoogleMaps">Perbaiki Pergerakan Google Maps di China</string>
     <string name="useOSMDroidMap">Gunakan Peta OSMDroid</string>
-    <string name="UnknownNekoSettingsOption">Tidak ada pilihan Pengaturan-SoundGram tersebut.</string>
+    <string name="UnknownNekoSettingsOption">Tidak ada pilihan Pengaturan-Velora tersebut.</string>
     <string name="PasscodeNeeded">Anda harus mengaktifkan kode akses terlebih dahulu</string>
     <string name="PasscodeNeko">Kode akses</string>
-    <string name="PasscodeShowInSettings">Tampilkan di Pengaturan-SoundGram</string>
+    <string name="PasscodeShowInSettings">Tampilkan di Pengaturan-Velora</string>
     <string name="PasscodeShowInSettingsAbout">Setelah menyembunyikannya, Anda **HANYA** dapat membuka halaman ini melalui tautan:</string>
     <string name="PasscodeSet">Atur kode akses</string>
     <string name="PasscodeEdit">Ubah kode akses</string>

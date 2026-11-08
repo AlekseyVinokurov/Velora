@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Klien Pengalaman Audio Moden</string>
-    <string name="SoundGramStyle">Gaya SoundGram &amp; Kesan Audio</string>
-    <string name="SoundGramEqualizer">Penyama DSP SoundGram</string>
+    <string name="SoundGramStyle">Gaya Velora &amp; Kesan Audio</string>
+    <string name="SoundGramEqualizer">Penyama DSP Velora</string>
     <string name="SoundGramEQGraph">🎛️ Graf Penyama</string>
     <string name="SoundGramEQEffects">✨ Kesan &amp; Nada</string>
     <string name="SoundGramPresetFlat">Mata</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">jam</string>
     <string name="day">hari</string>
-    <string name="stat">Statistik SoundGram</string>
+    <string name="stat">Statistik Velora</string>
     <string name="imports">Import Lagu</string>
     <string name="im">Import (</string>
-    <string name="ims">Import ke SoundGram</string>
+    <string name="ims">Import ke Velora</string>
     <string name="src">Cari</string>
     <string name="chus">Masukkan @nama_pengguna saluran</string>
     <string name="imm">Import muzik dari saluran</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Artis</string>
     <string name="sg_source_untitled">Tanpa tajuk</string>
     <string name="sg_eq_title">AudioFX &amp; Nada</string>
-    <string name="sg_eq_hero_title">🎛️ Penyama SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Dayakan Penyama SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Penyama Velora</string>
+    <string name="sg_eq_hero_switch_descr">Dayakan Penyama Velora</string>
     <string name="sg_eq_status_active">Didayakan dan aktif</string>
     <string name="sg_eq_status_disabled">Dilumpuhkan</string>
     <string name="sg_eq_section_graph">📈 GRAF PENYAMA INTERAKTIF 10-JALUR</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Konsert 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Maksimum Bes</string>
-    <string name="sg_style_title">Penampilan SoundGram</string>
+    <string name="sg_style_title">Penampilan Velora</string>
     <string name="sg_style_section_glass">GAYA GLASSMORPHISM</string>
     <string name="sg_style_player_title">Pemain Audio</string>
     <string name="sg_style_player_subtitle">Kesan kaca fros untuk pemain penuh</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Senarai Lagu</string>
     <string name="sg_style_tracks_subtitle">Pemisah separa lutsinar dan latar lagu</string>
     <string name="sg_style_eq_title">Penyama</string>
-    <string name="sg_style_eq_subtitle">Antara muka kaca untuk Penyama SoundGram</string>
+    <string name="sg_style_eq_subtitle">Antara muka kaca untuk Penyama Velora</string>
     <string name="sg_sphere_settings">TETAPAN SFERA GELOMBANG SAYA</string>
     <string name="sg_sphere_size_title">Saiz Sfera</string>
     <string name="sg_sphere_size_subtitle">Skala sfera 3D: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">KURSOR</string>
     <string name="sg_ta_cursor_smooth">Kursor Lancar</string>
     <string name="sg_ta_cursor_liquid">Kursor Cecair</string>
-    <string name="TelegramVersion">SoundGram untuk Android %1$s</string>
+    <string name="TelegramVersion">Velora untuk Android %1$s</string>
     <string name="CG_LastSeenNow">dilihat sebentar tadi</string>
     <string name="CG_LastSeenMinutes_one">dilihat %1$d minit yang lalu</string>
     <string name="CG_LastSeenMinutes_few">dilihat %1$d minit yang lalu</string>
@@ -361,10 +361,10 @@
     <string name="NM_WSB_VoIP_Enable">Lalukan panggilan melalui pintasan</string>
     <string name="NM_WSB_Subscribe_Header">Langganan diperlukan</string>
     <string name="NM_WSB_Subscribe_Info">Pintasan dijalankan pada infrastruktur pengarang. Untuk terus menggunakannya, kekal melanggan saluran pada sekurang-kurangnya satu akaun anda.</string>
-    <string name="NM_WSB_Subscribe_Button">Langgan @soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="NM_CP_LatexRendering">Paparkan formula LaTeX</string>
     <string name="NM_CP_LatexRendering_Desc">Kenali formula di dalam $…$ dan $$…$$ dalam mesej.</string>
-    <string name="NimarkoGramSettings">Tetapan SoundGram</string>
+    <string name="NimarkoGramSettings">Tetapan Velora</string>
     <string name="NM_Cat_General">Umum</string>
     <string name="NM_Cat_Appearance">Penampilan</string>
     <string name="NM_Cat_Chats">Sembang</string>

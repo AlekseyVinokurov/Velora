@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Klien Pengalaman Audio Modern</string>
-    <string name="SoundGramStyle">Gaya &amp; Efek Audio SoundGram</string>
-    <string name="SoundGramEqualizer">Equalizer DSP SoundGram</string>
+    <string name="SoundGramStyle">Gaya &amp; Efek Audio Velora</string>
+    <string name="SoundGramEqualizer">Equalizer DSP Velora</string>
     <string name="SoundGramEQGraph">🎛️ Grafik Equalizer</string>
     <string name="SoundGramEQEffects">✨ Efek &amp; Nada</string>
     <string name="SoundGramPresetFlat">Datar</string>
@@ -108,10 +108,10 @@
     <string name="min">mnt</string>
     <string name="hour">jam</string>
     <string name="day">hari</string>
-    <string name="stat">Statistik SoundGram</string>
+    <string name="stat">Statistik Velora</string>
     <string name="imports">Impor Trek</string>
     <string name="im">Impor (</string>
-    <string name="ims">Impor ke SoundGram</string>
+    <string name="ims">Impor ke Velora</string>
     <string name="src">Cari</string>
     <string name="chus">Masukkan @username saluran</string>
     <string name="imm">Impor musik dari saluran</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Artis</string>
     <string name="sg_source_untitled">Tanpa Judul</string>
     <string name="sg_eq_title">Efek Audio &amp; Nada</string>
-    <string name="sg_eq_hero_title">🎛️ Equalizer SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Aktifkan Equalizer SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Equalizer Velora</string>
+    <string name="sg_eq_hero_switch_descr">Aktifkan Equalizer Velora</string>
     <string name="sg_eq_status_active">Diaktifkan dan bekerja</string>
     <string name="sg_eq_status_disabled">Dinonaktifkan</string>
     <string name="sg_eq_section_graph">📈 GRAFIK EQUALIZER INTERAKTIF 10 BAND</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Konser 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Bass Maksimal</string>
-    <string name="sg_style_title">Tampilan SoundGram</string>
+    <string name="sg_style_title">Tampilan Velora</string>
     <string name="sg_style_section_glass">GAYA KACA BURAM (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">Pemutar Audio</string>
     <string name="sg_style_player_subtitle">Efek kaca buram untuk pemutar layar penuh</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Daftar Trek</string>
     <string name="sg_style_tracks_subtitle">Pemisah transparan dan latar belakang trek</string>
     <string name="sg_style_eq_title">Equalizer</string>
-    <string name="sg_style_eq_subtitle">Antarmuka kaca untuk Equalizer SoundGram</string>
+    <string name="sg_style_eq_subtitle">Antarmuka kaca untuk Equalizer Velora</string>
     <string name="sg_sphere_settings">PENGATURAN BOLA 3D «GELOMBANG SAYA»</string>
     <string name="sg_sphere_size_title">Ukuran Bola</string>
     <string name="sg_sphere_size_subtitle">Skala bola 3D: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Ulangi</string>
     <string name="AccDescrShuffle">Acak</string>
     <string name="AccDescrEqualizer">Equalizer</string>
-    <string name="NimarkoGramSettings">Pengaturan SoundGram</string>
+    <string name="NimarkoGramSettings">Pengaturan Velora</string>
     <string name="NM_Cat_General">Umum</string>
     <string name="NM_Cat_Appearance">Tampilan</string>
     <string name="NM_Cat_Chats">Obrolan</string>

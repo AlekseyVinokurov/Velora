@@ -18,7 +18,7 @@
     <string name="AccDescrGIFs">GIF</string>
     <string name="AccDescrStickers">ステッカー</string>
     <string name="ActionsChartTitle">操作</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">本当によろしいですか？</string>
     <string name="AvatarPreviewSearchMessages">メッセージを検索</string>
     <string name="Back">戻る</string>
@@ -237,7 +237,7 @@
     <string name="NM_Config_Exported">設定がファイルに保存されました</string>
     <string name="NM_Config_Header">設定構成</string>
     <string name="NM_Config_Import">設定をインポート</string>
-    <string name="NM_Config_ImportEmpty">選択されたファイルはSoundGram設定ではありません</string>
+    <string name="NM_Config_ImportEmpty">選択されたファイルはVelora設定ではありません</string>
     <string name="NM_Config_Info">設定をファイルに保存するか、別のデバイスで復元します。</string>
     <string name="NM_CustomTitle">アプリのタイトル</string>
     <string name="NM_DBG_AudioSource">マイクの音声入力ソース</string>
@@ -283,7 +283,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Premiumサブスクリプションなしでプレミアム絵文字を送信します。</string>
     <string name="NM_GEN_MiscHeader">その他</string>
     <string name="NM_GE_UploadSpeedBoost">アップロード高速化</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGramは公式Telegram上に構築され、機能はSoundGramから移植されました。</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">ソースコード</string>
     <string name="NM_HideActionBarStatus">ヘッダーのステータスを非表示</string>
     <string name="NM_HideBubbleTail">メッセージのしっぽを非表示</string>
@@ -439,5 +439,5 @@
     <string name="TranslateMessage">翻訳</string>
     <string name="UserColorTabProfile">プロフィール</string>
     <string name="VibrationDisabled">無効</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

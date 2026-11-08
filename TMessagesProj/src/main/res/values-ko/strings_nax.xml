@@ -326,7 +326,7 @@
     <string name="sg_chat_list_background">대화방 목록 배경</string>
     <string name="sg_choose_from_gallery">갤러리에서 선택</string>
     <string name="sg_delete_background">배경 삭제</string>
-    <string name="sg_soundgram_status">💎 SoundGram 상태</string>
+    <string name="sg_soundgram_status">💎 Velora 상태</string>
     <string name="sg_status_member">멤버</string>
     <string name="sg_eq_notice">⚡ 속도, 음조 및 효과는 음악 트랙에만 적용됩니다</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

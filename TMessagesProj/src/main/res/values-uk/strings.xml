@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="AppName">SoundGram</string>
-    <string name="AppNameBeta">SoundGram Beta</string>
+    <string name="AppName">Velora</string>
+    <string name="AppNameBeta">Velora Beta</string>
     <string name="LanguageName">Українська</string>
     <string name="English">Англійська</string>
     <string name="LanguageNameInEnglish">Ukrainian</string>
@@ -27,21 +27,21 @@
     <string name="WrongNumberFormat">Неправильний формат</string>
     <string name="ShortNumberInfo">Вказаний номер є занадто коротким для **%1$s**:\n\n**%2$s**\n\nВведіть номер телефону повністю, разом із кодом країни.</string>
     <string name="EditNumber">Змінити номер</string>
-    <string name="DidNotGetTheCodeInfo">Якщо ви не одержали коду в SMS або виклику, перевірте **налаштування мобільної мережі** та номер телефону:\n\n**%1$s**\n\nЯкщо це не допоможе, вам залишиться спробувати інший номер телефону або звʼязатися з підтримкою SoundGram. Натисніть **Допомога**, щоб надіслати нам технічну інформацію і ми могли зʼясувати проблему.</string>
+    <string name="DidNotGetTheCodeInfo">Якщо ви не одержали коду в SMS або виклику, перевірте **налаштування мобільної мережі** та номер телефону:\n\n**%1$s**\n\nЯкщо це не допоможе, вам залишиться спробувати інший номер телефону або звʼязатися з підтримкою Telegram. Натисніть **Допомога**, щоб надіслати нам технічну інформацію і ми могли зʼясувати проблему.</string>
     <string name="DidNotGetTheCodeHelpButton">Допомога</string>
     <string name="DidNotGetTheCodeEditNumberButton">Змінити номер</string>
     
     <string name="YourCode">Підтвердження номера</string>
     <string name="SentSmsCode">Ми надіслали SMS із кодом активації на ваш телефон **%1$s**.</string>
-    <string name="SentAppCode">Ми надіслали код до **SoundGram** на іншому вашому пристрої.</string>
-    <string name="SentAppCodeWithPhone">Ми надіслали код до **SoundGram** для %1$s на іншому вашому пристрої.</string>
-    <string name="SentAppCodeTitle">Перевірте повідомлення в SoundGram</string>
+    <string name="SentAppCode">Ми надіслали код до **Telegram** на іншому вашому пристрої.</string>
+    <string name="SentAppCodeWithPhone">Ми надіслали код до **Telegram** для %1$s на іншому вашому пристрої.</string>
+    <string name="SentAppCodeTitle">Перевірте повідомлення в Telegram</string>
     <string name="SentFragmentCode">Отримайте код для %1$s у розділі «Anonymous Numbers» на Fragment.</string>
     <string name="SentSmsCodeTitle">Введіть код</string>
     <string name="OpenFragment">Відкрити Fragment</string>
-    <string name="SentCallCode">Ми телефонуємо на ваш номер **%1$s**.\n\nВідповідати на виклик не потрібно, SoundGram автоматично зробить усе сам.</string>
+    <string name="SentCallCode">Ми телефонуємо на ваш номер **%1$s**.\n\nВідповідати на виклик не потрібно, Velora автоматично зробить усе сам.</string>
     <string name="SentCallOnly">Ми телефонуємо на номер **%1$s**, щоб продиктувати код.</string>
-    <string name="CallText">SoundGram зателефонує вам за %1$d:%2$02d</string>
+    <string name="CallText">Velora зателефонує вам за %1$d:%2$02d</string>
     <string name="SmsText">Ми надішлемо вам SMS за %1$d:%2$02d</string>
     <string name="Calling">Телефонуємо вам...</string>
     <string name="SendingSms">Надсилаємо SMS...</string>
@@ -52,7 +52,7 @@
     <string name="DidNotGetTheCodeSms">Отримати код в SMS</string>
     <string name="DidNotGetTheCodeFragment">Отримати код на платформі Fragment</string>
     <string name="CancelAccountReset">Скасувати скидання акаунта</string>
-    <string name="CancelAccountResetInfo2">Хтось з доступом до **%1$s ** запросив видалення вашого акаунта SoundGram і скидання хмарного пароля.\n\nЯкщо це були не ви, введіть код з SMS, надісланого на ваш номер. Ви також можете скасувати видалення, *змінивши номер телефону*.</string>
+    <string name="CancelAccountResetInfo2">Хтось з доступом до **%1$s ** запросив видалення вашого акаунта Telegram і скидання хмарного пароля.\n\nЯкщо це були не ви, введіть код з SMS, надісланого на ваш номер. Ви також можете скасувати видалення, *змінивши номер телефону*.</string>
     <string name="ResetAccount">Скинути акаунт</string>
     <string name="ResetAccountInfo">"Акаунт **%1$s** активний та захищений паролем, тому з міркувань безпеки ми видалимо його лише через тиждень.\n\nВи можете скасувати цей процес будь-коли. "</string>
     <string name="ResetAccountStatus">Ви зможете скинути акаунт через:</string>
@@ -61,7 +61,7 @@
     <string name="CancelLinkExpired">Посилання недійсне або застаріле.</string>
     <string name="CancelLinkSuccessTitle">Успіх!</string>
     <string name="CancelLinkSuccess">Процес видалення вашого акаунта %1$s було скасовано. Зараз ви можете закрити це вікно.</string>
-    <string name="OtherLoginCode">Ваш код для входу – **%1$s**. Введіть його у програмі SoundGram, через яку ви хочете увійти.\n\nНе повідомляйте цей код нікому.</string>
+    <string name="OtherLoginCode">Ваш код для входу – **%1$s**. Введіть його у програмі Telegram, через яку ви хочете увійти.\n\nНе повідомляйте цей код нікому.</string>
     <string name="SmsAvailableIn">Ви зможете зробити запит на SMS за %1$d:%2$02d</string>
     <string name="ResendSmsAvailableIn">Ви зможете зробити запит на SMS за %1$d:%2$02d</string>
     <string name="RequestSmsButton">Отримати код в SMS-повідомленні</string>
@@ -130,7 +130,7 @@
     <string name="PleaseEnterNewSecondPasswordHint">Введіть новий пароль ще раз</string>
     <string name="RecoveryEmail">Е-пошта для відновлення</string>
     <string name="RecoveryEmailTitle">Е-пошта для відновлення</string>
-    <string name="RecoveryEmailSubtitle">Ви можете встановити е-пошту, за допомогою якої ви зможете скинути пароль і відновити доступ до SoundGram-акаунта.</string>
+    <string name="RecoveryEmailSubtitle">Ви можете встановити е-пошту, за допомогою якої ви зможете скинути пароль і відновити доступ до Telegram-акаунта.</string>
     <string name="YourEmail">Ваша е-пошта</string>
     <string name="YourNewEmail">Ваша нова е-пошта</string>
     <string name="YourLoginEmailChangedSuccess">Вашу адресу е-пошти змінено.</string>
@@ -211,9 +211,9 @@
     <string name="VerificationCode">Код підтвердження</string>
     <string name="EnterCode">Введіть код</string>
     <string name="ResendCodeInfo">На вашу е-пошту надіслано код підтвердження.</string>
-    <string name="EnabledPasswordText">Увімкнено двоетапну перевірку.\nДля входу в акаунт SoundGram вам знадобиться встановлений тут пароль.</string>
+    <string name="EnabledPasswordText">Увімкнено двоетапну перевірку.\nДля входу в акаунт Telegram вам знадобиться встановлений тут пароль.</string>
     <string name="AddEmailTitle">Вкажіть е-пошту для входу</string>
-    <string name="AddEmailSubtitle">Ви отримуватимете коди для входу в SoundGram на е-пошту, а не через SMS. Будь ласка, додайте адресу, до якої ви маєте доступ.</string>
+    <string name="AddEmailSubtitle">Ви отримуватимете коди для входу в Velora на е-пошту, а не через SMS. Будь ласка, додайте адресу, до якої ви маєте доступ.</string>
     <string name="EnterNewEmail">Вкажіть нову е-пошту</string>
     <string name="VerificationCodeSubtitle">"Перевірте свою е-пошту %1$s і введіть код, який ми вам щойно надіслали. Не забудьте перевірити теку зі спамом. "</string>
     <string name="CheckYourEmail">Перевірте вашу е-пошту</string>
@@ -222,18 +222,18 @@
     <string name="CheckYourNewEmailSubtitle">Введіть код, який ми щойно надіслали на вашу нову е-пошту %1$s.</string>
     <string name="LoginOrSingInWithGoogle">або</string>
     
-    <string name="Page1Title">SoundGram</string>
+    <string name="Page1Title">Velora</string>
     <string name="Page2Title">Швидкий</string>
     <string name="Page3Title">Безплатний</string>
     <string name="Page4Title">Захищений</string>
     <string name="Page5Title">Потужний</string>
     <string name="Page6Title">Хмарний</string>
     <string name="Page1Message">**Найшвидший** месенджер у світі.\n**Безплатний** і **захищений**.</string>
-    <string name="Page2Message">**SoundGram** доставляє повідомлення\nшвидше за всі інші застосунки.</string>
-    <string name="Page3Message">У **SoundGram** можна безплатно зберігати\nскільки завгодно повідомлень і медіафайлів.</string>
-    <string name="Page4Message">**SoundGram** оберігає ваші повідомлення\nвід хакерських атак.</string>
-    <string name="Page5Message">**SoundGram** не обмежує вас\nу розмірі чатів і медіа.</string>
-    <string name="Page6Message">**SoundGram** надає вам доступ до\nповідомлень з безлічі пристроїв.</string>
+    <string name="Page2Message">**Velora** доставляє повідомлення\nшвидше за всі інші застосунки.</string>
+    <string name="Page3Message">У **Velora** можна безплатно зберігати\nскільки завгодно повідомлень і медіафайлів.</string>
+    <string name="Page4Message">**Velora** оберігає ваші повідомлення\nвід хакерських атак.</string>
+    <string name="Page5Message">**Velora** не обмежує вас\nу розмірі чатів і медіа.</string>
+    <string name="Page6Message">**Velora** надає вам доступ до\nповідомлень з безлічі пристроїв.</string>
     <string name="StartMessaging">Почати спілкування</string>
     
     <string name="formatterBoostExpired">dd MMM yyyy</string>
@@ -291,7 +291,7 @@
     <string name="PluginsSafeModeInfo2">Усі плагіни вимкнено. Вмикайте їх по одному, щоб знайти проблемний.</string>
     <string name="PluginsDocumentation">Документація</string>
     <string name="PluginsTrusted">Довірені плагіни</string>
-    <string name="ForkedByNimarko">Форкнуто SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">Працює на &lt;a href="https://github.com/exteraSquad/exteraGram"&gt;exteraGram&lt;/a&gt;.</string>
     <string name="PluginsNotFound">Плагіни ще не встановлено.</string>
     <string name="PluginNoDescription">Без опису</string>
@@ -307,7 +307,7 @@
     <string name="PluginInstalled">Плагін встановлено</string>
     <string name="PluginUpdated">Плагін оновлено</string>
     <string name="PluginInstallError">Не вдалося встановити плагін</string>
-<string name="Preferences">Налаштування exteraGram</string><string name="Links">Посилання</string><string name="EnablePluginsEngine">Увімкнути систему плагінів</string><string name="PluginNotEnabled">Увімкніть **Систему плагінів** для встановлення **%1$s**.</string><string name="PluginInstalledButFailedToEnable">**%1$s** встановлено, але під час увімкнення сталася помилка.</string><string name="PluginEnableError">Не вдалося увімкнути **%1$s**.</string><string name="PluginDisableError">Не вдалося вимкнути **%1$s**.</string><string name="PluginIsNotResponding">Плагін не відповідає.</string><string name="PluginIsNotRespondingAlert">%1$s не відповідає</string><string name="EnterValue">Введіть значення</string><string name="PluginDelete">Видалити плагін</string><string name="PluginDeleteInfo">Ви впевнені, що хочете видалити %1$s?</string><string name="ResetPluginSettings">Налаштування **%1$s** були скинуті.</string><string name="ResetPluginSettingsInfo">Ви впевнені, що хочете скинути налаштування **%1$s** до стандартних?</string><string name="PluginEngineNotEnabled">Увімкніть **Систему плагінів**, щоб відкрити налаштування **%1$s**.</string><string name="PluginNotFound">**%1$s** не знайдено.</string><string name="PluginHasNoSettings">**%1$s** не має налаштувань.</string><string name="PluginsRowSubtitle">Python-скрипти, що розширюють додаток</string><string name="PluginsDevMode">Режим розробника</string><string name="PluginsDevServerLaunched">Сервер розробки запущено.</string><string name="PluginsDevServerStopped">Сервер розробки зупинено.</string><string name="PluginsDisableAll">Вимкнути всі плагіни</string><string name="PluginsDisableAllConfirm">Вимкнути всі активні плагіни?</string><string name="PluginsDisabledN">%1$d плагінів вимкнено.</string><string name="PluginsPySdkAutoUpdate">Авто-оновлення SDK</string><string name="PluginsPySdkCheckUpdates">Перевірити оновлення SDK</string><string name="PluginsPySdkEnableBetaVersion">Використовувати бета SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Онлайн-оновлення вимкнено в SoundGram.</string><string name="PluginsRestartEngine">Перезапустити двигун</string><string name="PluginsRestartingEngine">Перезапуск двигуна плагінів…</string><string name="PluginsSafeModeOff">Безпечний режим вимкнено.</string><string name="PluginsSafeModeOn">Безпечний режим увімкнено. Плагіни не завантажуватимуться автоматично.</string>    <string name="AP_CenterTitle">Заголовок по центру</string>
+<string name="Preferences">Налаштування exteraGram</string><string name="Links">Посилання</string><string name="EnablePluginsEngine">Увімкнути систему плагінів</string><string name="PluginNotEnabled">Увімкніть **Систему плагінів** для встановлення **%1$s**.</string><string name="PluginInstalledButFailedToEnable">**%1$s** встановлено, але під час увімкнення сталася помилка.</string><string name="PluginEnableError">Не вдалося увімкнути **%1$s**.</string><string name="PluginDisableError">Не вдалося вимкнути **%1$s**.</string><string name="PluginIsNotResponding">Плагін не відповідає.</string><string name="PluginIsNotRespondingAlert">%1$s не відповідає</string><string name="EnterValue">Введіть значення</string><string name="PluginDelete">Видалити плагін</string><string name="PluginDeleteInfo">Ви впевнені, що хочете видалити %1$s?</string><string name="ResetPluginSettings">Налаштування **%1$s** були скинуті.</string><string name="ResetPluginSettingsInfo">Ви впевнені, що хочете скинути налаштування **%1$s** до стандартних?</string><string name="PluginEngineNotEnabled">Увімкніть **Систему плагінів**, щоб відкрити налаштування **%1$s**.</string><string name="PluginNotFound">**%1$s** не знайдено.</string><string name="PluginHasNoSettings">**%1$s** не має налаштувань.</string><string name="PluginsRowSubtitle">Python-скрипти, що розширюють додаток</string><string name="PluginsDevMode">Режим розробника</string><string name="PluginsDevServerLaunched">Сервер розробки запущено.</string><string name="PluginsDevServerStopped">Сервер розробки зупинено.</string><string name="PluginsDisableAll">Вимкнути всі плагіни</string><string name="PluginsDisableAllConfirm">Вимкнути всі активні плагіни?</string><string name="PluginsDisabledN">%1$d плагінів вимкнено.</string><string name="PluginsPySdkAutoUpdate">Авто-оновлення SDK</string><string name="PluginsPySdkCheckUpdates">Перевірити оновлення SDK</string><string name="PluginsPySdkEnableBetaVersion">Використовувати бета SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Онлайн-оновлення вимкнено в Velora.</string><string name="PluginsRestartEngine">Перезапустити двигун</string><string name="PluginsRestartingEngine">Перезапуск двигуна плагінів…</string><string name="PluginsSafeModeOff">Безпечний режим вимкнено.</string><string name="PluginsSafeModeOn">Безпечний режим увімкнено. Плагіни не завантажуватимуться автоматично.</string>    <string name="AP_CenterTitle">Заголовок по центру</string>
     <string name="AP_DisableDividers">Приховати роздільники</string>
     <string name="AP_GlareOnElements">Відблиски на елементах</string>
     <string name="AP_GlareOnElementsInfo">Відображення верхніх і нижніх відблисків на елементах з ефектом рідкого скла.</string>
@@ -541,7 +541,7 @@
     <string name="NM_Config_Exported">Налаштування збережено у файл</string>
     <string name="NM_Config_Header">Конфігурація</string>
     <string name="NM_Config_Import">Імпорт налаштувань</string>
-    <string name="NM_Config_ImportEmpty">Вибраний файл — не конфігурація SoundGram</string>
+    <string name="NM_Config_ImportEmpty">Вибраний файл — не конфігурація Velora</string>
     <string name="NM_Config_Info">Збережіть налаштування у файл або відновіть їх на іншому пристрої.</string>
     <string name="NM_CustomTitle">Заголовок додатка</string>
     <string name="NM_DBG_AudioSource">Джерело звуку мікрофона</string>
@@ -587,7 +587,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Надсилайте преміум-емодзі без підписки Premium.</string>
     <string name="NM_GEN_MiscHeader">Різне</string>
     <string name="NM_GE_UploadSpeedBoost">Прискорення надсилання</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram побудовано на офіційному клієнті Telegram; функції портовано з SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Вихідний код</string>
     <string name="NM_HideActionBarStatus">Приховати статус у шапці</string>
     <string name="NM_HideBubbleTail">Приховати хвостики повідомлень</string>
@@ -739,5 +739,5 @@
     <string name="TranslateMessage">Перекласти</string>
     <string name="UserColorTabProfile">Профіль</string>
     <string name="VibrationDisabled">Вимкнена</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

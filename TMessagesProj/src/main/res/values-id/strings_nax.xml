@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="XChannel">Saluran SoundGram</string>
+    <string name="XChannel">Saluran Velora</string>
     <string name="EnableSaveDeletedMessages">Simpan Pesan yang Dihapus</string>
     <string name="DeletedMessage">dihapus</string>
     <string name="EnableSaveEditsHistory">Simpan Riwayat Suntingan</string>
@@ -326,7 +326,7 @@
     <string name="sg_chat_list_background">Latar belakang daftar obrolan</string>
     <string name="sg_choose_from_gallery">Pilih dari Galeri</string>
     <string name="sg_delete_background">Hapus latar belakang</string>
-    <string name="sg_soundgram_status">💎 Status SoundGram</string>
+    <string name="sg_soundgram_status">💎 Status Velora</string>
     <string name="sg_status_member">Anggota</string>
     <string name="sg_eq_notice">⚡ Kecepatan, nada, dan efek hanya diterapkan pada trek musik</string>
     <string name="sg_added_to_playlist">Añadido a "%s"</string>

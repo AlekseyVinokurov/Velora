@@ -62,17 +62,6 @@ android {
 
     signingConfigs {
         debug {
-            if (rootProject.ext.hasReleaseSigning) {
-                storeFile rootProject.file(rootProject.ext.releaseSigning.storeFile)
-                storePassword rootProject.ext.releaseSigning.storePassword
-                keyAlias rootProject.ext.releaseSigning.keyAlias
-                keyPassword rootProject.ext.releaseSigning.keyPassword
-            } else {
-                storeFile file("../TMessagesProj/config/release.keystore")
-                storePassword "serega070908"
-                keyAlias "key0"
-                keyPassword "serega070908"
-            }
             enableV1Signing true
             enableV2Signing true
             enableV3Signing true
@@ -85,11 +74,6 @@ android {
                 storePassword rootProject.ext.releaseSigning.storePassword
                 keyAlias rootProject.ext.releaseSigning.keyAlias
                 keyPassword rootProject.ext.releaseSigning.keyPassword
-            } else {
-                storeFile file("../TMessagesProj/config/release.keystore")
-                storePassword "serega070908"
-                keyAlias "key0"
-                keyPassword "serega070908"
             }
             // Sign with ALL APK signature schemes (v1 JAR + v2 + v3 + v3.1)
             // so Android stops prompting "additional APK verification" on
@@ -113,10 +97,6 @@ android {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
-            // NimarkoGram: ".web" suffix dropped permanently from vc6934.
-            // Clean package 'app.nimarkogram.messenger' (the ".web" suffix
-            // was a hybrid-app malware pattern signal for Play Protect's
-            // package classifier in mid-2026 — contributing to hard-blocks).
             minifyEnabled false
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../TMessagesProj/proguard-rules.pro'
@@ -127,7 +107,6 @@ android {
             debuggable false
             jniDebuggable false
             signingConfig signingConfigs.release
-            // NimarkoGram: ".web" suffix dropped (see comment in debug block).
             // The normal standalone artifact remains plugins-friendly. Passing
             // -PngCompactStandalone enables an isolated, measurable experiment
             // with app-level R8 and resource shrinking; it is never implicit.
@@ -139,13 +118,6 @@ android {
         }
     }
 
-    // NimarkoGram: rebrand the published applicationId for this variant only.
-    // Upstream TG namespace ('org.telegram.messenger') stays intact for compatibility
-    // (TG core references it everywhere — renaming the whole package is out of scope).
-    // Final ids (no ".web" suffix anymore — see buildTypes comments):
-    //   debug      -> app.nimarkogram.messenger
-    //   standalone -> app.nimarkogram.messenger
-    defaultConfig.applicationId = 'app.nimarkogram.messenger'
 
     sourceSets.debug {
         manifest.srcFile '../TMessagesProj/config/release/AndroidManifest_standalone.xml'

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Modern Ses Deneyimi İstemcisi</string>
-    <string name="SoundGramStyle">SoundGram Stili ve Ses Efektleri</string>
-    <string name="SoundGramEqualizer">SoundGram DSP Ekolayzer</string>
+    <string name="SoundGramStyle">Velora Stili ve Ses Efektleri</string>
+    <string name="SoundGramEqualizer">Velora DSP Ekolayzer</string>
     <string name="SoundGramEQGraph">🎛️ Ekolayzer Grafiği</string>
     <string name="SoundGramEQEffects">✨ Efektler ve Ton</string>
     <string name="SoundGramPresetFlat">Düz</string>
@@ -108,10 +108,10 @@
     <string name="min">dk</string>
     <string name="hour">sa</string>
     <string name="day">gün</string>
-    <string name="stat">SoundGram İstatistikleri</string>
+    <string name="stat">Velora İstatistikleri</string>
     <string name="imports">Parçaları İçe Aktar</string>
     <string name="im">İçe aktar (</string>
-    <string name="ims">SoundGram\'a İçe Aktar</string>
+    <string name="ims">Velora\'a İçe Aktar</string>
     <string name="src">Ara</string>
     <string name="chus">Kanal @kullanıcıadını girin</string>
     <string name="imm">Kanaldan müzik içe aktar</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Sanatçı</string>
     <string name="sg_source_untitled">Başlıksız</string>
     <string name="sg_eq_title">Ses Efektleri ve Ton</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram Ekolayzer</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram Ekolayzerini Etkinleştir</string>
+    <string name="sg_eq_hero_title">🎛️ Velora Ekolayzer</string>
+    <string name="sg_eq_hero_switch_descr">Velora Ekolayzerini Etkinleştir</string>
     <string name="sg_eq_status_active">Etkin ve çalışıyor</string>
     <string name="sg_eq_status_disabled">Devre dışı</string>
     <string name="sg_eq_section_graph">📈 10 BANTLI ETKİLEŞİMLİ EKOLAYZER GRAFİĞİ</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Konser 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Maksimum Bas</string>
-    <string name="sg_style_title">SoundGram Görünümü</string>
+    <string name="sg_style_title">Velora Görünümü</string>
     <string name="sg_style_section_glass">BUZLU CAM STİLİ (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">Müzik Çalar</string>
     <string name="sg_style_player_subtitle">Tam ekran oynatıcı için buzlu cam efekti</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Parça Listesi</string>
     <string name="sg_style_tracks_subtitle">Yarı saydam ayırıcılar ve parça arka planı</string>
     <string name="sg_style_eq_title">Ekolayzer</string>
-    <string name="sg_style_eq_subtitle">SoundGram Ekolayzer için cam arayüz</string>
+    <string name="sg_style_eq_subtitle">Velora Ekolayzer için cam arayüz</string>
     <string name="sg_sphere_settings">BENİM DALGAM KÜRE AYARLARI</string>
     <string name="sg_sphere_size_title">Küre Boyutu</string>
     <string name="sg_sphere_size_subtitle">3D küre ölçeği: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Tekrarla</string>
     <string name="AccDescrShuffle">Karıştır</string>
     <string name="AccDescrEqualizer">Ekolayzer</string>
-    <string name="NimarkoGramSettings">SoundGram Ayarları</string>
+    <string name="NimarkoGramSettings">Velora Ayarları</string>
     <string name="NM_Cat_General">Genel</string>
     <string name="NM_Cat_Appearance">Görünüm</string>
     <string name="NM_Cat_Chats">Sohbetler</string>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Moderne lydopplevelsesklient</string>
-    <string name="SoundGramStyle">SoundGram-stil &amp; Lydeffekter</string>
-    <string name="SoundGramEqualizer">SoundGram DSP-equalizer</string>
+    <string name="SoundGramStyle">Velora-stil &amp; Lydeffekter</string>
+    <string name="SoundGramEqualizer">Velora DSP-equalizer</string>
     <string name="SoundGramEQGraph">🎛️ Equalizer-graf</string>
     <string name="SoundGramEQEffects">✨ Effekter &amp; Tone</string>
     <string name="SoundGramPresetFlat">Flat</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">t</string>
     <string name="day">dager</string>
-    <string name="stat">SoundGram-statistikk</string>
+    <string name="stat">Velora-statistikk</string>
     <string name="imports">Importer spor</string>
     <string name="im">Importer (</string>
-    <string name="ims">Importer til SoundGram</string>
+    <string name="ims">Importer til Velora</string>
     <string name="src">Søk</string>
     <string name="chus">Skriv inn kanal-@brukernavn</string>
     <string name="imm">Importer musikk fra kanal</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Artist</string>
     <string name="sg_source_untitled">Uten tittel</string>
     <string name="sg_eq_title">AudioFX &amp; Tonehøyde</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram-equalizer</string>
-    <string name="sg_eq_hero_switch_descr">Aktiver SoundGram-equalizer</string>
+    <string name="sg_eq_hero_title">🎛️ Velora-equalizer</string>
+    <string name="sg_eq_hero_switch_descr">Aktiver Velora-equalizer</string>
     <string name="sg_eq_status_active">Aktivert og aktiv</string>
     <string name="sg_eq_status_disabled">Deaktivert</string>
     <string name="sg_eq_section_graph">📈 10-BÅNDS INTERAKTIV EQUALIZERGRAF</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Sporliste</string>
     <string name="sg_style_tracks_subtitle">Halvgjennomsiktige skillelinjer og bakgrunn</string>
     <string name="sg_style_eq_title">Equalizer</string>
-    <string name="sg_style_eq_subtitle">Glassgrensesnitt for SoundGram-equalizer</string>
+    <string name="sg_style_eq_subtitle">Glassgrensesnitt for Velora-equalizer</string>
     <string name="sg_sphere_settings">SFÆREINNSTILLINGER «MIN BØLGE»</string>
     <string name="sg_sphere_size_title">Sfærestørrelse</string>
     <string name="sg_sphere_size_subtitle">3D-sfæreskala: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">MARKØR</string>
     <string name="sg_ta_cursor_smooth">Jevn markør</string>
     <string name="sg_ta_cursor_liquid">Flytende markør</string>
-    <string name="TelegramVersion">SoundGram for Android %1$s</string>
+    <string name="TelegramVersion">Velora for Android %1$s</string>
     <string name="CG_LastSeenNow">sett nettopp</string>
     <string name="CG_LastSeenMinutes_one">sett for %1$d minutt siden</string>
     <string name="CG_LastSeenMinutes_few">sett for %1$d minutter siden</string>
@@ -354,8 +354,8 @@
     <string name="NM_WSB_VoIP_Header">Samtaler</string>
     <string name="NM_WSB_Subscribe_Header">Abonnement påkrevd</string>
     <string name="NM_WSB_Subscribe_Info">Omgåelsen kjører på forfatterens infrastruktur. For å fortsette å bruke den, må du forbli abonnent på kanalen på minst én av kontoene dine.</string>
-    <string name="NM_WSB_Subscribe_Button">Abonner på @soundgram_project</string>
-    <string name="NimarkoGramSettings">SoundGram-innstillinger</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
+    <string name="NimarkoGramSettings">Velora-innstillinger</string>
     <string name="NM_Cat_General">Generelt</string>
     <string name="NM_Cat_Appearance">Utseende</string>
     <string name="NM_Cat_Chats">Chatter</string>

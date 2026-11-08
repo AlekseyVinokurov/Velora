@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">مشغل تجربة صوتية متقدمة</string>
-    <string name="SoundGramStyle">مظهر ومؤثرات SoundGram</string>
-    <string name="SoundGramEqualizer">معادل الصوت DSP لـ SoundGram</string>
+    <string name="SoundGramStyle">مظهر ومؤثرات Velora</string>
+    <string name="SoundGramEqualizer">معادل الصوت DSP لـ Velora</string>
     <string name="SoundGramEQGraph">🎛️ رسم بياني لمعادل الصوت</string>
     <string name="SoundGramEQEffects">✨ المؤثرات والنبرة</string>
     <string name="SoundGramPresetFlat">مستوٍ</string>
@@ -108,10 +108,10 @@
     <string name="min">دقيقة</string>
     <string name="hour">ساعة</string>
     <string name="day">يوم</string>
-    <string name="stat">إحصائيات SoundGram</string>
+    <string name="stat">إحصائيات Velora</string>
     <string name="imports">استيراد المسارات</string>
     <string name="im">استيراد (</string>
-    <string name="ims">استيراد إلى SoundGram</string>
+    <string name="ims">استيراد إلى Velora</string>
     <string name="src">بحث</string>
     <string name="chus">أدخل @اسم_المستخدم للقناة</string>
     <string name="imm">استيراد الموسيقى من القناة</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">فنان</string>
     <string name="sg_source_untitled">بدون عنوان</string>
     <string name="sg_eq_title">المؤثرات الصوتية والنبرة</string>
-    <string name="sg_eq_hero_title">🎛️ معادل الصوت SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">تفعيل معادل الصوت SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ معادل الصوت Velora</string>
+    <string name="sg_eq_hero_switch_descr">تفعيل معادل الصوت Velora</string>
     <string name="sg_eq_status_active">مفعل ويعمل</string>
     <string name="sg_eq_status_disabled">معطل</string>
     <string name="sg_eq_section_graph">📈 رسم بياني تفاعلي لمعادل الصوت بـ 10 نطاقات</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ حفلة حية 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 أقصى باس</string>
-    <string name="sg_style_title">مظهر SoundGram</string>
+    <string name="sg_style_title">مظهر Velora</string>
     <string name="sg_style_section_glass">نمط الزجاج المصنفر (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">مشغل الموسيقى</string>
     <string name="sg_style_player_subtitle">تأثير زجاجي مصنفر للمشغل الكامل</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">قائمة المسارات</string>
     <string name="sg_style_tracks_subtitle">فواصل وخلفيات شبه شفافة للمسارات</string>
     <string name="sg_style_eq_title">معادل الصوت</string>
-    <string name="sg_style_eq_subtitle">واجهة زجاجية لمعادل الصوت SoundGram</string>
+    <string name="sg_style_eq_subtitle">واجهة زجاجية لمعادل الصوت Velora</string>
     <string name="sg_sphere_settings">إعدادات كرة «موجتي» ثلاثية الأبعاد</string>
     <string name="sg_sphere_size_title">حجم الكرة</string>
     <string name="sg_sphere_size_subtitle">مقياس الكرة ثلاثية الأبعاد: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">تكرار</string>
     <string name="AccDescrShuffle">خلط عشوائي</string>
     <string name="AccDescrEqualizer">معادل الصوت</string>
-    <string name="NimarkoGramSettings">إعدادات SoundGram</string>
+    <string name="NimarkoGramSettings">إعدادات Velora</string>
     <string name="NM_Cat_General">عام</string>
     <string name="NM_Cat_Appearance">المظهر</string>
     <string name="NM_Cat_Chats">المحادثات</string>

@@ -17,10 +17,10 @@ ext.buildConfigString = { String value ->
     return '"' + value.replace('\\', '\\\\').replace('"', '\\"') + '"'
 }
 
-def releaseStoreFile = privateConfig('RELEASE_STORE_FILE', 'TMessagesProj/config/release.keystore')
-def releaseStorePassword = privateConfig('RELEASE_STORE_PASSWORD', 'serega070908')
-def releaseKeyAlias = privateConfig('RELEASE_KEY_ALIAS', 'key0')
-def releaseKeyPassword = privateConfig('RELEASE_KEY_PASSWORD', 'serega070908')
+def releaseStoreFile = privateConfig('RELEASE_STORE_FILE')
+def releaseStorePassword = privateConfig('RELEASE_STORE_PASSWORD')
+def releaseKeyAlias = privateConfig('RELEASE_KEY_ALIAS')
+def releaseKeyPassword = privateConfig('RELEASE_KEY_PASSWORD')
 
 ext.RELEASE_STORE_FILE = releaseStoreFile
 ext.RELEASE_STORE_PASSWORD = releaseStorePassword
@@ -78,12 +78,26 @@ allprojects {
 // that consume it. Using subprojects keeps it in one place.
 //   keep:  base/, latin/, maths/, euler/  (\mathbb, \mathcal, \mathfrak still work)
 //   drop:  latin/optional/, maths/optional/  (~290 KB; \textbf/\textit/\mathds fall back)
-//          licences/                          (~20 KB; pure license text files)
 subprojects {
     plugins.withId('com.android.application') {
         android {
             androidResources {
-                ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~:!optional:!licences:!*stmary*:!*eufb*'
+                ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~:!optional:!*stmary*:!*eufb*'
+            }
+        }
+        def androidComponents = project.extensions.getByName('androidComponents')
+        androidComponents.onVariants(androidComponents.selector().all()) { variant ->
+            variant.resValues.put(variant.makeResValueKey("string", "velora_account_type"),
+                    variant.applicationId.map { packageName ->
+                        new com.android.build.api.variant.ResValue(packageName, "Android account identity")
+                    })
+            [profile: "profile", call: "call", video: "call.video"].each { name, suffix ->
+                variant.resValues.put(variant.makeResValueKey("string", "velora_contacts_${name}_mime"),
+                        variant.applicationId.map { packageName ->
+                            new com.android.build.api.variant.ResValue(
+                                    "vnd.android.cursor.item/vnd.${packageName}.android.${suffix}",
+                                    "Contact action identity")
+                        })
             }
         }
         android.defaultConfig.manifestPlaceholders['GOOGLE_MAPS_API_KEY'] =

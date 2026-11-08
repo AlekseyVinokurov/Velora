@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="VeloraProject">Velora project</string>
+    <string name="VeloraCredits">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
+    <string name="VeloraUpstreamSource">SoundGram source and credits</string>
+    <string name="VeloraUpdateUnavailable">Automatic updates are not configured. Check the Velora repository for project updates.</string>
+    <!-- Application modules override these with their final variant applicationId. -->
+    <string name="velora_account_type" translatable="false">io.github.alekseyvinokurov.velora</string>
+    <string name="velora_contacts_profile_mime" translatable="false">vnd.android.cursor.item/vnd.io.github.alekseyvinokurov.velora.android.profile</string>
+    <string name="velora_contacts_call_mime" translatable="false">vnd.android.cursor.item/vnd.io.github.alekseyvinokurov.velora.android.call</string>
+    <string name="velora_contacts_video_mime" translatable="false">vnd.android.cursor.item/vnd.io.github.alekseyvinokurov.velora.android.call.video</string>
+</resources>

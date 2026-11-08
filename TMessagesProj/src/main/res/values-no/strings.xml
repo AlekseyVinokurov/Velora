@@ -59,7 +59,7 @@
     <string name="AccDescrGIFs">GIF-er</string>
     <string name="AccDescrStickers">Klistremerker</string>
     <string name="ActionsChartTitle">Handlinger</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Er du sikker?</string>
     <string name="AvatarPreviewSearchMessages">Søk i meldinger</string>
     <string name="Back">Tilbake</string>
@@ -278,7 +278,7 @@
     <string name="NM_Config_Exported">Innstillinger lagret i fil</string>
     <string name="NM_Config_Header">Konfigurasjon</string>
     <string name="NM_Config_Import">Importer innstillinger</string>
-    <string name="NM_Config_ImportEmpty">Valgt fil er ikke en SoundGram-konfigurasjon</string>
+    <string name="NM_Config_ImportEmpty">Valgt fil er ikke en Velora-konfigurasjon</string>
     <string name="NM_Config_Info">Lagre innstillinger i en fil eller gjenopprett dem på en annen enhet.</string>
     <string name="NM_CustomTitle">App-tittel</string>
     <string name="NM_DBG_AudioSource">Mikrofonaudiokilde</string>
@@ -324,7 +324,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Send premium-emoji uten et Premium-abonnement.</string>
     <string name="NM_GEN_MiscHeader">Forskjellig</string>
     <string name="NM_GE_UploadSpeedBoost">Raskere opplasting</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram er bygget på Telegram; funksjoner portert fra SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Kildekode</string>
     <string name="NM_HideActionBarStatus">Skjul status i topptekst</string>
     <string name="NM_HideBubbleTail">Skjul meldingshaler</string>
@@ -476,5 +476,5 @@
     <string name="TranslateMessage">Oversett</string>
     <string name="UserColorTabProfile">Profil</string>
     <string name="VibrationDisabled">Deaktivert</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

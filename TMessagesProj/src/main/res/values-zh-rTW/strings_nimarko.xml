@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NimarkoAbout">關於 SoundGram</string>
-    <string name="NimarkoAboutAuthor">由 @soundgram_project 製作</string>
+    <string name="NimarkoAbout">關於 Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">強調色作為通知顏色</string>
     <string name="NimarkoAdminsShortcut">「管理員」捷徑</string>
     <string name="NimarkoAltOpenAnim">替代開啟動畫</string>
@@ -159,7 +159,7 @@
     <string name="NimarkoSectionStickers">貼圖</string>
     <string name="NimarkoSectionTabsTitles">分頁 &amp; 標題</string>
     <string name="NimarkoSectionVoiceTranslation">🎤 語音 &amp; 翻譯</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">顯示操作時間</string>
     <string name="NimarkoShowAddToSaved">加入收藏夾</string>
     <string name="NimarkoShowClearHistory">顯示「清除歷史紀錄」</string>

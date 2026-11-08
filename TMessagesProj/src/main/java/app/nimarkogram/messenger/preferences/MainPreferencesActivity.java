@@ -57,7 +57,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
     private static final int REQ_IMPORT_CONFIG = 49802;
     private static final int MAX_CONFIG_IMPORT_BYTES = 5 * 1024 * 1024;
 
-    private static final String SOURCE_REPOSITORY_URL = "https://github.com/Ettacent/NimarkoGram";
+    private static final String SOURCE_REPOSITORY_URL = "https://github.com/AlekseyVinokurov/Velora";
 
     private UItem category(int id, IconBackgroundColors colors, int icon, int title, String alias) {
         return SettingsActivity.SettingCell.Factory.of(
@@ -95,7 +95,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
         arrayList.add(category(ID_DEBUG, IconBackgroundColors.GRAY,
                 R.drawable.msg_info_solar, R.string.NM_HUB_Debug, "nimarko_debug"));
         arrayList.add(category(ID_SUPPORT_DEVELOPMENT, IconBackgroundColors.ORANGE_DEEP,
-                R.drawable.msg_gift_premium_solar, R.string.NM_HUB_SupportDevelopment, "nimarko_support_development"));
+                R.drawable.msg_gift_premium_solar, R.string.VeloraProject, "nimarko_support_development"));
         arrayList.add(UItem.asShadow(null));
 
         arrayList.add(UItem.asHeader(LocaleController.getString(R.string.NM_HUB_Header_Other)));
@@ -110,7 +110,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
         arrayList.add(UItem.asShadow(null));
 
         SpannableString forkedSub;
-        String forkedSubRaw = LocaleController.getString(R.string.NM_HUB_ForkedFromCherrygramSub);
+        String forkedSubRaw = LocaleController.getString(R.string.VeloraCredits);
         if (Build.VERSION.SDK_INT >= 24) {
             forkedSub = new SpannableString(Html.fromHtml(forkedSubRaw, Html.FROM_HTML_MODE_LEGACY));
         } else {
@@ -189,7 +189,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("application/json");
-            intent.putExtra(Intent.EXTRA_TITLE, "soundgram_config.json");
+            intent.putExtra(Intent.EXTRA_TITLE, "velora_config.json");
             startActivityForResult(intent, REQ_EXPORT_CONFIG);
         } catch (Throwable t) {
             Toast.makeText(getContext(), LocaleController.getString(R.string.NM_Config_Error), Toast.LENGTH_SHORT).show();

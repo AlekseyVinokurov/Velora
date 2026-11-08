@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Modern zenei élménykliens</string>
-    <string name="SoundGramStyle">SoundGram stílus és hanghatások</string>
-    <string name="SoundGramEqualizer">SoundGram DSP hangszínszabályzó</string>
+    <string name="SoundGramStyle">Velora stílus és hanghatások</string>
+    <string name="SoundGramEqualizer">Velora DSP hangszínszabályzó</string>
     <string name="SoundGramEQGraph">🎛️ Hangszínszabályzó görbe</string>
     <string name="SoundGramEQEffects">✨ Hatások és hangszín</string>
     <string name="SoundGramPresetFlat">Lapos</string>
@@ -108,10 +108,10 @@
     <string name="min">perc</string>
     <string name="hour">óra</string>
     <string name="day">nap</string>
-    <string name="stat">SoundGram statisztikák</string>
+    <string name="stat">Velora statisztikák</string>
     <string name="imports">Számok importálása</string>
     <string name="im">Importálás (</string>
-    <string name="ims">Importálás a SoundGramba</string>
+    <string name="ims">Importálás a Veloraba</string>
     <string name="src">Keresés</string>
     <string name="chus">Adja meg a csatorna @felhasználónevét</string>
     <string name="imm">Zene importálása csatornáról</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Előadó</string>
     <string name="sg_source_untitled">Névtelen</string>
     <string name="sg_eq_title">AudioFX és hangszín</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram hangszínszabályzó</string>
-    <string name="sg_eq_hero_switch_descr">SoundGram hangszínszabályzó bekapcsolása</string>
+    <string name="sg_eq_hero_title">🎛️ Velora hangszínszabályzó</string>
+    <string name="sg_eq_hero_switch_descr">Velora hangszínszabályzó bekapcsolása</string>
     <string name="sg_eq_status_active">Bekapcsolva és aktív</string>
     <string name="sg_eq_status_disabled">Kikapcsolva</string>
     <string name="sg_eq_section_graph">📈 10 SÁVOS HANGSZÍNSZABÁLYZÓ GÖRBE</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Koncert 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Bass Max</string>
-    <string name="sg_style_title">SoundGram megjelenés</string>
+    <string name="sg_style_title">Velora megjelenés</string>
     <string name="sg_style_section_glass">ÜVEGHATÁSÚ STÍLUS (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">Zenelejátszó</string>
     <string name="sg_style_player_subtitle">Homályos üveghatás a teljes lejátszóhoz</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Számlista</string>
     <string name="sg_style_tracks_subtitle">Áttetsző elválasztók és számháttér</string>
     <string name="sg_style_eq_title">Hangszínszabályzó</string>
-    <string name="sg_style_eq_subtitle">Üvegfelület a SoundGram hangszínszabályzóhoz</string>
+    <string name="sg_style_eq_subtitle">Üvegfelület a Velora hangszínszabályzóhoz</string>
     <string name="sg_sphere_settings">SAJÁT HULLÁM GÖMB BEÁLLÍTÁSAI</string>
     <string name="sg_sphere_size_title">Gömb mérete</string>
     <string name="sg_sphere_size_subtitle">3D gömb méretaránya: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">KURZOR</string>
     <string name="sg_ta_cursor_smooth">Sima kurzor</string>
     <string name="sg_ta_cursor_liquid">Folyékony kurzor</string>
-    <string name="TelegramVersion">SoundGram Androidra %1$s</string>
+    <string name="TelegramVersion">Velora Androidra %1$s</string>
     <string name="CG_LastSeenNow">legutóbb látható: épp most</string>
     <string name="CG_LastSeenMinutes_one">legutóbb látható: %1$d perce</string>
     <string name="CG_LastSeenMinutes_few">legutóbb látható: %1$d perce</string>
@@ -361,10 +361,10 @@
     <string name="NM_WSB_VoIP_Enable">Hívások átirányítása a megkerülésen keresztül</string>
     <string name="NM_WSB_Subscribe_Header">Feliratkozás szükséges</string>
     <string name="NM_WSB_Subscribe_Info">A megkerülés a szerző infrastruktúráján fut. A további használathoz maradjon feliratkozva a csatornára legalább egy fiókkal.</string>
-    <string name="NM_WSB_Subscribe_Button">Feliratkozás a @soundgram_project csatornára</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="NM_CP_LatexRendering">LaTeX képletek renderelése</string>
     <string name="NM_CP_LatexRendering_Desc">Felismeri a képleteket a $…$ és $$…$$ jelek között az üzenetekben.</string>
-    <string name="NimarkoGramSettings">SoundGram beállítások</string>
+    <string name="NimarkoGramSettings">Velora beállítások</string>
     <string name="NM_Cat_General">Általános</string>
     <string name="NM_Cat_Appearance">Megjelenés</string>
     <string name="NM_Cat_Chats">Csevegések</string>

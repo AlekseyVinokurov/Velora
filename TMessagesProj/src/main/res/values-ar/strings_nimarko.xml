@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">تمكين ميزات Telegram Premium UI محليًا (الحدود المزدوجة، وعلامات المجلدات، وما إلى ذلك)</string>
-    <string name="NimarkoAbout">حول ساوند جرام</string>
-    <string name="NimarkoAboutAuthor">بواسطة @soundgram_project</string>
+    <string name="NimarkoAbout">حول Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">لهجة كلون الإخطار</string>
     <string name="NimarkoAdminsShortcut">اختصار المسؤولين</string>
     <string name="NimarkoAltOpenAnim">الرسوم المتحركة المفتوحة البديلة</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">ملصقات</string>
     <string name="NimarkoSectionTabsTitles">علامات التبويب والعناوين</string>
     <string name="NimarkoSectionVoiceTranslation">الصوت والترجمة</string>
-    <string name="NimarkoSettingsTitle">SoundGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">إظهار الطوابع الزمنية للإجراء</string>
     <string name="NimarkoShowAddToSaved">أضف إلى الرسائل المحفوظة</string>
     <string name="NimarkoShowClearHistory">عرض مسح التاريخ</string>

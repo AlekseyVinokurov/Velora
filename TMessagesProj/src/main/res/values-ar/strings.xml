@@ -2,8 +2,8 @@
 <resources>
     <string name="NM_Menu_TelegramPlus">قائمة الرسائل الحديثة</string>
     <string name="NM_Menu_TelegramPlus_Desc">قائمة مدمجة بتأثير Liquid Glass، مع إجراءات مجمعة وحركات نابضية وتأثيرات تفاعلية. يظل التخطيط المدمج متاحًا.</string>
-    <string name="AppName">SoundGram</string>
-    <string name="AppNameBeta">SoundGram Beta</string>
+    <string name="AppName">Velora</string>
+    <string name="AppNameBeta">Velora Beta</string>
     <string name="LanguageName">العربية</string>
     <string name="English">الإنجليزية</string>
     <string name="LanguageNameInEnglish">Arabic</string>
@@ -182,8 +182,8 @@
     <string name="NotificationGroupFew">أرسل %1$s %3$s لمجموعة %2$s</string>
     <string name="NotificationGroupAlbum">أرسل %1$s حُزمة وسائط لمجموعة %2$s</string>
     <string name="NotificationGroupForwardedFew">أعاد %1$s تحويل %3$s لمجموعة %2$s</string>
-    <string name="NotificationHiddenName">SoundGram</string>
-    <string name="NotificationHiddenChatName">SoundGram</string>
+    <string name="NotificationHiddenName">Velora</string>
+    <string name="NotificationHiddenChatName">Velora</string>
     <string name="NotificationHiddenChatUserName">مستخدم</string>
     <string name="NotificationHiddenMessage">رسالة جديدة</string>
     <string name="Reply">رد</string>
@@ -558,7 +558,7 @@
     <string name="DirectShareInfo">إظهار آخر المحادثات في قائمة المشاركة</string>
     <string name="Emoji">الرموز التعبيرية</string>
     <string name="LargeEmoji">رموز تعبيرية كبيرة</string>
-    <string name="TelegramVersion">SoundGram for Android %1$s</string>
+    <string name="TelegramVersion">Velora for Android %1$s</string>
     <string name="ChangeLanguageLater">يمكنك تغيير لغة التطبيق لاحقًا من الإعدادات.</string>
     <string name="ChooseYourLanguage">اختيار اللغة</string>
     <string name="ChooseYourLanguageOther">أخرى</string>
@@ -1193,7 +1193,7 @@
     <string name="TosUpdateDecline">للأسف، لا توجد خيارات أخرى. على عكس التطبيقات الأخرى؛ لا تستخدم تيليجرام بيانات المستخدمين لاستهدافهم بالإعلانات أو لأغراض تجارية أخرى. يخزن تيليجرام فقط المعلومات التي يحتاجها للعمل كخدمة سحابية غنية بالميزات. يمكنك ضبط كيفية استخدام بياناتك في إعدادات الخصوصية والأمان.\n\nإذا لم تكن مرتاحًا لاحتياجات تيليجرام المتواضعة؛ لن نتمكن من تزويدك بهذه الخدمة.</string>
     <string name="TosDeclineDeleteAccount">تحذير، سيؤدي هذا إلى حذف حسابك في تيليجرام بشكل نهائي بالإضافة لجميع البيانات التي تخزنها في سحابة تيليجرام.\n\nهام: يمكنك الإلغاء الآن وتصدير بياناتك قبل حذف حسابك عوضًا عن خسارتها كلها. (للقيام بذلك، افتح النسخة الأخيرة من تيليجرام لسطح المكتب وتوجه إلى الإعدادات &gt; إعدادات متقدمة &gt; تصدير بيانات تيليجرام).</string>
     
-    <string name="Page1Title">تيليجرام</string>
+    <string name="Page1Title">Velora</string>
     <string name="Page2Title">سريع</string>
     <string name="Page3Title">مجاني</string>
     <string name="Page4Title">آمن</string>
@@ -1257,7 +1257,7 @@
     <string name="PluginsSafeModeInfo2">كل الإضافات معطّلة. فعّلها واحدةً تلو الأخرى لتحديد المسبّبة.</string>
     <string name="PluginsDocumentation">التوثيق</string>
     <string name="PluginsTrusted">إضافات موثوقة</string>
-    <string name="ForkedByNimarko">تفرّع من SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">مدعوم من &lt;a href="https://github.com/exteraSquad/exteraGram"&gt;exteraGram&lt;/a&gt;.</string>
     <string name="PluginsNotFound">لا توجد إضافات مثبّتة بعد.</string>
     <string name="PluginNoDescription">لا يوجد وصف</string>
@@ -1273,7 +1273,7 @@
     <string name="PluginInstalled">تم تثبيت الإضافة</string>
     <string name="PluginUpdated">تم تحديث الإضافة</string>
     <string name="PluginInstallError">تعذّر تثبيت الإضافة</string>
-<string name="Preferences">تفضيلات exteraGram</string><string name="Links">الروابط</string><string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in SoundGram.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">عنوان متوسط</string>
+<string name="Preferences">تفضيلات exteraGram</string><string name="Links">الروابط</string><string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in Velora.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">عنوان متوسط</string>
     <string name="AP_DisableDividers">إخفاء الفواصل</string>
     <string name="AP_GlareOnElements">الوهج على العناصر</string>
     <string name="AP_GlareOnElementsInfo">إظهار الإبرازات العلوية والسفلية على عناصر الزجاج السائل.</string>
@@ -1491,7 +1491,7 @@
     <string name="NM_Config_Exported">تم حفظ الإعدادات في ملف</string>
     <string name="NM_Config_Header">التكوين</string>
     <string name="NM_Config_Import">استيراد الإعدادات</string>
-    <string name="NM_Config_ImportEmpty">الملف المحدد ليس تكوين SoundGram</string>
+    <string name="NM_Config_ImportEmpty">الملف المحدد ليس تكوين Velora</string>
     <string name="NM_Config_Info">احفظ الإعدادات في ملف أو استعدها على جهاز آخر.</string>
     <string name="NM_CustomTitle">عنوان التطبيق</string>
     <string name="NM_DBG_AudioSource">مصدر صوت الميكروفون</string>
@@ -1537,7 +1537,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">إرسال رموز تعبيرية مميزة بدون اشتراك Premium.</string>
     <string name="NM_GEN_MiscHeader">متنوع</string>
     <string name="NM_GE_UploadSpeedBoost">رفع أسرع</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">تم بناء SoundGram على تطبيق تيليجرام الرسمي؛ وتم نقل الميزات من SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">الرمز المصدري</string>
     <string name="NM_HideActionBarStatus">إخفاء الحالة في الشريط العلوي</string>
     <string name="NM_HideBubbleTail">إخفاء ذيول الرسائل</string>
@@ -1681,5 +1681,5 @@
     <string name="TelegramPremium">تيليجرام بريميوم</string>
     <string name="TranslateMessage">ترجمة</string>
     <string name="UserColorTabProfile">الملف الشخصي</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

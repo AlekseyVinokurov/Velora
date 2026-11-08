@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Trình phát âm thanh hiện đại</string>
-    <string name="SoundGramStyle">Phong cách &amp; Hiệu ứng âm thanh SoundGram</string>
-    <string name="SoundGramEqualizer">Bộ cân bằng DSP SoundGram</string>
+    <string name="SoundGramStyle">Phong cách &amp; Hiệu ứng âm thanh Velora</string>
+    <string name="SoundGramEqualizer">Bộ cân bằng DSP Velora</string>
     <string name="SoundGramEQGraph">🎛️ Biểu đồ bộ cân bằng</string>
     <string name="SoundGramEQEffects">✨ Hiệu ứng &amp; Tông âm</string>
     <string name="SoundGramPresetFlat">Phẳng</string>
@@ -108,10 +108,10 @@
     <string name="min">phút</string>
     <string name="hour">giờ</string>
     <string name="day">ngày</string>
-    <string name="stat">Thống kê SoundGram</string>
+    <string name="stat">Thống kê Velora</string>
     <string name="imports">Nhập bài hát</string>
     <string name="im">Nhập (</string>
-    <string name="ims">Nhập vào SoundGram</string>
+    <string name="ims">Nhập vào Velora</string>
     <string name="src">Tìm kiếm</string>
     <string name="chus">Nhập @tên_người_dùng của kênh</string>
     <string name="imm">Nhập nhạc từ kênh</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Nghệ sĩ</string>
     <string name="sg_source_untitled">Không tiêu đề</string>
     <string name="sg_eq_title">AudioFX &amp; Tông âm</string>
-    <string name="sg_eq_hero_title">🎛️ Bộ cân bằng SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Bật bộ cân bằng SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Bộ cân bằng Velora</string>
+    <string name="sg_eq_hero_switch_descr">Bật bộ cân bằng Velora</string>
     <string name="sg_eq_status_active">Đã bật và đang hoạt động</string>
     <string name="sg_eq_status_disabled">Đã tắt</string>
     <string name="sg_eq_section_graph">📈 BIỂU ĐỒ BỘ CÂN BẰNG 10 BĂNG TẦN</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Buổi hòa nhạc 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Âm trầm tối đa</string>
-    <string name="sg_style_title">Giao diện SoundGram</string>
+    <string name="sg_style_title">Giao diện Velora</string>
     <string name="sg_style_section_glass">PHONG CÁCH KÍNH MỜ (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">Trình phát âm thanh</string>
     <string name="sg_style_player_subtitle">Hiệu ứng kính mờ cho toàn bộ trình phát</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Danh sách bài hát</string>
     <string name="sg_style_tracks_subtitle">Đường phân chia bán trong suốt và nền bài hát</string>
     <string name="sg_style_eq_title">Bộ cân bằng</string>
-    <string name="sg_style_eq_subtitle">Giao diện kính cho Bộ cân bằng SoundGram</string>
+    <string name="sg_style_eq_subtitle">Giao diện kính cho Bộ cân bằng Velora</string>
     <string name="sg_sphere_settings">CÀI ĐẶT QUẢ CẦU LÀN SÓNG CỦA TÔI</string>
     <string name="sg_sphere_size_title">Kích thước quả cầu</string>
     <string name="sg_sphere_size_subtitle">Tỷ lệ quả cầu 3D: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">CON TRỎ</string>
     <string name="sg_ta_cursor_smooth">Con trỏ mượt mà</string>
     <string name="sg_ta_cursor_liquid">Con trỏ dạng lỏng</string>
-    <string name="TelegramVersion">SoundGram cho Android %1$s</string>
+    <string name="TelegramVersion">Velora cho Android %1$s</string>
     <string name="CG_LastSeenNow">vừa mới truy cập</string>
     <string name="CG_LastSeenMinutes_one">truy cập %1$d phút trước</string>
     <string name="CG_LastSeenMinutes_few">truy cập %1$d phút trước</string>
@@ -361,10 +361,10 @@
     <string name="NM_WSB_VoIP_Enable">Định tuyến cuộc gọi qua vượt chặn</string>
     <string name="NM_WSB_Subscribe_Header">Yêu cầu đăng ký kênh</string>
     <string name="NM_WSB_Subscribe_Info">Tính năng vượt chặn chạy trên hạ tầng của tác giả. Để tiếp tục sử dụng, vui lòng duy trì đăng ký kênh trên ít nhất một tài khoản.</string>
-    <string name="NM_WSB_Subscribe_Button">Đăng ký kênh @soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="NM_CP_LatexRendering">Hiển thị công thức LaTeX</string>
     <string name="NM_CP_LatexRendering_Desc">Nhận dạng công thức bên trong $…$ và $$…$$ trong tin nhắn.</string>
-    <string name="NimarkoGramSettings">Cài đặt SoundGram</string>
+    <string name="NimarkoGramSettings">Cài đặt Velora</string>
     <string name="NM_Cat_General">Chung</string>
     <string name="NM_Cat_Appearance">Giao diện</string>
     <string name="NM_Cat_Chats">Trò chuyện</string>

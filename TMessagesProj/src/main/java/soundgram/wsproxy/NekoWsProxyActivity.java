@@ -54,7 +54,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     public View createView(Context context) {
         actionBar.setBackButtonImage(R.drawable.ic_ab_back);
         actionBar.setAllowOverlayTitle(true);
-        actionBar.setTitle("SoundGram Bypass");
+        actionBar.setTitle("Velora Bypass");
         actionBar.setActionBarMenuOnItemClick(new org.telegram.ui.ActionBar.ActionBar.ActionBarMenuOnItemClick() {
             @Override
             public void onItemClick(int id) {
@@ -299,7 +299,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     }
 
     protected String getActionBarTitle() {
-        return "SoundGram Bypass";
+        return "Velora Bypass";
     }
 
     // ── Click handling ───────────────────────────────────────────────────────
@@ -885,7 +885,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                     title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
                     title.setTypeface(AndroidUtilities.bold());
                     title.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
-                    title.setText("SoundGram Bypass");
+                    title.setText("Velora Bypass");
                     title.setGravity(Gravity.CENTER_HORIZONTAL);
                     container.addView(title, LayoutHelper.createLinear(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_HORIZONTAL, 0, 16, 0, 8));
 

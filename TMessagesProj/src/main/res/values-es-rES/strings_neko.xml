@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="NekoSettings">SoundGram-Ajustes</string>
+    <string name="NekoSettings">Velora-Ajustes</string>
     <string name="IPv6">IPv6 preferido</string>
     <string name="MessageMenu">Menú de mensaje</string>
     <string name="HidePhone">Ocultar número de teléfono</string>
@@ -110,10 +110,10 @@
     <string name="enhancedFileLoader">Aumento de velocidad de descarga</string>
     <string name="mapDriftingFixForGoogleMaps">Corregir la deriva de Google Maps en China</string>
     <string name="useOSMDroidMap">Usar mapa OSMDroid</string>
-    <string name="UnknownNekoSettingsOption">No existe tal opción en SoundGram-Settings.</string>
+    <string name="UnknownNekoSettingsOption">No existe tal opción en Velora-Settings.</string>
     <string name="PasscodeNeeded">Tienes que activar primero el código de acceso</string>
     <string name="PasscodeNeko">Código de acceso</string>
-    <string name="PasscodeShowInSettings">Mostrar en SoundGram-Ajustes</string>
+    <string name="PasscodeShowInSettings">Mostrar en Velora-Ajustes</string>
     <string name="PasscodeShowInSettingsAbout">Después de ocultarlo, **SÓLO puede** abrir esta página mediante enlace:</string>
     <string name="PasscodeSet">Establecer código de acceso</string>
     <string name="PasscodeEdit">Cambiar código de acceso</string>

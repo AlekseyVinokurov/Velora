@@ -37,7 +37,7 @@
     <string name="ResetPluginSettingsInfo">**%1$s** の設定をデフォルトにリセットしてもよろしいですか？</string>
     <string name="RestartRequired">変更を有効にするには、アプリを再起動してください。</string>
     <string name="UpdatePlugin">更新</string>
-<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in SoundGram.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIncompatible">Incompatible plugin</string><string name="PluginIncompatibleInfo">This plugin requires a newer version of the app.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="PluginsSafeModeInfo2">All plugins are disabled. Re-enable them one by one to find the offender.</string><string name="ForkedByNimarko">Forked by SoundGram</string><string name="PluginsPoweredBy">Powered by <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]> plugin engine.</string><string name="PluginsDisableArt">Disable startup optimisations</string><string name="PluginsDisableArtInfo">Skip Python AOT compilation on startup. Faster boot, but plugins run slightly slower.</string>    <string name="AP_CenterTitle">タイトルを中央揃え</string>
+<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in Velora.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIncompatible">Incompatible plugin</string><string name="PluginIncompatibleInfo">This plugin requires a newer version of the app.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="PluginsSafeModeInfo2">All plugins are disabled. Re-enable them one by one to find the offender.</string><string name="ForkedByNimarko">Velora based on SoundGram</string><string name="PluginsPoweredBy">Powered by <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]> plugin engine.</string><string name="PluginsDisableArt">Disable startup optimisations</string><string name="PluginsDisableArtInfo">Skip Python AOT compilation on startup. Faster boot, but plugins run slightly slower.</string>    <string name="AP_CenterTitle">タイトルを中央揃え</string>
     <string name="AP_DisableDividers">区切り線を非表示</string>
     <string name="AP_GlareOnElements">要素の反射光</string>
     <string name="AP_GlareOnElementsInfo">液体ガラス要素の上下のハイライトを表示します。</string>
@@ -55,7 +55,7 @@
     <string name="AccDescrGIFs">GIF</string>
     <string name="AccDescrStickers">ステッカー</string>
     <string name="ActionsChartTitle">操作</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">本当によろしいですか？</string>
     <string name="AvatarPreviewSearchMessages">メッセージを検索</string>
     <string name="Back">戻る</string>
@@ -274,7 +274,7 @@
     <string name="NM_Config_Exported">設定がファイルに保存されました</string>
     <string name="NM_Config_Header">設定構成</string>
     <string name="NM_Config_Import">設定をインポート</string>
-    <string name="NM_Config_ImportEmpty">選択されたファイルはSoundGram設定ではありません</string>
+    <string name="NM_Config_ImportEmpty">選択されたファイルはVelora設定ではありません</string>
     <string name="NM_Config_Info">設定をファイルに保存するか、別のデバイスで復元します。</string>
     <string name="NM_CustomTitle">アプリのタイトル</string>
     <string name="NM_DBG_AudioSource">マイクの音声入力ソース</string>
@@ -320,7 +320,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Premiumサブスクリプションなしでプレミアム絵文字を送信します。</string>
     <string name="NM_GEN_MiscHeader">その他</string>
     <string name="NM_GE_UploadSpeedBoost">アップロード高速化</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGramは公式Telegram上に構築され、機能はSoundGramから移植されました。</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">ソースコード</string>
     <string name="NM_HideActionBarStatus">ヘッダーのステータスを非表示</string>
     <string name="NM_HideBubbleTail">メッセージのしっぽを非表示</string>
@@ -472,5 +472,5 @@
     <string name="TranslateMessage">翻訳</string>
     <string name="UserColorTabProfile">プロフィール</string>
     <string name="VibrationDisabled">無効</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

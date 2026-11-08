@@ -18,7 +18,7 @@
     <string name="AccDescrGIFs">GIF</string>
     <string name="AccDescrStickers">Sticker</string>
     <string name="ActionsChartTitle">Azioni</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">Sei sicuro?</string>
     <string name="AvatarPreviewSearchMessages">Cerca messaggi</string>
     <string name="Back">Indietro</string>
@@ -237,7 +237,7 @@
     <string name="NM_Config_Exported">Impostazioni salvate nel file</string>
     <string name="NM_Config_Header">Configurazione</string>
     <string name="NM_Config_Import">Importa impostazioni</string>
-    <string name="NM_Config_ImportEmpty">Il file selezionato non è una configurazione SoundGram</string>
+    <string name="NM_Config_ImportEmpty">Il file selezionato non è una configurazione Velora</string>
     <string name="NM_Config_Info">Salva le impostazioni in un file o ripristinale su un altro dispositivo.</string>
     <string name="NM_CustomTitle">Titolo dell\'app</string>
     <string name="NM_DBG_AudioSource">Sorgente audio microfono</string>
@@ -283,7 +283,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Invia emoji premium senza abbonamento Premium.</string>
     <string name="NM_GEN_MiscHeader">Varie</string>
     <string name="NM_GE_UploadSpeedBoost">Caricamento più veloce</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram è basato su Telegram ufficiale; funzionalità da SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Codice sorgente</string>
     <string name="NM_HideActionBarStatus">Nascondi stato nell\'intestazione</string>
     <string name="NM_HideBubbleTail">Nascondi code dei messaggi</string>
@@ -439,5 +439,5 @@
     <string name="TranslateMessage">Traduci</string>
     <string name="UserColorTabProfile">Profilo</string>
     <string name="VibrationDisabled">Disattivata</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

@@ -14,7 +14,7 @@
     <string name="PluginsSafeModeInfo2">تمام افزونه‌ها غیرفعال هستند. آن‌ها را یکی‌یکی فعال کنید تا افزونه مشکل‌ساز را پیدا کنید.</string>
     <string name="PluginsDocumentation">مستندات</string>
     <string name="PluginsTrusted">افزونه‌های مورد اعتماد</string>
-    <string name="ForkedByNimarko">فورک‌شده توسط SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">قدرت‌گرفته از <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]>.</string>
     <string name="PluginsNotFound">هنوز افزونه‌ای نصب نشده است.</string>
     <string name="PluginNoDescription">بدون توضیح</string>
@@ -30,7 +30,7 @@
     <string name="PluginInstalled">افزونه نصب شد</string>
     <string name="PluginUpdated">افزونه به‌روز شد</string>
     <string name="PluginInstallError">نصب افزونه ناموفق بود</string>
-<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in SoundGram.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">عنوان در وسط</string>
+<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in Velora.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">عنوان در وسط</string>
     <string name="AP_DisableDividers">پنهان کردن جداکننده‌ها</string>
     <string name="AP_GlareOnElements">درخشش روی عناصر</string>
     <string name="AP_GlareOnElementsInfo">نمایش بازتاب‌های بالا و پایین در عناصر شیشه مایع.</string>
@@ -48,7 +48,7 @@
     <string name="AccDescrGIFs">گیف‌ها</string>
     <string name="AccDescrStickers">استیکرها</string>
     <string name="ActionsChartTitle">اقدامات</string>
-    <string name="AppName">SoundGram</string>
+    <string name="AppName">Velora</string>
     <string name="AreYouSure">آیا مطمئن هستید؟</string>
     <string name="AvatarPreviewSearchMessages">جستجوی پیام‌ها</string>
     <string name="Back">بازگشت</string>
@@ -266,7 +266,7 @@
     <string name="NM_Config_Exported">تنظیمات در فایل ذخیره شد</string>
     <string name="NM_Config_Header">پیکربندی</string>
     <string name="NM_Config_Import">وارد کردن تنظیمات</string>
-    <string name="NM_Config_ImportEmpty">فایل انتخابی پیکربندی SoundGram نیست</string>
+    <string name="NM_Config_ImportEmpty">فایل انتخابی پیکربندی Velora نیست</string>
     <string name="NM_Config_Info">تنظیمات را در یک فایل ذخیره کرده یا در دستگاه دیگری بازیابی کنید.</string>
     <string name="NM_CustomTitle">عنوان برنامه</string>
     <string name="NM_DBG_AudioSource">منبع صوتی میکروفون</string>
@@ -312,7 +312,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">ارسال اموجی‌های پرمیوم بدون اشتراک تلگرام پرمیوم.</string>
     <string name="NM_GEN_MiscHeader">متفرقه</string>
     <string name="NM_GE_UploadSpeedBoost">آپلود سریع‌تر</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">برنامه SoundGram بر پایه تلگرام رسمی ساخته شده و امکانات از SoundGram اضافه شده است.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">کد منبع</string>
     <string name="NM_HideActionBarStatus">پنهان کردن وضعیت در نوار بالا</string>
     <string name="NM_HideBubbleTail">پنهان کردن دم حباب پیام</string>
@@ -464,5 +464,5 @@
     <string name="TranslateMessage">ترجمه</string>
     <string name="UserColorTabProfile">نمایه</string>
     <string name="VibrationDisabled">غیرفعال</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

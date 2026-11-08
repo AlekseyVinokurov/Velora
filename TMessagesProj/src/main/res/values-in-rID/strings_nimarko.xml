@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Mengaktifkan fitur UI Telegram Premium secara lokal (batas ganda, tag folder, dll.)</string>
-    <string name="NimarkoAbout">Tentang SoundGram</string>
-    <string name="NimarkoAboutAuthor">oleh @soundgram_project</string>
+    <string name="NimarkoAbout">Tentang Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">Aksen sebagai warna notifikasi</string>
     <string name="NimarkoAdminsShortcut">Pintasan administrator</string>
     <string name="NimarkoAltOpenAnim">Animasi terbuka alternatif</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">Stiker</string>
     <string name="NimarkoSectionTabsTitles">Tab &amp; Judul</string>
     <string name="NimarkoSectionVoiceTranslation">Suara &amp; Terjemahan</string>
-    <string name="NimarkoSettingsTitle">Gram Suara</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Tampilkan stempel waktu tindakan</string>
     <string name="NimarkoShowAddToSaved">Tambahkan ke Pesan Tersimpan</string>
     <string name="NimarkoShowClearHistory">Tampilkan Hapus riwayat</string>

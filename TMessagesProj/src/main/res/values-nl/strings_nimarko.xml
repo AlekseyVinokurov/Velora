@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="LocalPremiumNotice">Schakelt Telegram Premium UI-functies lokaal in (dubbele limieten, maptags, enz.)</string>
-    <string name="NimarkoAbout">Over SoundGram</string>
-    <string name="NimarkoAboutAuthor">door @soundgram_project</string>
+    <string name="NimarkoAbout">Over Velora</string>
+    <string name="NimarkoAboutAuthor">SoundGram: @soundgram_project (upstream)</string>
     <string name="NimarkoAccentAsNotif">Accent als meldingskleur</string>
     <string name="NimarkoAdminsShortcut">Snelkoppeling voor beheerders</string>
     <string name="NimarkoAltOpenAnim">Alternatieve open animatie</string>
@@ -160,7 +160,7 @@
     <string name="NimarkoSectionStickers">Stickers</string>
     <string name="NimarkoSectionTabsTitles">Tabbladen en titels</string>
     <string name="NimarkoSectionVoiceTranslation">Stem &amp; vertaling</string>
-    <string name="NimarkoSettingsTitle">GeluidGram</string>
+    <string name="NimarkoSettingsTitle">Velora</string>
     <string name="NimarkoShowActionTimestamps">Toon tijdstempels van acties</string>
     <string name="NimarkoShowAddToSaved">Toevoegen aan opgeslagen berichten</string>
     <string name="NimarkoShowClearHistory">Toon Geschiedenis wissen</string>

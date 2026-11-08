@@ -2,8 +2,8 @@
 <resources>
     <string name="NM_Menu_TelegramPlus">Modern berichtenmenu</string>
     <string name="NM_Menu_TelegramPlus_Desc">Een compact Liquid Glass-menu met gegroepeerde acties, veeranimaties en responsieve effecten. De compacte indeling blijft beschikbaar.</string>
-    <string name="AppName">SoundGram</string>
-    <string name="AppNameBeta">SoundGram-bèta</string>
+    <string name="AppName">Velora</string>
+    <string name="AppNameBeta">Velora-bèta</string>
     <string name="LanguageName">Nederlands</string>
     <string name="English">Engels</string>
     <string name="LanguageNameInEnglish">Dutch</string>
@@ -29,21 +29,21 @@
     <string name="WrongNumberFormat">Verkeerd formaat</string>
     <string name="ShortNumberInfo">Het nummer dat je hebt verstrekt, is te kort voor **%1$s**:\n\n**%2$s**\n\nVoer alsjeblieft het juiste nummer in (inclusief de landcode).</string>
     <string name="EditNumber">Nummer wijzigen</string>
-    <string name="DidNotGetTheCodeInfo">Als je de code niet via SMS of telefonisch hebt ontvangen, controleer dan je **mobiele data-instellingen** en telefoonnummer:\n\n**%1$s**\n\nJe resterende mogelijkheden zijn om een ander nummer te proberen of contact op te nemen met de ondersteuning van SoundGram. Tik op **Hulp** om de technische details naar ons te sturen, zodat we het probleem kunnen identificeren.</string>
+    <string name="DidNotGetTheCodeInfo">Als je de code niet via SMS of telefonisch hebt ontvangen, controleer dan je **mobiele data-instellingen** en telefoonnummer:\n\n**%1$s**\n\nJe resterende mogelijkheden zijn om een ander nummer te proberen of contact op te nemen met de ondersteuning van Telegram. Tik op **Hulp** om de technische details naar ons te sturen, zodat we het probleem kunnen identificeren.</string>
     <string name="DidNotGetTheCodeHelpButton">Help</string>
     <string name="DidNotGetTheCodeEditNumberButton">Nummer wijzigen</string>
     <!--code enter view-->
     <string name="YourCode">Telefoonverificatie</string>
     <string name="SentSmsCode">We hebben een sms met een activeringscode verzonden naar je telefoon **%1$s**.</string>
-    <string name="SentAppCode">We hebben de code naar de **SoundGram**-app op je andere apparaat verzonden.</string>
-    <string name="SentAppCodeWithPhone">We hebben de code naar de **SoundGram-app** voor %1$s op je andere apparaat gestuurd.</string>
+    <string name="SentAppCode">We hebben de code naar de **Telegram**-app op je andere apparaat verzonden.</string>
+    <string name="SentAppCodeWithPhone">We hebben de code naar de **Telegram-app** voor %1$s op je andere apparaat gestuurd.</string>
     <string name="SentAppCodeTitle">Controleer je Telegramberichten</string>
     <string name="SentFragmentCode">Ga naar Anonymous Numbers op Fragment om de code voor %1$s te verkrijgen.</string>
     <string name="SentSmsCodeTitle">Code invoeren</string>
     <string name="OpenFragment">Fragment openen</string>
-    <string name="SentCallCode">We bellen je op je telefoonnummer **%1$s**.\n\nNeem niet op. SoundGram zal alles automatisch verwerken.</string>
+    <string name="SentCallCode">We bellen je op je telefoonnummer **%1$s**.\n\nNeem niet op. Velora zal alles automatisch verwerken.</string>
     <string name="SentCallOnly">We bellen je op **%1$s** om de code te delen.</string>
-    <string name="CallText">SoundGram belt je over %1$d:%2$02d min</string>
+    <string name="CallText">Velora belt je over %1$d:%2$02d min</string>
     <string name="SmsText">We sturen je een SMS over %1$d:%2$02d</string>
     <string name="Calling">We bellen je</string>
     <string name="SendingSms">SMS sturen...</string>
@@ -54,7 +54,7 @@
     <string name="DidNotGetTheCodeSms">Tik hier om een code via SMS te ontvangen</string>
     <string name="DidNotGetTheCodeFragment">Code verkrijgen via Fragment</string>
     <string name="CancelAccountReset">Accountreset annuleren</string>
-    <string name="CancelAccountResetInfo2">Iemand met toegang tot **%1$s** heeft een verzoek ingediend om je SoundGram-account te verwijderen en je wachtwoord voor tweestapsverificatie te resetten.\n\nAls dit niet door jou is aangevraagd, voer dan de code in die je zojuist via SMS van ons hebt ontvangen. Je kunt dit ook annuleren door *je telefoonnummer te wijzigen*.</string>
+    <string name="CancelAccountResetInfo2">Iemand met toegang tot **%1$s** heeft een verzoek ingediend om je Telegram-account te verwijderen en je wachtwoord voor tweestapsverificatie te resetten.\n\nAls dit niet door jou is aangevraagd, voer dan de code in die je zojuist via SMS van ons hebt ontvangen. Je kunt dit ook annuleren door *je telefoonnummer te wijzigen*.</string>
     <string name="ResetAccount">Account resetten</string>
     <string name="ResetAccountInfo">Account **%1$s** is actief en beveiligd met een wachtwoord, dus voor de veiligheid verwijderen we het pas over 1 week.\n\nJe kunt dit proces ieder moment annuleren.</string>
     <string name="ResetAccountStatus">Je account kan worden gereset over:</string>
@@ -62,7 +62,7 @@
     <string name="CancelLinkExpired">Deze link is ongeldig of verlopen.</string>
     <string name="CancelLinkSuccessTitle">Success!</string>
     <string name="CancelLinkSuccess">De verwijdering van je account %1$s is geannuleerd. Je kunt dit venster sluiten.</string>
-    <string name="OtherLoginCode">Je logincode is **%1$s**. Voer de code in in de SoundGram-app waarop je probeert in te loggen.\n\nGeef deze code nooit aan iemand anders.</string>
+    <string name="OtherLoginCode">Je logincode is **%1$s**. Voer de code in in de Telegram-app waarop je probeert in te loggen.\n\nGeef deze code nooit aan iemand anders.</string>
     <string name="SmsAvailableIn">Je kunt een SMS aanvragen in %1$d:%2$02d</string>
     <string name="ResendSmsAvailableIn">Je kunt over %1$d:%2$02d een nieuwe SMS aanvragen</string>
     <string name="RequestSmsButton">Code ontvangen via SMS</string>
@@ -218,8 +218,8 @@
     <string name="NotificationGroupFew">%1$s heeft %3$s naar de groep %2$s gestuurd</string>
     <string name="NotificationGroupAlbum">%1$s heeft een album naar de groep %2$s gestuurd</string>
     <string name="NotificationGroupForwardedFew">%1$s heeft %3$s naar de groep %2$s doorgestuurd</string>
-    <string name="NotificationHiddenName">SoundGram</string>
-    <string name="NotificationHiddenChatName">SoundGram</string>
+    <string name="NotificationHiddenName">Velora</string>
+    <string name="NotificationHiddenChatName">Velora</string>
     <string name="NotificationHiddenChatUserName">Gebruiker</string>
     <string name="NotificationHiddenMessage">Nieuw bericht</string>
     <string name="Reply">Antwoorden</string>
@@ -283,7 +283,7 @@
     <string name="NotificationActionPinnedGeoLiveUser">\n%1$s zette een Live-locatie vast</string>
     <string name="NotificationActionPinnedGifUser">\n%1$s zette een GIF vast</string>
     <string name="NotificationActionPinnedMusicUser">\n%1$s zette een audiobestand vast</string>
-    <string name="SecretChatName">SoundGram</string>
+    <string name="SecretChatName">Velora</string>
     <!--usernames-->
     <string name="Username">Gebruikersnaam</string>
     <string name="UsernameAlso">ook %1$s</string>
@@ -440,11 +440,11 @@
     <string name="LanguageUnsupportedError">Taal niet gevonden.</string>
     <string name="LanguageSame">Je maakt al gebruik van dit taalbestand (**%1$s**). Je kunt je taal op elk moment aanpassen via de instellingen.</string>
     <string name="LanguageUnknownCustomAlert">Helaas bevat dit aangepaste taalbestand (**%1$s**) geen informatie voor Telegram Android.</string>
-    <string name="AskAQuestionInfo">Houd er rekening mee dat de ondersteuning van SoundGram door vrijwilligers wordt gedaan. We proberen zo snel mogelijk te reageren, maar soms kan het even duren.\n\nBekijk ook de <![CDATA[<a href=\"https://telegram.org/faq#general-questions\">veelgestelde vragen</a>]]> van SoundGram: daar vind je antwoorden op de meestgestelde vragen en belangrijke tips voor <![CDATA[<a href=\"https://telegram.org/faq#troubleshooting\">probleemoplossing</a>]]>.</string>
+    <string name="AskAQuestionInfo">Houd er rekening mee dat de ondersteuning van Telegram door vrijwilligers wordt gedaan. We proberen zo snel mogelijk te reageren, maar soms kan het even duren.\n\nBekijk ook de <![CDATA[<a href=\"https://telegram.org/faq#general-questions\">veelgestelde vragen</a>]]> van Telegram: daar vind je antwoorden op de meestgestelde vragen en belangrijke tips voor <![CDATA[<a href=\"https://telegram.org/faq#troubleshooting\">probleemoplossing</a>]]>.</string>
     <string name="AskButton">Vraag een vrijwilliger</string>
     <string name="TelegramFAQ">Veelgestelde vragen</string>
     <string name="TelegramFaq">Veelgestelde vragen</string>
-    <string name="TelegramFeatures">SoundGram-functies</string>
+    <string name="TelegramFeatures">Telegram-functies</string>
     <string name="TelegramFeaturesUrl">https://t.me/TelegramTips</string>
     <string name="AddAccount">Account toevoegen</string>
     <string name="SelectAccount">Account kiezen</string>
@@ -591,7 +591,7 @@
     <string name="DirectShareInfo">Recente chats in snel delen weergeven</string>
     <string name="Emoji">Emoji</string>
     <string name="LargeEmoji">Grote emoji</string>
-    <string name="TelegramVersion">SoundGram voor Android %1$s</string>
+    <string name="TelegramVersion">Velora voor Android %1$s</string>
     <string name="ChangeLanguageLater">Via instellingen kun je je taal altijd aanpassen.</string>
     <string name="ChooseYourLanguage">Kies je taal</string>
     <string name="ChooseYourLanguageOther">Overige</string>
@@ -777,7 +777,7 @@
     <string name="PleaseEnterNewSecondPasswordHint">Voer nieuw wachtwoord nogmaals in</string>
     <string name="RecoveryEmail">Herstel-e-mailadres</string>
     <string name="RecoveryEmailTitle">Herstel-e-mailadres</string>
-    <string name="RecoveryEmailSubtitle">Je kunt een herstel-e-mailadres instellen om je wachtwoord te resetten en de toegang tot je SoundGram-account te herstellen.</string>
+    <string name="RecoveryEmailSubtitle">Je kunt een herstel-e-mailadres instellen om je wachtwoord te resetten en de toegang tot je Telegram-account te herstellen.</string>
     <string name="YourEmail">Je e-mailadres</string>
     <string name="YourNewEmail">Je nieuwe e-mailadres</string>
     <string name="YourLoginEmailChangedSuccess">Je e-mailadres is gewijzigd.</string>
@@ -853,9 +853,9 @@
     <string name="VerificationCode">Verificatiecode</string>
     <string name="EnterCode">Code invoeren</string>
     <string name="ResendCodeInfo">De verificatiecode is naar je e-mailadres gestuurd.</string>
-    <string name="EnabledPasswordText">Je hebt tweestapsverificatie ingeschakeld. Het wachtwoord dat je hier instelt, heb je later nodig om in te loggen op je SoundGram-account.</string>
+    <string name="EnabledPasswordText">Je hebt tweestapsverificatie ingeschakeld. Het wachtwoord dat je hier instelt, heb je later nodig om in te loggen op je Telegram-account.</string>
     <string name="AddEmailTitle">Kies een e-mailadres om in te loggen</string>
-    <string name="AddEmailSubtitle">Inlogcodes van SoundGram ontvang je via e-mail in plaats van SMS. Voer een e-mailadres in waar je toegang toe hebt.</string>
+    <string name="AddEmailSubtitle">Inlogcodes van Velora ontvang je via e-mail in plaats van SMS. Voer een e-mailadres in waar je toegang toe hebt.</string>
     <string name="EnterNewEmail">Voer nieuw e-mailadres in</string>
     <string name="VerificationCodeSubtitle">Controleer je e-mailadres %1$s (en eventueel je spam) voor de code die we zojuist naar je hebben verzonden.</string>
     <string name="CheckYourEmail">Controleer je e-mail</string>
@@ -1028,14 +1028,14 @@
     <string name="PermissionNoAudioVideoWithHint">**Telegram** heeft toegang tot je microfoon nodig zodat je spraakberichten kunt versturen. Tik op Instellingen &gt; Machtigingen en schakel **Microfoon** aan.</string>
     <string name="PermissionNoCameraWithHint">**Telegram** heeft toegang tot je camera nodig zodat je foto\'s en video\'s kunt maken. Tik op Instellingen &gt; Machtigingen en schakel **Camera** aan.</string>
     <string name="PermissionNoCameraMicVideo">**Telegram** heeft toegang tot je camera en microfoon nodig zodat je videoberichten kunt versturen. Tik op Instellingen &gt; Machtigingen en schakel **Microfoon** en **Camera** aan.</string>
-    <string name="PermissionNoLocation">SoundGram heeft toegang tot je locatie nodig om deze te kunnen delen met je vrienden.</string>
-    <string name="PermissionNoLocationStory">SoundGram heeft toegang nodig tot je locatie zodat je het weerbericht in je verhalen kunt plaatsen.</string>
+    <string name="PermissionNoLocation">Velora heeft toegang tot je locatie nodig om deze te kunnen delen met je vrienden.</string>
+    <string name="PermissionNoLocationStory">Velora heeft toegang nodig tot je locatie zodat je het weerbericht in je verhalen kunt plaatsen.</string>
     <string name="PermissionNoLocationFriends">**Telegram** heeft toegang tot je locatie nodig zodat je het met vrienden kunt delen. Tik op Instellingen &gt; Machtigingen en schakel **Locatie** aan.</string>
     <string name="PermissionNoLocationNavigation">**Telegram** heeft toegang tot je locatie nodig zodat je aanwijzingen kunt krijgen. Tik op Instellingen &gt; Machtigingen en schakel **Locatie** aan.</string>
     <string name="PermissionNoContactsSharing">**Telegram** heeft toegang tot je contacten nodig zodat je die met vrienden kunt delen. Tik op Instellingen &gt; Machtigingen en schakel **Contacten** aan.</string>
     <string name="PermissionNoStorageAvatar">**Telegram** heeft toegang tot je opslag nodig zodat je profielfoto\'s s kunt uploaden. Tik op Instellingen &gt; Machtigingen en schakel **Bestanden en media** in.</string>
     <string name="PermissionNoAudioStorageStory">**Telegram** heeft toegang tot je muziekbestanden nodig om ze aan je verhaal toe te voegen. Tik op Instellingen &gt; Machtigingen en schakel **Muziek en geluid** in.</string>
-    <string name="PermissionDrawAboveOtherApps">SoundGram heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in beeld-in-beeld-modus.</string>
+    <string name="PermissionDrawAboveOtherApps">Velora heeft de toestemming \'over andere apps tekenen\' nodig om video\'s af te spelen in beeld-in-beeld-modus.</string>
     <string name="PermissionDrawAboveOtherAppsGroupCall">Met overlay-modus  kun je Push-To-Talk gebruiken en zien wie er aan het praten is zelfs als je Telegram niet in de voorgrond hebt.</string>
     <string name="PermissionOpenSettings">Instellingen</string>
     <string name="PermissionXiaomiLockscreen">Sta Telegram toe om weer te kunnen geven op het vergrendelscherm om ervoor te zorgen dat oproepen goed werken.</string>
@@ -1098,7 +1098,7 @@
     <string name="PluginsSafeModeInfo2">Alle plug-ins zijn uitgeschakeld. Schakel ze één voor één in om de boosdoener te vinden.</string>
     <string name="PluginsDocumentation">Documentatie</string>
     <string name="PluginsTrusted">Vertrouwde plug-ins</string>
-    <string name="ForkedByNimarko">Geforkt door SoundGram</string>
+    <string name="ForkedByNimarko">Velora based on SoundGram</string>
     <string name="PluginsPoweredBy">Mogelijk gemaakt door <![CDATA[<a href="https://github.com/exteraSquad/exteraGram">exteraGram</a>]]>.</string>
     <string name="PluginsNotFound">Nog geen plug-ins geïnstalleerd.</string>
     <string name="PluginNoDescription">Geen beschrijving</string>
@@ -1114,7 +1114,7 @@
     <string name="PluginInstalled">Plug-in geïnstalleerd</string>
     <string name="PluginUpdated">Plug-in bijgewerkt</string>
     <string name="PluginInstallError">Plug-in-installatie mislukt</string>
-<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in SoundGram.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">Gecentreerde titel</string>
+<string name="PluginsRowSubtitle">Python scripts that extend the app</string><string name="PluginsDevMode">Developer mode</string><string name="PluginsDevServerLaunched">Dev server is running.</string><string name="PluginsDevServerStopped">Dev server is stopped.</string><string name="PluginsDisableAll">Disable all plugins</string><string name="PluginsDisableAllConfirm">Turn off every enabled plugin?</string><string name="PluginsDisabledN">%1$d plugins disabled.</string><string name="PluginsRestartEngine">Restart engine</string><string name="PluginsRestartingEngine">Restarting plugin engine…</string><string name="PluginsPySdkAutoUpdate">Auto-update SDK</string><string name="PluginsPySdkCheckUpdates">Check for SDK updates</string><string name="PluginsPySdkEnableBetaVersion">Use beta SDK</string><string name="PluginsPySdkHeader">Python SDK</string><string name="PluginsPySdkOffline">Online updates disabled in Velora.</string><string name="PluginsSafeModeOff">Safe mode disabled.</string><string name="PluginsSafeModeOn">Safe mode enabled. Plugins won’t auto-load.</string><string name="PluginIsNotRespondingAlert">Plugin "%s" is not responding</string><string name="EnablePluginsEngine">Enable plugin engine</string><string name="PluginDelete">Delete plugin</string><string name="PluginDeleteInfo">Are you sure you want to delete %s?</string><string name="PluginDisableError">Failed to disable plugin: %s</string><string name="PluginEnableError">Failed to enable plugin: %s</string><string name="PluginEngineNotEnabled">Plugin engine is disabled. Enable it to use %s.</string><string name="PluginHasNoSettings">%s has no settings.</string><string name="PluginInstalledButFailedToEnable">Installed, but failed to enable plugin.</string><string name="PluginNotEnabled">Plugin %s is not enabled.</string><string name="PluginNotFound">Plugin %s not found.</string>    <string name="AP_CenterTitle">Gecentreerde titel</string>
     <string name="AP_DisableDividers">Scheidingslijnen verbergen</string>
     <string name="AP_GlareOnElements">Glans op elementen</string>
     <string name="AP_GlareOnElementsInfo">Toon boven- en onderreflecties op vloeibaar glas-elementen.</string>
@@ -1340,7 +1340,7 @@
     <string name="NM_Config_Exported">Instellingen opgeslagen in bestand</string>
     <string name="NM_Config_Header">Configuratie</string>
     <string name="NM_Config_Import">Instellingen importeren</string>
-    <string name="NM_Config_ImportEmpty">Geselecteerd bestand is geen SoundGram-configuratie</string>
+    <string name="NM_Config_ImportEmpty">Geselecteerd bestand is geen Velora-configuratie</string>
     <string name="NM_Config_Info">Sla instellingen op in een bestand of herstel ze op een ander apparaat.</string>
     <string name="NM_CustomTitle">App-titel</string>
     <string name="NM_DBG_AudioSource">Microfoonaudiobron</string>
@@ -1386,7 +1386,7 @@
     <string name="NM_GEN_LocalPremiumEmoji_Desc">Verzend premium emoji zonder Premium-abonnement.</string>
     <string name="NM_GEN_MiscHeader">Diversen</string>
     <string name="NM_GE_UploadSpeedBoost">Snellere uploads</string>
-    <string name="NM_HUB_ForkedFromCherrygramSub">SoundGram is gebouwd op Telegram; functies overgenomen van SoundGram.</string>
+    <string name="NM_HUB_ForkedFromCherrygramSub">Velora is an independent, unofficial client based on SoundGram and Telegram for Android. Not affiliated with or endorsed by Telegram. Credits: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram and exteraGram.</string>
     <string name="NM_HUB_SourceCode">Broncode</string>
     <string name="NM_HideActionBarStatus">Koptekststatus verbergen</string>
     <string name="NM_HideBubbleTail">Berichtstaarten verbergen</string>
@@ -1532,5 +1532,5 @@
     <string name="TelegramPremium">Telegram Premium</string>
     <string name="TranslateMessage">Vertalen</string>
     <string name="UserColorTabProfile">Profiel</string>
-    <string name="exteraAppName">SoundGram</string>
+    <string name="exteraAppName">Velora</string>
 </resources>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Nowoczesny klient audio premium</string>
-    <string name="SoundGramStyle">Styl i Efekty SoundGram</string>
-    <string name="SoundGramEqualizer">Korektor DSP SoundGram</string>
+    <string name="SoundGramStyle">Styl i Efekty Velora</string>
+    <string name="SoundGramEqualizer">Korektor DSP Velora</string>
     <string name="SoundGramEQGraph">🎛️ Wykres korektora</string>
     <string name="SoundGramEQEffects">✨ Efekty i Barwa</string>
     <string name="SoundGramPresetFlat">Płaski</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">godz</string>
     <string name="day">dni</string>
-    <string name="stat">Statystyki SoundGram</string>
+    <string name="stat">Statystyki Velora</string>
     <string name="imports">Import utworów</string>
     <string name="im">Import (</string>
-    <string name="ims">Importuj do SoundGram</string>
+    <string name="ims">Importuj do Velora</string>
     <string name="src">Szukaj</string>
     <string name="chus">Wprowadź @nazwę kanału</string>
     <string name="imm">Importuj muzykę z kanału</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Wykonawca</string>
     <string name="sg_source_untitled">Bez tytułu</string>
     <string name="sg_eq_title">AudioFX i Barwa</string>
-    <string name="sg_eq_hero_title">🎛️ Korektor SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Włącz korektor SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Korektor Velora</string>
+    <string name="sg_eq_hero_switch_descr">Włącz korektor Velora</string>
     <string name="sg_eq_status_active">Włączony i aktywny</string>
     <string name="sg_eq_status_disabled">Wyłączony</string>
     <string name="sg_eq_section_graph">📈 10-PASMOWY WYKRES KOREKTORA</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Lista utworów</string>
     <string name="sg_style_tracks_subtitle">Półprzezroczyste separatory i tło</string>
     <string name="sg_style_eq_title">Korektor</string>
-    <string name="sg_style_eq_subtitle">Szklany interfejs korektora SoundGram</string>
+    <string name="sg_style_eq_subtitle">Szklany interfejs korektora Velora</string>
     <string name="sg_sphere_settings">USTAWIENIA SFERY „MOJA FALA”</string>
     <string name="sg_sphere_size_title">Rozmiar sfery</string>
     <string name="sg_sphere_size_subtitle">Skala sfery 3D względem ekranu: %d%%</string>
@@ -304,7 +304,7 @@
     <string name="AccDescrRepeat">Powtórz</string>
     <string name="AccDescrShuffle">Kolejność losowa</string>
     <string name="AccDescrEqualizer">Korektor</string>
-    <string name="NimarkoGramSettings">Ustawienia SoundGram</string>
+    <string name="NimarkoGramSettings">Ustawienia Velora</string>
     <string name="NM_Cat_General">Ogólne</string>
     <string name="NM_Cat_Appearance">Wygląd</string>
     <string name="NM_Cat_Chats">Czaty</string>

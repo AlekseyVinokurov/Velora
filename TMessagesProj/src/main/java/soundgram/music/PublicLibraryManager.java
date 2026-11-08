@@ -263,7 +263,7 @@ public class PublicLibraryManager {
 
             ByteArrayOutputStream id3Frames = new ByteArrayOutputStream();
             writeId3Frame(id3Frames, "TIT2", title != null ? title : "");
-            writeId3Frame(id3Frames, "TPE1", performer != null ? performer : "SoundGram");
+            writeId3Frame(id3Frames, "TPE1", performer != null ? performer : "Velora");
 
             byte[] framesBytes = id3Frames.toByteArray();
             int tagSize = framesBytes.length;

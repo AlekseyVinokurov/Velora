@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Moderni äänikokemuskäyttöliittymä</string>
-    <string name="SoundGramStyle">SoundGram-tyyli ja äänitehosteet</string>
-    <string name="SoundGramEqualizer">SoundGram DSP -taajuuskorjain</string>
+    <string name="SoundGramStyle">Velora-tyyli ja äänitehosteet</string>
+    <string name="SoundGramEqualizer">Velora DSP -taajuuskorjain</string>
     <string name="SoundGramEQGraph">🎛️ Taajuuskorjaimen kuvaaja</string>
     <string name="SoundGramEQEffects">✨ Tehosteet ja sävy</string>
     <string name="SoundGramPresetFlat">Tasainen</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">t</string>
     <string name="day">pv</string>
-    <string name="stat">SoundGram-tilastot</string>
+    <string name="stat">Velora-tilastot</string>
     <string name="imports">Tuo kappaleita</string>
     <string name="im">Tuo (</string>
-    <string name="ims">Tuo SoundGramiin</string>
+    <string name="ims">Tuo Veloraiin</string>
     <string name="src">Haku</string>
     <string name="chus">Syötä kanavan @käyttäjänimi</string>
     <string name="imm">Tuo musiikkia kanavalta</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Artisti</string>
     <string name="sg_source_untitled">Nimetön</string>
     <string name="sg_eq_title">AudioFX ja sävy</string>
-    <string name="sg_eq_hero_title">🎛️ SoundGram-taajuuskorjain</string>
-    <string name="sg_eq_hero_switch_descr">Ota SoundGram-taajuuskorjain käyttöön</string>
+    <string name="sg_eq_hero_title">🎛️ Velora-taajuuskorjain</string>
+    <string name="sg_eq_hero_switch_descr">Ota Velora-taajuuskorjain käyttöön</string>
     <string name="sg_eq_status_active">Käytössä ja aktiivinen</string>
     <string name="sg_eq_status_disabled">Pois käytöstä</string>
     <string name="sg_eq_section_graph">📈 10-KAISTAINEN TAAJUUSKORJAIMEN KUVAAJA</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Konsertti 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Bass Max</string>
-    <string name="sg_style_title">SoundGram-ulkoasu</string>
+    <string name="sg_style_title">Velora-ulkoasu</string>
     <string name="sg_style_section_glass">LASIMORFISMI-TYYLI</string>
     <string name="sg_style_player_title">Äänentoistin</string>
     <string name="sg_style_player_subtitle">Huurrelasiefekti koko soittimelle</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Kappalelista</string>
     <string name="sg_style_tracks_subtitle">Läpikuultavat jakajat ja kappaleen tausta</string>
     <string name="sg_style_eq_title">Taajuuskorjain</string>
-    <string name="sg_style_eq_subtitle">Lasikäyttöliittymä SoundGram-taajuuskorjaimelle</string>
+    <string name="sg_style_eq_subtitle">Lasikäyttöliittymä Velora-taajuuskorjaimelle</string>
     <string name="sg_sphere_settings">OMA AALTO -PALLON ASETUKSET</string>
     <string name="sg_sphere_size_title">Pallon koko</string>
     <string name="sg_sphere_size_subtitle">3D-pallon mittakaava: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">KURSORI</string>
     <string name="sg_ta_cursor_smooth">Sulava kursori</string>
     <string name="sg_ta_cursor_liquid">Nestemäinen kursori</string>
-    <string name="TelegramVersion">SoundGram Androidille %1$s</string>
+    <string name="TelegramVersion">Velora Androidille %1$s</string>
     <string name="CG_LastSeenNow">paikalla äskettäin</string>
     <string name="CG_LastSeenMinutes_one">paikalla %1$d minuutti sitten</string>
     <string name="CG_LastSeenMinutes_few">paikalla %1$d minuuttia sitten</string>
@@ -361,10 +361,10 @@
     <string name="NM_WSB_VoIP_Enable">Ohjaa puhelut ohituksen kautta</string>
     <string name="NM_WSB_Subscribe_Header">Tilaus vaaditaan</string>
     <string name="NM_WSB_Subscribe_Info">Ohitus toimii tekijän infrastruktuurilla. Jatkaaksesi sen käyttöä, pysy kanavan tilaajana vähintään yhdellä tililläsi.</string>
-    <string name="NM_WSB_Subscribe_Button">Tilaa @soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="NM_CP_LatexRendering">Renderöi LaTeX-kaavat</string>
     <string name="NM_CP_LatexRendering_Desc">Tunnistaa kaavat merkkien $…$ ja $$…$$ sisällä viesteissä.</string>
-    <string name="NimarkoGramSettings">SoundGram-asetukset</string>
+    <string name="NimarkoGramSettings">Velora-asetukset</string>
     <string name="NM_Cat_General">Yleiset</string>
     <string name="NM_Cat_Appearance">Ulkoasu</string>
     <string name="NM_Cat_Chats">Keskustelut</string>

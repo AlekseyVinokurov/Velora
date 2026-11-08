@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="SoundGram">SoundGram</string>
+    <string name="SoundGram">Velora</string>
     <string name="SoundGramSubtitle">Moderní hudební klient</string>
-    <string name="SoundGramStyle">SoundGram styl &amp; Audio FX</string>
-    <string name="SoundGramEqualizer">DSP Ekvalizér SoundGram</string>
+    <string name="SoundGramStyle">Velora styl &amp; Audio FX</string>
+    <string name="SoundGramEqualizer">DSP Ekvalizér Velora</string>
     <string name="SoundGramEQGraph">🎛️ Křivka ekvalizéru</string>
     <string name="SoundGramEQEffects">✨ Efekty a tón</string>
     <string name="SoundGramPresetFlat">Plochý</string>
@@ -108,10 +108,10 @@
     <string name="min">min</string>
     <string name="hour">h</string>
     <string name="day">dny</string>
-    <string name="stat">Statistiky SoundGram</string>
+    <string name="stat">Statistiky Velora</string>
     <string name="imports">Importovat skladby</string>
     <string name="im">Importovat (</string>
-    <string name="ims">Importovat do SoundGram</string>
+    <string name="ims">Importovat do Velora</string>
     <string name="src">Hledat</string>
     <string name="chus">Zadejte @uživatelské jméno kanálu</string>
     <string name="imm">Importovat hudbu z kanálu</string>
@@ -204,8 +204,8 @@
     <string name="sg_source_artist">Umělec</string>
     <string name="sg_source_untitled">Bez názvu</string>
     <string name="sg_eq_title">AudioFX a tón</string>
-    <string name="sg_eq_hero_title">🎛️ Ekvalizér SoundGram</string>
-    <string name="sg_eq_hero_switch_descr">Povolit ekvalizér SoundGram</string>
+    <string name="sg_eq_hero_title">🎛️ Ekvalizér Velora</string>
+    <string name="sg_eq_hero_switch_descr">Povolit ekvalizér Velora</string>
     <string name="sg_eq_status_active">Povoleno a aktivní</string>
     <string name="sg_eq_status_disabled">Zakázáno</string>
     <string name="sg_eq_section_graph">📈 10-PÁSMOVÝ GRAF EKVALIZÉRU</string>
@@ -246,7 +246,7 @@
     <string name="sg_eq_rule_nightcore">⚡ Nightcore</string>
     <string name="sg_eq_rule_concert">🏛️ Koncert 3D</string>
     <string name="sg_eq_rule_bassmax">🔊 Bass Max</string>
-    <string name="sg_style_title">Vzhled SoundGram</string>
+    <string name="sg_style_title">Vzhled Velora</string>
     <string name="sg_style_section_glass">SKLENĚNÝ STYL (GLASSMORPHISM)</string>
     <string name="sg_style_player_title">Audio přehrávač</string>
     <string name="sg_style_player_subtitle">Efekt matného skla pro celý přehrávač</string>
@@ -263,7 +263,7 @@
     <string name="sg_style_tracks_title">Seznam skladeb</string>
     <string name="sg_style_tracks_subtitle">Poloprůhledné oddělovače a pozadí skladeb</string>
     <string name="sg_style_eq_title">Ekvalizér</string>
-    <string name="sg_style_eq_subtitle">Skleněné rozhraní pro ekvalizér SoundGram</string>
+    <string name="sg_style_eq_subtitle">Skleněné rozhraní pro ekvalizér Velora</string>
     <string name="sg_sphere_settings">NASTAVENÍ KOULE „MOJE VLNA“</string>
     <string name="sg_sphere_size_title">Velikost koule</string>
     <string name="sg_sphere_size_subtitle">Měřítko 3D koule: %d%%</string>
@@ -319,7 +319,7 @@
     <string name="sg_ta_section_cursor">KURZOR</string>
     <string name="sg_ta_cursor_smooth">Hladký kurzor</string>
     <string name="sg_ta_cursor_liquid">Tekutý kurzor</string>
-    <string name="TelegramVersion">SoundGram pro Android %1$s</string>
+    <string name="TelegramVersion">Velora pro Android %1$s</string>
     <string name="CG_LastSeenNow">naposledy spatřen(a) právě teď</string>
     <string name="CG_LastSeenMinutes_one">naposledy před %1$d minutou</string>
     <string name="CG_LastSeenMinutes_few">naposledy před %1$d minutami</string>
@@ -361,10 +361,10 @@
     <string name="NM_WSB_VoIP_Enable">Směrovat hovory přes obcházení</string>
     <string name="NM_WSB_Subscribe_Header">Vyžadováno předplatné</string>
     <string name="NM_WSB_Subscribe_Info">Obcházení běží na infrastruktuře autora. Pro další používání zůstaňte přihlášeni k odběru kanálu alespoň z jednoho účtu.</string>
-    <string name="NM_WSB_Subscribe_Button">Odebírat @soundgram_project</string>
+    <string name="NM_WSB_Subscribe_Button">Velora on GitHub</string>
     <string name="NM_CP_LatexRendering">Zobrazovat vzorce LaTeX</string>
     <string name="NM_CP_LatexRendering_Desc">Rozpoznává vzorce uvnitř $…$ a $$…$$ ve zprávách.</string>
-    <string name="NimarkoGramSettings">Nastavení SoundGram</string>
+    <string name="NimarkoGramSettings">Nastavení Velora</string>
     <string name="NM_Cat_General">Obecné</string>
     <string name="NM_Cat_Appearance">Vzhled</string>
     <string name="NM_Cat_Chats">Chaty</string>
