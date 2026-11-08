@@ -1,0 +1,227 @@
+name: Android release APK
+run-name: Velora release APK (${{ inputs.abi }}) by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      abi:
+        description: APK architectures
+        type: choice
+        options:
+          - universal
+          - arm64
+        default: universal
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: velora-android-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'AlekseyVinokurov/Velora' && github.ref == 'refs/heads/main' && github.ref_type == 'branch'
+    runs-on: ubuntu-24.04
+    environment: velora-release
+    timeout-minutes: 330
+    defaults:
+      run:
+        shell: bash
+    env:
+      # Never restore/save release build caches: generated BuildConfig contains API credentials.
+      GRADLE_USER_HOME: ${{ runner.temp }}/velora-gradle
+      GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=false
+
+    steps:
+      - name: Check required secrets without printing values
+        env:
+          VELORA_KEYSTORE_BASE64: ${{ secrets.VELORA_KEYSTORE_BASE64 }}
+          VELORA_KEYSTORE_PASSWORD: ${{ secrets.VELORA_KEYSTORE_PASSWORD }}
+          VELORA_KEY_ALIAS: ${{ secrets.VELORA_KEY_ALIAS }}
+          VELORA_KEY_PASSWORD: ${{ secrets.VELORA_KEY_PASSWORD }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: |
+          set +x
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          names = ('VELORA_KEYSTORE_BASE64', 'VELORA_KEYSTORE_PASSWORD', 'VELORA_KEY_ALIAS',
+                   'VELORA_KEY_PASSWORD', 'TELEGRAM_API_ID', 'TELEGRAM_API_HASH')
+          missing = [name for name in names if not os.environ.get(name)]
+          if missing:
+              raise SystemExit('Missing Secrets in main-only environment velora-release: ' + ', '.join(missing))
+          api_id = os.environ['TELEGRAM_API_ID']
+          if not re.fullmatch('[1-9][0-9]{0,9}', api_id) or int(api_id) > 2147483647:
+              raise SystemExit('Invalid TELEGRAM_API_ID format (value hidden)')
+          if not re.fullmatch('[0-9a-fA-F]{32}', os.environ['TELEGRAM_API_HASH']):
+              raise SystemExit('Invalid TELEGRAM_API_HASH format (value hidden)')
+          print('All six Secrets are configured; values hidden.')
+          PY
+
+      - name: Prepare disk space on the GitHub-hosted runner
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_ACTIONS" == true && "$RUNNER_ENVIRONMENT" == github-hosted && "$RUNNER_OS" == Linux ]]
+          df -h "$RUNNER_TEMP" "$GITHUB_WORKSPACE"
+          free -h
+          nproc
+          available=$(df --output=avail -B1 "$RUNNER_TEMP" | tail -1)
+          if (( available < 45 * 1024 * 1024 * 1024 )); then
+            # Fixed preinstalled tool directories on the disposable runner only.
+            sudo rm -rf -- /usr/share/dotnet /usr/local/lib/android/sdk/ndk/27.* \
+              /usr/local/lib/android/sdk/ndk/28.* /usr/local/lib/android/sdk/ndk/29.* \
+              /usr/local/.ghcup /opt/ghc /usr/local/share/powershell \
+              /usr/local/swift /opt/hostedtoolcache/CodeQL
+          fi
+          df -h "$RUNNER_TEMP"
+          available=$(df --output=avail -B1 "$RUNNER_TEMP" | tail -1)
+          if (( available < 30 * 1024 * 1024 * 1024 )); then
+            echo '::error::Less than 30 GiB free before checkout/toolchain. Use a larger GitHub-hosted Ubuntu runner with more disk.'
+            exit 1
+          fi
+
+      - name: Checkout the dispatched commit and all pinned submodules
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          submodules: recursive
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify the 19 submodules and permanent public pin
+        run: |
+          set -euo pipefail
+          [[ $(git ls-tree -r HEAD | awk '$1 == "160000" {count++} END {print count}') == 19 ]]
+          git submodule status --recursive
+          if git submodule status --recursive | grep -Eq '^[-+U]'; then
+            echo '::error::Uninitialized or mismatched submodule commit'
+            exit 1
+          fi
+          [[ $(cat release/certificate.sha256) == a32f7e8239e47cc061ebabf226a88ab7dc3cf6224625f98ac6166b2966ea1842 ]]
+          [[ -z $(git status --porcelain=v1 --untracked-files=all) ]]
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install the pinned Android toolchain on GitHub
+        run: |
+          set -euo pipefail
+          sdkmanager="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          [[ -x "$sdkmanager" ]]
+          # Close the pipe safely: yes exits with SIGPIPE after sdkmanager finishes.
+          set +o pipefail
+          yes | "$sdkmanager" --licenses > /dev/null
+          license_status=${PIPESTATUS[1]}
+          set -o pipefail
+          (( license_status == 0 ))
+          "$sdkmanager" 'platforms;android-36' 'build-tools;36.0.0' \
+            'ndk;26.3.11579264' 'cmake;3.22.1' 'platform-tools'
+          df -h "$RUNNER_TEMP" "$GITHUB_WORKSPACE"
+          available=$(df --output=avail -B1 "$RUNNER_TEMP" | tail -1)
+          if (( available < 25 * 1024 * 1024 * 1024 )); then
+            echo '::error::Less than 25 GiB free after toolchain setup. Use a larger GitHub-hosted runner.'
+            exit 1
+          fi
+
+      - name: Build and verify with the existing permanent release key
+        env:
+          APK_ABI: ${{ inputs.abi }}
+          VELORA_KEYSTORE_BASE64: ${{ secrets.VELORA_KEYSTORE_BASE64 }}
+          # Map secret names to the existing Gradle contract, without duplicate secrets.
+          RELEASE_STORE_PASSWORD: ${{ secrets.VELORA_KEYSTORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.VELORA_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.VELORA_KEY_PASSWORD }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: |
+          set +x
+          set -euo pipefail
+          umask 077
+          signing_dir="$RUNNER_TEMP/velora-signing"
+          trap 'rm -rf -- "$signing_dir"' EXIT
+          trap 'exit 130' INT
+          trap 'exit 143' TERM
+          python3 - <<'PY'
+          import base64
+          import os
+          from pathlib import Path
+          directory = Path(os.environ['RUNNER_TEMP']) / 'velora-signing'
+          directory.mkdir(mode=0o700)
+          try:
+              data = base64.b64decode(os.environ['VELORA_KEYSTORE_BASE64'], validate=True)
+          except ValueError:
+              raise SystemExit('Invalid VELORA_KEYSTORE_BASE64 (value hidden)')
+          descriptor = os.open(directory / 'velora-release.p12', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+          with os.fdopen(descriptor, 'wb') as stream:
+              stream.write(data)
+          PY
+          unset VELORA_KEYSTORE_BASE64
+          export RELEASE_STORE_FILE="$signing_dir/velora-release.p12"
+          options=(--ci --low-memory)
+          if [[ "$APK_ABI" == arm64 ]]; then options+=(--arm64-only); fi
+          bash scripts/build-stable.sh "${options[@]}"
+
+      - name: Remove signing material and credential-bearing build caches
+        if: always()
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_ACTIONS" == true && "$RUNNER_ENVIRONMENT" == github-hosted ]]
+          rm -rf -- "$RUNNER_TEMP/velora-signing" "$GRADLE_USER_HOME"
+          # No cache or build-directory artifact is uploaded.
+          find . -type f -name '*.hprof' -delete
+
+      - name: Stage only the verified APK and public receipt
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          directory = Path(os.environ['RUNNER_TEMP']) / 'velora-artifacts'
+          receipt = json.loads((directory / 'stable-build.json').read_text())
+          source = Path('TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk')
+          target = directory / f"Velora-{receipt['versionName']}-{receipt['versionCode']}.apk"
+          shutil.copyfile(source, target)
+          if hashlib.sha256(target.read_bytes()).hexdigest() != receipt['sha256']:
+              raise SystemExit('APK digest changed during artifact staging')
+          summary = ('Verified release APK\n\n'
+                     + ''.join(f'- {name}: `{receipt[name]}`\n' for name in
+                               ('applicationId', 'versionCode', 'versionName', 'certificateSha256', 'sha256', 'sourceCommit'))
+                     + '\nAPK is staged for acceptance. No GitHub Release was created.\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write(summary)
+          PY
+
+      - name: Upload the signed APK for acceptance
+        id: artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: Velora-release-${{ inputs.abi }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/velora-artifacts/Velora-*.apk
+            ${{ runner.temp }}/velora-artifacts/stable-build.json
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+      - name: Record artifact link
+        env:
+          ARTIFACT_URL: ${{ steps.artifact.outputs.artifact-url }}
+        run: printf '\n[Download verified APK artifact](%s)\n' "$ARTIFACT_URL" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report runner resources and failure evidence
+        if: always()
+        run: |
+          df -h "$RUNNER_TEMP" "$GITHUB_WORKSPACE"
+          free -h
+          # Kernel access varies by runner. Report OOM evidence when available.
+          sudo dmesg --ctime 2>/dev/null | grep -Ei 'out of memory|oom-kill|killed process|no space left' | tail -20 || true

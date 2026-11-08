@@ -2,6 +2,9 @@
 
 # Releasing Velora
 
+For cloud builds using the existing permanent key, follow [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md).
+That procedure supersedes the local-only CI restriction below. Do not create a new key.
+
 This process stages and verifies artifacts locally. It does not push, create a tag remotely, create a GitHub Release or upload a key to CI. Actual completion is recorded in [VELORA_STATUS.md](VELORA_STATUS.md).
 
 ## 1. Create the single permanent signing identity
