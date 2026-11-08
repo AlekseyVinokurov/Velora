@@ -6295,68 +6295,11 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
 
     private boolean firstAppUpdateCheck = true;
     public void checkAppUpdate(boolean force, Browser.Progress progress) {
-        if (!ApplicationLoader.isStandaloneBuild() && !ApplicationLoader.isBetaBuild()) {
-            return;
-        }
-        if (!force && !BuildVars.CHECK_UPDATES) {
-            return;
-        }
-        if (ApplicationLoader.applicationLoaderInstance.isCustomUpdate()) {
-            final BetaUpdate prevUpdate = ApplicationLoader.applicationLoaderInstance.getUpdate();
-            final boolean first = firstAppUpdateCheck;
-            firstAppUpdateCheck = false;
-            ApplicationLoader.applicationLoaderInstance.checkUpdate(force, () -> {
-                final BetaUpdate pendingUpdate = ApplicationLoader.applicationLoaderInstance.getUpdate();
-                if (progress != null) {
-                    progress.end();
-                    if (pendingUpdate == null) {
-                        BaseFragment fragment = getLastFragment();
-                        if (fragment != null) {
-                            BulletinFactory.of(fragment).createSimpleBulletin(R.raw.chats_infotip, LocaleController.getString(R.string.YourVersionIsLatest)).show();
-                        }
-                    }
-                }
-                if (pendingUpdate != null && !ApplicationLoader.applicationLoaderInstance.isDownloadingUpdate() && (first || prevUpdate == null || pendingUpdate.higherThan(prevUpdate))) {
-                    ApplicationLoader.applicationLoaderInstance.showCustomUpdateAppPopup(LaunchActivity.this, pendingUpdate, currentAccount);
-                }
-            });
-            return;
-        }
-        if (!force && Math.abs(System.currentTimeMillis() - SharedConfig.lastUpdateCheckTime) < MessagesController.getInstance(0).updateCheckDelay * 1000) {
-            return;
-        }
-        final int accountNum = currentAccount;
+        if (!force && !BuildVars.CHECK_UPDATES) return;
         if (progress != null) progress.init();
-        tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().checkNewVersionAvailable((res, error) -> {
-            SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
-            SharedConfig.saveConfig();
-            AndroidUtilities.runOnUIThread(() -> {
-                if (res != null) {
-                    SharedConfig.setNewAppVersionAvailable(res);
-                    if (res.can_not_skip) {
-                        showUpdateActivity(accountNum, res, false);
-                    } else {
-                        ApplicationLoader.applicationLoaderInstance.showUpdateAppPopup(LaunchActivity.this, res, accountNum);
-                    }
-                } else {
-                    if (force) {
-                        BaseFragment fragment = getLastFragment();
-                        if (fragment != null) {
-                            if (error == null) {
-                                BulletinFactory.of(fragment).createSimpleBulletin(R.raw.done, LocaleController.getString(R.string.YourVersionIsLatestNax)).show();
-                            } else {
-                                AlertsCreator.createSimpleAlert(LaunchActivity.this, getString(R.string.ErrorOccurred) + "\n" + error).show();
-                            }
-                        }
-                    }
-                    SharedConfig.setNewAppVersionAvailable(null);
-                }
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable);
-                if (progress != null) {
-                    progress.end();
-                }
-            });
-        }, force);
+        Runnable end = () -> { if (progress != null) progress.end(); };
+        app.nimarkogram.messenger.updater.NimarkoUpdater.checkUpdates(getLastFragment(), force || progress != null,
+                end::run, end, end::run);
     }
 
     public Dialog showAlertDialog(AlertDialog.Builder builder) {
@@ -7305,7 +7248,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         super.onResume();
         if (flagSecureReason != null) flagSecureReason.invalidate();
         isResumed = true;
-        // NimarkoGram: OTA auto-check once per launch (gated on "Check on launch").
+        // Velora: a throttled check on foreground resume; no background polling.
         try {
             AndroidUtilities.runOnUIThread(() ->
                     app.nimarkogram.messenger.updater.NimarkoUpdater.checkOnLaunch(LaunchActivity.getLastFragment()), 2500);

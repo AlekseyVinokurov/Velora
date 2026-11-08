@@ -1,124 +1,91 @@
+**English** · [Русский](BUILDING.ru.md)
+
 # Building Velora
 
-This guide describes the existing Gradle targets, not a guarantee of a successful build on an unprepared machine. See [VELORA_STATUS.md](VELORA_STATUS.md) for the actual checks performed.
+Actual verification results are in [VELORA_STATUS.md](VELORA_STATUS.md). A Gradle invocation or a host policy test is not a successful Android app build.
 
-## Toolchain
+## Environment
 
-| Component | Primary standalone / regular target |
+| Component | Primary standalone build |
 | --- | --- |
-| JDK | 17 or 21; this workspace has OpenJDK 21 |
-| Gradle | 8.13 through `./gradlew` |
-| Android Gradle Plugin | 8.13.2, pinned in the existing project |
-| Android SDK / Build Tools | 36 / 36.0.0 |
-| Android NDK | 26.3.11579264 |
-| CMake | 3.22.1 |
-| Device | Android 7.0+ (API 24), ARM64 or ARMv7 |
+| JDK | 21 recommended; project supports 17 |
+| Gradle / Android Gradle Plugin | 8.13 wrapper / 8.13.2 |
+| SDK / Build Tools | 36 / 36.0.0 |
+| NDK / CMake | 26.3.11579264 / 3.22.1 |
+| Device minimum / ABIs | API 24; ARM64 and ARMv7 |
 
-The Huawei, HockeyApp and test modules also retain an NDK 27.2.12479018 declaration in `defaultConfig`; prepare that toolchain when building those targets. No dependency versions or submodule revisions are changed by this rebrand. The current Gradle scripts do not declare a Chaquopy build plugin; the inherited blanket requirement to install Python 3.11 for every APK build has been removed.
-
-Use your local `JAVA_HOME`. No other developer's JDK path belongs in `gradle.properties`. Existing Gradle JVM settings reserve up to 8 GiB of heap; adjust them locally if the WSL instance has less available memory.
-
-## Source and submodules
-
-For a fresh checkout:
+Use a recursive checkout of the recorded submodule commits:
 
 ```bash
 git clone --recursive https://github.com/AlekseyVinokurov/Velora.git
 cd Velora
+python3 scripts/setup-android.py
 ```
 
-For a clean checkout whose submodules have not yet been initialized:
+The setup uses Google's official Android repository and installs packages into ignored `.local-build/android-sdk`, then writes `sdk.dir` to ignored `local.properties`. Review SDK license prompts when running it yourself. It downloads approximately 1 GB before extraction. It does not install an emulator/system image. Set your JDK with `JAVA_HOME` if needed; no developer-specific JDK path is committed.
+
+For a clean checkout with missing submodules, use `git submodule update --init --recursive`, never `--remote`. Do not use it to overwrite modified submodules. Existing native archives and generated wrappers under `TMessagesProj/jni/prebuild` must remain matched to the source.
+
+Legacy Huawei/HockeyApp/test targets retain their own NDK 27.2.12479018 declaration. They are not the stable release target covered by the release scripts. No Python/Chaquopy Gradle plugin is declared for the primary APK; Python 3 is used by local tooling, not to replace Android compilation.
+
+For interactive first-time local setup, run `python3 scripts/configure-local-release.py`. It preserves an existing key or creates the permanent key outside Git, pins its public certificate, and saves your own Telegram/signing parameters in ignored `private.properties` with mode `0600`. Password input is hidden. Back up the exact key twice and keep passwords separately.
+
+## Local Telegram configuration
+
+Copy the template only if the local file does not already exist:
 
 ```bash
-git submodule update --init --recursive
+umask 077
+test -e private.properties || cp private.properties.example private.properties
 ```
 
-Do not run this to overwrite modified submodules. Preserve and inspect existing local changes first. Never use `--remote` for this build: use the recorded commits.
+Open `private.properties` in a local editor and set your own `TELEGRAM_API_ID` and `TELEGRAM_API_HASH` from [my.telegram.org](https://my.telegram.org). The ID must be a positive integer and the hash 32 hexadecimal characters. The format check does not prove that Telegram issued the pair. No fallback credentials are supplied. Do not paste these values into shell commands, Issues, screenshots or Git.
 
-The rebrand branch was created as a separate worktree at `/home/agat/code/velora-rebrand` because `/home/agat/code/velora/TMessagesProj/jni/wallet-engine` already contained staged deletions. Submodule checkouts are not automatically populated in a new worktree. The original submodules were neither moved nor updated. An isolated verification temporarily referenced their existing directories, then removed those links; the new worktree still needs its own initialized submodules for a normal build. A fresh recursive clone of the local repository is another option:
+Environment variables take precedence; existing Gradle project/local properties remain supported. The optional service parameters in the template do not provision any backend. Do not use `--debug`, `--info`, build scans or a configuration cache when handling release secrets.
 
-```bash
-git clone --recurse-submodules --branch feature/velora-rebrand /home/agat/code/velora /home/agat/code/velora-build
-```
-
-This creates a separate checkout of recorded commits without modifying the original dirty submodule. This local branch has not been pushed to GitHub.
-
-Native CMake targets reference existing archives and generated wrappers under `TMessagesProj/jni/prebuild`. Keep those matching files with the source; do not upgrade their submodules independently. Pine is supplied by the existing JNI files, not by a Pine submodule listed in `.gitmodules`.
-
-## Local configuration
+## DEV APK
 
 ```bash
-cp private.properties.example private.properties
-```
-
-Set your own `TELEGRAM_API_ID` (positive integer) and `TELEGRAM_API_HASH` (32 hexadecimal characters) from [my.telegram.org](https://my.telegram.org). Without validly formatted values Gradle stops with a configuration error; it no longer substitutes inherited credentials. Successful formatting does not verify that Telegram issued the pair.
-
-Environment variables take precedence. Telegram build fields also retain compatibility with Gradle project properties and `local.properties`; prefer the ignored `private.properties` file or environment variables. Never pass secrets in public logs, commit them or send them in a pull request.
-
-Set `ANDROID_HOME` to your actual Android SDK directory, or add `sdk.dir` to the ignored `local.properties`. If Android command-line tools are already installed, prepare exactly these components:
-
-```bash
-sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;26.3.11579264' 'cmake;3.22.1'
-```
-
-This command can download substantial files; it was not run during the rebrand. SDK installation and license acceptance remain prerequisites in an environment without an SDK. Dependency resolution also needs network access on the first build.
-
-## APK variants and signing
-
-For development, Gradle uses its local Android debug key, not any inherited release keystore:
-
-```bash
-./gradlew :TMessagesProj_AppStandalone:assembleAfatDebug
+./gradlew --no-daemon :TMessagesProj_AppStandalone:assembleAfatDebug
 ```
 
 Output: `TMessagesProj_AppStandalone/build/outputs/apk/afat/debug/app.apk`.
 
-For the primary standalone distribution variant:
+Application ID: `io.github.alekseyvinokurov.velora.dev`. The label is **Velora DEV**, with the Android-generated local debug key. Stable updates are disabled in DEV; replace DEV manually using the same local debug key, or uninstall it only after accepting loss of its DEV-only data. It can coexist with STABLE.
+
+## STABLE APK
+
+Create and back up the real permanent key, then record/commit its public certificate pin as described in [RELEASING.md](RELEASING.md). Commit reviewed source before a stable build:
 
 ```bash
-./gradlew :TMessagesProj_AppStandalone:assembleAfatStandalone
+scripts/build-stable.sh
 ```
 
-Output: `TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk`. Configure all four signing values in `private.properties` or the environment with your own keystore:
+This prompts locally for the external keystore path, alias and passwords, and for Telegram parameters if no local configuration exists. Secrets are passed through the short-lived build environment, not command arguments; the script uses a one-shot daemon and disables the configuration cache. Do not run it under tracing or record its terminal session.
 
-```properties
-RELEASE_STORE_FILE=/absolute/path/to/your/velora-release.jks
-RELEASE_STORE_PASSWORD=
-RELEASE_KEY_ALIAS=
-RELEASE_KEY_PASSWORD=
-```
+After the interactive local setup above, use `scripts/build-stable.sh --local` to build from the ignored local configuration without entering secrets again. The same clean-source and certificate checks apply.
 
-Fill the blank fields locally. No release key or password is supplied. Without a complete configuration pointing to an existing key, no release signing identity is configured; a generated unsigned APK is not installable. Debug and standalone currently share the primary applicationId, so their different signing keys prevent replacing one with the other without uninstalling it (and losing its private data). Keep your release key stable for future upgrades.
+The underlying task is `:TMessagesProj_AppStandalone:assembleAfatStandalone`; output is `TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk`. Application ID remains **`io.github.alekseyvinokurov.velora`**. Gradle refuses stable builds without the pinned external RSA-4096 key and a valid certificate originally lasting at least 30 years. The key's certificate must match `release/certificate.sha256`.
 
-The inherited regular target remains available:
+The wrapper verifies the finished APK and writes a public build receipt to ignored `.local-build/stable-build.json`. This identifies the APK digest, version, certificate and clean source commit for release preparation. No keystore is copied. A build receipt is generated only after a real APK has been verified.
+
+## Identity, versions and integrations
+
+`APP_VERSION_NAME` and `APP_VERSION_CODE` in `gradle.properties` are the fixed version source. Current planned first version: `0.1.0` / `100000`. No Gradle invocation increments them and no ABI suffix is added to the APK version code. Edit and commit both for a new published version; never rebuild/replace an already published tag with different assets.
+
+Internal namespaces/Java packages stay unchanged. Debug variants use `.dev`; inherited regular/test `.web` variants are not the primary STABLE distribution. Providers, Android account type and contact MIME types derive from the final applicationId, including `.dev`; Telegram/TON deep links and JNI names are preserved. Changing the applicationId does not migrate another application's private data.
+
+Google/Firebase and Huawei service files must be yours and match the package and certificate. Standalone/regular Google configuration is optional; without matching service JSON do not expect configured push, OAuth or other service integrations to work. Huawei retains its inherited plugin requirements. Files and API keys must not enter Git. Remote badge configuration remains optional and unrelated to releases; the old Telegram update channel is disabled.
+
+The build is defined by pinned source/submodules, fixed versions and tools, external signing identity and explicit commands. Byte-for-byte APK reproducibility has not been demonstrated; do not claim it from this setup alone.
+
+## Verification
 
 ```bash
-./gradlew :TMessagesProj_App:assembleAfatRelease
+python3 tests/release/run.py
+python3 scripts/release.py verify TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk
 ```
 
-Output: `TMessagesProj_App/build/outputs/apk/afat/release/app.apk`. It has the same release signing requirements. Existing `-PngArm64Only` narrows the shared library ABI list; application flavors retain their declarations. Do not describe the resulting APK as verified ARM64-only without checking its contents.
+The first command compiles production updater policy classes and runs host tests against tiny disposable fixture APKs signed by temporary random test keys. It verifies metadata rejection and actual signature/hash failures. It does not build or install Velora, and does not create the permanent key.
 
-## Application identity
-
-| Target / build type | applicationId |
-| --- | --- |
-| Standalone debug / standalone; regular release; Huawei | `io.github.alekseyvinokurov.velora` |
-| Regular debug; HockeyApp variants | `io.github.alekseyvinokurov.velora.beta` |
-| Regular standalone; test debug / standalone | `io.github.alekseyvinokurov.velora.web` |
-
-Core namespace stays `org.telegram.messenger`; app namespaces remain `.regular`, `.web`, `.huawei` and `.test` under it. FileProvider and notification/call providers already derive authorities from `${applicationId}` and runtime package names. The Android account authenticator, contact MIME types and sync adapter now also use the final applicationId, including variant suffixes, to avoid claiming another client's Android accounts and contact actions. Telegram account/session logic is unchanged. Variant resources use the [Android Gradle Plugin resource API](https://developer.android.com/reference/tools/gradle-api/8.12/com/android/build/api/variant/HasAndroidResources).
-
-Existing Telegram/TON deep links, JNI class names, preference keys, backup magic, external storage paths and music-channel discovery identifiers are preserved. Existing SoundGram backups remain readable. A new applicationId creates separate app storage and does not migrate login sessions automatically.
-
-## Optional services
-
-- Firebase/Google service configuration must belong to the final applicationId and your signing certificate. Supply your own ignored `google-services.json` in the application module if enabling it. Without it, do not expect Firebase push or other configured Google integrations to work. Regular and standalone apply the Google plugin conditionally; Huawei keeps its existing Google/Huawei plugin setup and requires matching service configuration.
-- Use your own Huawei `agconnect-services.json` and integration parameters for Huawei builds. Google Maps, OAuth and other optional keys must be yours too.
-- `VELORA_UPDATE_CHANNEL` is an optional Telegram channel username hosting the inherited `#update` metadata format. Blank disables remote metadata requests; the UI explains that updates are unconfigured. No channel or update endpoint is invented. APK signature, hash and package checks remain intact.
-- `VELORA_BADGES_URL` is an optional owned URL for the inherited `id:badge` mapping. Blank disables that remote fetch. Velora offers no configured paid badges or donation service.
-- Existing optional `NIMARKO_*` property names remain in the template for compatibility; this rebrand does not provision backend services or assert that all inherited placeholder settings are wired up.
-- Translation scripts under `tools/` and `scripts/` are inherited maintenance utilities, not Gradle build prerequisites. Review their paths, translation sources and attribution before regenerating resources.
-
-## Current blockers
-
-The recorded offline build stops resolving `org.gradle.kotlin.kotlin-dsl:5.2.0` in `buildSrc`; that plugin is absent from the local cache. Android compilation has not started. The inspected environment also has no configured/discovered Android SDK/NDK, no Telegram API pair and no release signing material. After preparing the checkout and local prerequisites, rerun the commands above without `--offline`. Do not interpret Java/XML syntax checks as a successful Android build or a device test.
+The second command uses SDK `aapt2` and `apksigner` to inspect a real stable APK, compare version/package/certificate with project settings, calculate SHA-256 and reject embedded signing/configuration files. See [RELEASING.md](RELEASING.md) for staging and device validation.

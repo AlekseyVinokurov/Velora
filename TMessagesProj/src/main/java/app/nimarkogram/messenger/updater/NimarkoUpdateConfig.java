@@ -37,6 +37,11 @@ public final class NimarkoUpdateConfig {
     public static long getLastUpdateCheckTime() { return prefs().getLong("lastUpdateCheckTime", 0L); }
     public static void setLastUpdateCheckTime(long v) { prefs().edit().putLong("lastUpdateCheckTime", v).apply(); }
 
+    public static String getReleaseMetadata() { return prefs().getString("veloraReleaseMetadataV1", ""); }
+    public static void setReleaseMetadata(String json) {
+        prefs().edit().putString("veloraReleaseMetadataV1", json).apply();
+    }
+
     public static String getApkSha256() { return prefs().getString("apkSha256", ""); }
     public static void setApkSha256(String v) {
         prefs().edit().putString("apkSha256", v == null ? "" : v).apply();
@@ -86,5 +91,5 @@ public final class NimarkoUpdateConfig {
 
     public static boolean isStandalonePremiumBuild() { return false; }
     public static boolean isStandaloneBetaBuild() { return false; }
-    public static boolean isDevBuild() { return false; }
+    public static boolean isDevBuild() { return ApplicationLoader.applicationContext.getPackageName().endsWith(".dev"); }
 }

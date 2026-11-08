@@ -225,8 +225,7 @@ public class UpdateHelper extends BaseRemoteHelper {
     }
 
     public void checkNewVersionAvailable(Delegate delegate, boolean updateAlways) {
-        this.updateAlways = updateAlways;
-        load(delegate);
+        if (delegate != null) delegate.onTLResponse(null, "Legacy Telegram-channel updates are disabled in Velora");
     }
 
     private static final class InstanceHolder {

@@ -75,10 +75,7 @@ android {
                 keyAlias rootProject.ext.releaseSigning.keyAlias
                 keyPassword rootProject.ext.releaseSigning.keyPassword
             }
-            // Sign with ALL APK signature schemes (v1 JAR + v2 + v3 + v3.1)
-            // so Android stops prompting "additional APK verification" on
-            // install. v2-only was the previous behaviour and triggered the
-            // Play Protect / "Verify before install" sheet on modern Androids.
+            // Enable Android-compatible APK signature schemes with the permanent key.
             enableV1Signing true
             enableV2Signing true
             enableV3Signing true
@@ -93,10 +90,15 @@ android {
     }
 
     buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
         debug {
             debuggable true
             jniDebuggable true
             signingConfig signingConfigs.debug
+            applicationIdSuffix ".dev"
+            resValue "string", "AppName", "Velora DEV"
             minifyEnabled false
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), '../TMessagesProj/proguard-rules.pro'
@@ -148,7 +150,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             outputFileName = "app.apk"
-            output.versionCodeOverride = defaultConfig.versionCode * 10 + variant.productFlavors.get(0).abiVersionCode
+            output.versionCodeOverride = defaultConfig.versionCode
         }
     }
 
@@ -187,10 +189,7 @@ android {
     }
 }
 
-// NimarkoGram: dedicated Firebase project for app.nimarkogram.messenger
-// (project_id=nimarkogram-3a6f7) — the google-services.json next to this
-// build.gradle holds the matching client config. Without this plugin enabled
-// the FirebaseApp wouldn't initialise at runtime and FCM tokens never get
-// registered → push notifications silently never arrive in background. See
-// also the same JSON copied into TMessagesProj/ so the base manifest resolves.
-apply plugin: 'com.google.gms.google-services'
+// Firebase is optional and must use the final stable / DEV package and certificate.
+if (file('google-services.json').isFile()) {
+    apply plugin: 'com.google.gms.google-services'
+}

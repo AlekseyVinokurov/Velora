@@ -1,0 +1,76 @@
+import java.security.KeyStore
+import java.security.MessageDigest
+import java.security.interfaces.RSAPublicKey
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
+
+// This public pin is versioned. It is never taken from update metadata or secrets.
+def certificatePinFile = file('release/certificate.sha256')
+def certificatePins = certificatePinFile.isFile()
+        ? certificatePinFile.readLines('UTF-8').collect { it.trim() }.findAll { it && !it.startsWith('#') }
+        : []
+if (certificatePins.size() > 1 || (certificatePins && !(certificatePins[0] ==~ /[0-9a-f]{64}/))) {
+    throw new GradleException('release/certificate.sha256 must contain one lowercase SHA-256 fingerprint or comments only.')
+}
+ext.veloraReleaseCertificateSha256 = certificatePins ? certificatePins[0] : ''
+if (APP_PACKAGE != 'io.github.alekseyvinokurov.velora') {
+    throw new GradleException('Velora stable applicationId is permanent; do not override APP_PACKAGE.')
+}
+if (!(APP_VERSION_NAME ==~ /(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)/)
+        || !(APP_VERSION_CODE ==~ /[1-9][0-9]*/) || APP_VERSION_CODE.toBigInteger() > 2100000000) {
+    throw new GradleException('Set a fixed semantic APP_VERSION_NAME and integer APP_VERSION_CODE in gradle.properties.')
+}
+
+ext.validateVeloraSigningMaterial = {
+    if (!hasReleaseSigning || !veloraReleaseCertificateSha256) {
+        throw new GradleException('Stable signing is not configured. Create your own external key interactively, record its public certificate pin, and set RELEASE_* locally. See docs/RELEASING.md.')
+    }
+    def keyFile = file(releaseSigning.storeFile).canonicalFile
+    for (def parent = keyFile.parentFile; parent != null; parent = parent.parentFile) {
+        if (new File(parent, '.git').exists()) {
+            throw new GradleException('The release keystore must be outside every Git working tree.')
+        }
+    }
+    try {
+        def store = KeyStore.getInstance(keyFile, releaseSigning.storePassword.toCharArray())
+        def key = store.getKey(releaseSigning.keyAlias, releaseSigning.keyPassword.toCharArray())
+        def certificate = store.getCertificate(releaseSigning.keyAlias)
+        if (key == null || certificate == null || !(certificate.publicKey instanceof RSAPublicKey)
+                || certificate.publicKey.modulus.bitLength() < 4096) {
+            throw new GradleException('The release alias must contain an RSA private key of at least 4096 bits.')
+        }
+        certificate.checkValidity()
+        def years = ChronoUnit.YEARS.between(certificate.notBefore.toInstant().atZone(ZoneOffset.UTC),
+                certificate.notAfter.toInstant().atZone(ZoneOffset.UTC))
+        if (years < 30) throw new GradleException('The release certificate must have an original validity of at least 30 years.')
+        def actualPin = MessageDigest.getInstance('SHA-256').digest(certificate.encoded).encodeHex().toString()
+        if (actualPin != veloraReleaseCertificateSha256) {
+            throw new GradleException('Release key certificate does not match the versioned public pin. Restore the original key; do not replace the pin for an ordinary release.')
+        }
+    } catch (GradleException e) {
+        throw e
+    } catch (Exception ignored) {
+        // Do not attach a keystore exception or print any signing parameters.
+        throw new GradleException('Unable to open the release key. Check the external keystore, alias and locally entered passwords.')
+    }
+}
+
+tasks.register('validateVeloraReleaseSigning') {
+    group = 'verification'
+    description = 'Validate the external permanent key against the public certificate pin.'
+    doLast { validateVeloraSigningMaterial() }
+}
+
+subprojects {
+    plugins.withId('com.android.application') {
+        def components = project.extensions.getByName('androidComponents')
+        components.onVariants(components.selector().all()) { variant ->
+            if (variant.applicationId.get() == rootProject.APP_PACKAGE) {
+                def suffix = variant.name.substring(0, 1).toUpperCase(Locale.ROOT) + variant.name.substring(1)
+                project.tasks.matching { it.name == "pre${suffix}Build" }.configureEach {
+                    dependsOn(rootProject.tasks.named('validateVeloraReleaseSigning'))
+                }
+            }
+        }
+    }
+}

@@ -14,16 +14,10 @@ import android.app.PendingIntent;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
 
-import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.FileLoader;
-import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.TLRPC;
-import tw.nekomimi.nekogram.helpers.remote.BaseRemoteHelper;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
@@ -38,8 +32,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 public class NimarkoUpdater {
@@ -68,21 +60,14 @@ public class NimarkoUpdater {
     }
 
     private static boolean validateApkFully(File file, String wantHash) {
-        if (file == null || !file.exists() || file.length() <= 0) return false;
-        if (file.length() > MAX_APK_BYTES) return false;
-        if (expectedSizeBytes > 0 && file.length() != expectedSizeBytes) return false;
-        String contentDigest = sha256OfFile(file);
-        if (contentDigest == null) return false;
-        if (wantHash != null && !wantHash.isEmpty()) {
-            if (!SHA256_PATTERN.matcher(wantHash).matches()) return false;
-            if (!contentDigest.equalsIgnoreCase(wantHash)) return false;
-        }
-        if (matchesValidatedDigest(file, wantHash, contentDigest)) return true;
+        Update update = getOrRestoreLastUpdate();
+        if (update == null || file == null || !file.isFile() || file.length() != update.metadata.size
+                || !update.metadata.sha256.equals(wantHash)) return false;
         try {
+            if (!VeloraApkSignature.verifyDigest(file, update.metadata.size, update.metadata.sha256)) return false;
             String signer = trustedSignerFingerprint(file);
-            boolean trustedPackage = signer != null;
-            if (trustedPackage) rememberValidatedApk(file, wantHash, contentDigest, signer);
-            return trustedPackage;
+            if (signer == null) return false;
+            return true;
         } catch (Exception e) {
             FileLog.e(e);
             return false;
@@ -90,6 +75,8 @@ public class NimarkoUpdater {
     }
 
     private static String trustedSignerFingerprint(File file) throws Exception {
+        Update update = getOrRestoreLastUpdate();
+        if (update == null) return null;
         Context context = ApplicationLoader.applicationContext;
         android.content.pm.PackageManager pm = context.getPackageManager();
         int flags = Build.VERSION.SDK_INT >= 28
@@ -97,19 +84,16 @@ public class NimarkoUpdater {
                 : android.content.pm.PackageManager.GET_SIGNATURES;
         android.content.pm.PackageInfo archive = pm.getPackageArchiveInfo(file.getAbsolutePath(), flags);
         android.content.pm.PackageInfo installed = pm.getPackageInfo(context.getPackageName(), flags);
-        if (archive == null || installed == null
-                || !context.getPackageName().equals(archive.packageName)) {
-            return null;
-        }
-        android.content.pm.Signature[] archiveSignatures = signaturesOf(archive);
+        if (archive == null || archive.applicationInfo == null || installed == null
+                || !VeloraRelease.PACKAGE_NAME.equals(context.getPackageName())
+                || !update.metadata.acceptsApk(archive.packageName,
+                        androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(archive),
+                        archive.versionName, archive.applicationInfo.minSdkVersion,
+                        androidx.core.content.pm.PackageInfoCompat.getLongVersionCode(installed), Build.VERSION.SDK_INT)) return null;
+        String pin = org.telegram.messenger.BuildConfig.VELORA_RELEASE_CERT_SHA256;
         android.content.pm.Signature[] installedSignatures = signaturesOf(installed);
-        if (archiveSignatures.length == 0 || installedSignatures.length == 0) return null;
-        for (android.content.pm.Signature archiveSignature : archiveSignatures) {
-            for (android.content.pm.Signature installedSignature : installedSignatures) {
-                if (archiveSignature.equals(installedSignature)) return signatureSha256(archiveSignature);
-            }
-        }
-        return null;
+        if (installedSignatures.length != 1 || !pin.equals(signatureSha256(installedSignatures[0]))) return null;
+        return VeloraApkSignature.verify(file, pin, update.metadata.minSdk, Build.VERSION.SDK_INT) ? pin : null;
     }
 
     private static String signatureSha256(android.content.pm.Signature signature) throws Exception {
@@ -122,60 +106,20 @@ public class NimarkoUpdater {
 
     private static android.content.pm.Signature[] signaturesOf(android.content.pm.PackageInfo info) {
         if (Build.VERSION.SDK_INT >= 28 && info.signingInfo != null) {
-            android.content.pm.Signature[] signatures = info.signingInfo.hasMultipleSigners()
-                    ? info.signingInfo.getApkContentsSigners()
-                    : info.signingInfo.getSigningCertificateHistory();
+            android.content.pm.Signature[] signatures = info.signingInfo.getApkContentsSigners();
             return signatures == null ? new android.content.pm.Signature[0] : signatures;
         }
         return info.signatures == null ? new android.content.pm.Signature[0] : info.signatures;
     }
 
-    private static final class ValidatedApk {
-        final String path;
-        final String expectedHash;
-        final String contentDigest;
-        final String signer;
-        final long expectedLength;
-        final int expectedVersionCode;
 
-        ValidatedApk(File file, String expectedHash, String contentDigest, String signer) {
-            this.path = file.getAbsolutePath();
-            this.expectedHash = expectedHash;
-            this.contentDigest = contentDigest;
-            this.signer = signer;
-            this.expectedLength = expectedSizeBytes;
-            this.expectedVersionCode = versionCode;
-        }
-    }
 
-    private static volatile ValidatedApk validatedApk;
 
-    private static boolean isApkValidatedCached(File file, String wantHash) {
-        if (file == null || !file.isFile() || file.length() <= 0 || file.length() > MAX_APK_BYTES
-                || wantHash == null || Looper.myLooper() == Looper.getMainLooper()) return false;
-        if (expectedSizeBytes > 0 && file.length() != expectedSizeBytes) return false;
-        String norm = wantHash.toLowerCase(Locale.ROOT);
-        if (!norm.isEmpty() && !SHA256_PATTERN.matcher(norm).matches()) return false;
-        String digest = sha256OfFile(file);
-        return digest != null && matchesValidatedDigest(file, norm, digest);
-    }
 
-    private static boolean matchesValidatedDigest(File file, String wantHash, String contentDigest) {
-        ValidatedApk cached = validatedApk;
-        String norm = wantHash == null ? "" : wantHash.toLowerCase(Locale.ROOT);
-        return file != null && cached != null && cached.signer != null && contentDigest != null
-                && cached.path.equals(file.getAbsolutePath())
-                && cached.expectedLength == expectedSizeBytes
-                && cached.expectedVersionCode == versionCode
-                && norm.equals(cached.expectedHash)
-                && contentDigest.equalsIgnoreCase(cached.contentDigest);
-    }
 
-    private static void rememberValidatedApk(File file, String wantHash, String contentDigest, String signer) {
-        if (file == null || contentDigest == null || signer == null) return;
-        validatedApk = new ValidatedApk(file,
-                wantHash == null ? "" : wantHash.toLowerCase(Locale.ROOT), contentDigest, signer);
-    }
+
+
+
 
     public static String sha256OfFile(File file) {
         try (InputStream in = new java.io.FileInputStream(file)) {
@@ -216,7 +160,7 @@ public class NimarkoUpdater {
     public static File otaPath, versionPath, apkFile;
 
     public static long id = 1L;
-    private static final long updateCheckInterval = 3600000L;
+    private static final long updateCheckInterval = 24L * 60 * 60 * 1000;
     private static volatile boolean updateDownloaded = false;
     private static volatile boolean checkingForUpdates = false;
 
@@ -224,19 +168,44 @@ public class NimarkoUpdater {
         return updateDownloaded && apkFile != null && apkFile.isFile();
     }
 
+    public static boolean isStableUpdaterEnabled() {
+        Context context = ApplicationLoader.applicationContext;
+        return context != null && VeloraRelease.PACKAGE_NAME.equals(context.getPackageName())
+                && org.telegram.messenger.BuildConfig.VELORA_RELEASE_CERT_SHA256.matches("[0-9a-f]{64}");
+    }
+
+    public static volatile boolean noPublishedRelease;
+
+    private static void selectUpdate(Update update) {
+        lastUpdate = update;
+        version = update.version;
+        versionCode = update.versionCode;
+        expectedSha256 = update.metadata.sha256;
+        expectedSizeBytes = update.metadata.size;
+        downloadURL = update.downloadURL;
+        changelog = update.changelog;
+        size = update.size;
+        uploadDate = update.uploadDate;
+    }
+
     public static Update getOrRestoreLastUpdate() {
-        if (lastUpdate != null) return lastUpdate;
-        String v = NimarkoUpdateConfig.getLastUpdateVersion();
-        String url = NimarkoUpdateConfig.getLastUpdateUrl();
-        if (v == null || v.isEmpty() || url == null || url.isEmpty()) return null;
-        lastUpdate = new Update(
-                v,
-                NimarkoUpdateConfig.getLastUpdateVersionCode(),
-                NimarkoUpdateConfig.getLastUpdateChangelog(),
-                NimarkoUpdateConfig.getLastUpdateSize(),
-                url,
-                NimarkoUpdateConfig.getLastUpdateDate());
-        return lastUpdate;
+        if (!isStableUpdaterEnabled()) return null;
+        Update update = lastUpdate;
+        try {
+            if (update == null) {
+                String json = NimarkoUpdateConfig.getReleaseMetadata();
+                if (json.isEmpty()) return null;
+                update = new Update(VeloraRelease.parse(json,
+                        org.telegram.messenger.BuildConfig.VELORA_RELEASE_CERT_SHA256),
+                        NimarkoUpdateConfig.getLastUpdateChangelog(), NimarkoUpdateConfig.getLastUpdateDate());
+            }
+            if (!update.metadata.isNewerThan(getCurrentVersionCode(), Build.VERSION.SDK_INT)) return null;
+            selectUpdate(update);
+            return update;
+        } catch (Exception e) {
+            FileLog.e(e);
+            return null; // Never restore the legacy Telegram-channel metadata.
+        }
     }
 
     private static Runnable progressRunnable;
@@ -244,25 +213,20 @@ public class NimarkoUpdater {
     public interface OnUpdateNotFound { void run(); }
 
     public static boolean checkDirs() {
+        Update selected = getOrRestoreLastUpdate();
+        if (selected == null) { updateDownloaded = false; return false; }
         try {
-            otaPath = new File(ApplicationLoader.applicationContext.getExternalFilesDir(null), "ota");
-            if (version == null || version.isEmpty()) version = NimarkoUpdateConfig.getUpdateVersionName();
-            if (version == null || version.isEmpty()) { updateDownloaded = false; return false; }
-            versionPath = new File(otaPath, version);
-            if (!versionPath.exists() && !versionPath.mkdirs() && !versionPath.exists()) {
-                updateDownloaded = false; return false;
-            }
+            otaPath = new File(ApplicationLoader.applicationContext.getCacheDir(), "velora-updates");
+            versionPath = new File(otaPath, Integer.toString(selected.versionCode));
+            if (!versionPath.exists() && !versionPath.mkdirs()) return false;
             apkFile = new File(versionPath, "update.apk");
             if (Looper.myLooper() == Looper.getMainLooper()) {
-                updateDownloaded = isApkValidatedCached(apkFile, wantedApkHash());
-                if (apkFile.exists() && !updateDownloaded) otaQueue.postRunnable(NimarkoUpdater::checkDirs);
+                if (apkFile.isFile()) otaQueue.postRunnable(NimarkoUpdater::checkDirs);
                 return true;
             }
-            boolean valid = isApkValid(apkFile);
-            if (apkFile.exists() && !valid) {
-                apkFile.delete();
-            }
-            updateDownloaded = valid;
+            updateDownloaded = isApkValid(apkFile);
+            if (updateDownloaded) AndroidUtilities.runOnUIThread(() -> dispatchDownloadComplete(downloadGeneration));
+            if (apkFile.exists() && !updateDownloaded && !downloading && !downloadPaused && !hasPersistedDownloadLocked()) apkFile.delete();
             return true;
         } catch (Exception e) {
             FileLog.e(e);
@@ -275,95 +239,73 @@ public class NimarkoUpdater {
         checkUpdates(fragment, manual, null, null, null);
     }
 
-    private static boolean launchChecked = false;
-
-    private static final java.util.regex.Pattern VERSION_PATTERN =
-            java.util.regex.Pattern.compile("^[A-Za-z0-9._-]+$");
-
-    private static final int MAX_RESPONSE_BYTES = 64 * 1024;
 
     public interface OnCheckFailed { void run(); }
 
     public static void checkOnLaunch(BaseFragment fragment) {
-        if (launchChecked || !NimarkoUpdateConfig.getAutoOTA()) return;
-        launchChecked = true;
-        checkUpdates(fragment, false);
+        if (NimarkoUpdateConfig.getAutoOTA()) checkUpdates(fragment, false);
     }
 
     public static void checkUpdates(BaseFragment fragment, boolean manual, OnUpdateNotFound onUpdateNotFound, Runnable onUpdateFound) {
         checkUpdates(fragment, manual, onUpdateNotFound, onUpdateFound, null);
     }
 
-    public static TLRPC.Document lastDocument = null;
-
     public static void checkUpdates(BaseFragment fragment, boolean manual, OnUpdateNotFound onUpdateNotFound, Runnable onUpdateFound, OnCheckFailed onCheckFailed) {
-        long lastThrottle = NimarkoUpdateConfig.getUpdateScheduleTimestamp();
-        if (System.currentTimeMillis() - lastThrottle < updateCheckInterval && !manual) {
+        if (!isStableUpdaterEnabled()) {
+            if (onCheckFailed != null) AndroidUtilities.runOnUIThread(onCheckFailed::run);
             return;
         }
+        long elapsed = System.currentTimeMillis() - NimarkoUpdateConfig.getLastUpdateCheckTime();
+        if (!manual && (!NimarkoUpdateConfig.getAutoOTA()
+                || elapsed >= 0 && elapsed < updateCheckInterval)) return;
         synchronized (downloadBindingLock) {
-            boolean downloadOwned = downloading || downloadPaused || hasPersistedDownloadLocked();
-            if (!checkingForUpdates && !downloadOwned) {
-                checkingForUpdates = true;
-            } else {
-                if (manual && downloadOwned) {
-                    if (onCheckFailed != null) {
-                        AndroidUtilities.runOnUIThread(onCheckFailed::run);
-                    } else if (onUpdateNotFound != null) {
-                        AndroidUtilities.runOnUIThread(onUpdateNotFound::run);
-                    }
-                }
-                return;
-            }
-        }
-        tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().checkNewVersionAvailable((res, error) -> {
-            NimarkoUpdateConfig.setLastUpdateCheckTime(System.currentTimeMillis());
-            checkingForUpdates = false;
-            if (error != null) {
+            if (checkingForUpdates || downloading || downloadPaused || hasPersistedDownloadLocked()) {
                 if (onCheckFailed != null) AndroidUtilities.runOnUIThread(onCheckFailed::run);
                 return;
             }
-            if (res == null) {
-                if (onUpdateNotFound != null) AndroidUtilities.runOnUIThread(onUpdateNotFound::run);
-                cleanOtaDir();
-                return;
-            }
-            lastDocument = res.document;
-            version = res.version != null ? res.version : "";
-            int vCode = tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().lastParsedUpdate != null
-                    ? tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().lastParsedUpdate.versionCode : 0;
-            versionCode = vCode;
-            changelog = res.text != null ? res.text : "";
-            long sizeBytes = res.document != null ? res.document.size : 0L;
-            expectedSizeBytes = sizeBytes;
-            size = sizeBytes > 0 ? AndroidUtilities.formatFileSize(sizeBytes) : "";
-            long dateMs = res.document != null ? ((long) res.document.date) * 1000L : 0L;
-            uploadDate = dateMs > 0 ? LocaleController.formatDateTime(dateMs / 1000, true) : "";
-            int uniMsgId = 0;
-            if (tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().lastParsedUpdate != null
-                    && tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().lastParsedUpdate.document != null) {
-                Integer docIdVal = tw.nekomimi.nekogram.helpers.remote.UpdateHelper.getInstance().lastParsedUpdate.document.get("uni");
-                if (docIdVal != null) uniMsgId = docIdVal;
-            }
-            downloadURL = "tg://msg/" + uniMsgId;
-            Update update = new Update(version, versionCode, changelog, size, downloadURL, uploadDate, uniMsgId);
-            lastUpdate = update;
-            NimarkoUpdateConfig.setLastUpdate(version, versionCode, downloadURL, changelog, size, uploadDate);
-            if (update.isNew() && fragment != null && fragment.getContext() != null) {
+            checkingForUpdates = true;
+        }
+        otaQueue.postRunnable(() -> {
+            try {
+                GitHubReleaseClient.Result result = GitHubReleaseClient.latest(
+                        org.telegram.messenger.BuildConfig.VELORA_RELEASE_CERT_SHA256);
+                noPublishedRelease = result == null;
+                if (result == null || !result.metadata.isNewerThan(getCurrentVersionCode(), Build.VERSION.SDK_INT)) {
+                    lastUpdate = null;
+                    NimarkoUpdateConfig.setUpdateAvailable(false);
+                    NimarkoUpdateConfig.setReleaseMetadata("");
+                    if (onUpdateNotFound != null) AndroidUtilities.runOnUIThread(onUpdateNotFound::run);
+                    return;
+                }
+                Update update = new Update(result.metadata, result.changelog, result.publishedAt);
+                selectUpdate(update);
+                NimarkoUpdateConfig.setReleaseMetadata(result.metadata.toJson());
+                NimarkoUpdateConfig.setLastUpdate(update.version, update.versionCode, update.downloadURL,
+                        update.changelog, update.size, update.uploadDate);
+                NimarkoUpdateConfig.setApkSha256(result.metadata.sha256);
+                NimarkoUpdateConfig.setUpdateAvailable(true);
+                NimarkoUpdateConfig.setUpdateVersionName(update.version);
                 checkDirs();
                 AndroidUtilities.runOnUIThread(() -> {
-                    NimarkoUpdaterSheet.showAlert(fragment, true, update);
+                    if (fragment != null && fragment.getParentActivity() != null) {
+                        NimarkoUpdaterSheet.showAlert(fragment, true, update);
+                    }
                     if (onUpdateFound != null) onUpdateFound.run();
                 });
-                NimarkoUpdateConfig.setUpdateIsDownloading(false);
-                NimarkoUpdateConfig.setUpdateAvailable(true);
-                if (version != null && !version.isEmpty()) NimarkoUpdateConfig.setUpdateVersionName(version);
-                NimarkoUpdateConfig.setUpdateSize(size);
-            } else {
-                if (onUpdateNotFound != null) AndroidUtilities.runOnUIThread(onUpdateNotFound::run);
-                cleanOtaDir();
+            } catch (Exception e) {
+                FileLog.e(e);
+                if (onCheckFailed != null) AndroidUtilities.runOnUIThread(onCheckFailed::run);
+                else if (manual && fragment != null) AndroidUtilities.runOnUIThread(() -> {
+                    if (fragment.getParentActivity() != null) {
+                        AlertsCreator.createSimpleAlert(fragment.getParentActivity(),
+                                LocaleController.getString(R.string.UP_CheckFailed)).show();
+                    }
+                });
+            } finally {
+                NimarkoUpdateConfig.setLastUpdateCheckTime(System.currentTimeMillis());
+                checkingForUpdates = false;
             }
-        }, manual);
+        });
     }
 
     private static volatile boolean downloadCanceled = false;
@@ -461,6 +403,11 @@ public class NimarkoUpdater {
 
     public static void downloadApk(Context context, String link, String title, long ownerToken) {
         if (context == null) return;
+        Update selected = getOrRestoreLastUpdate();
+        if (selected == null || !selected.downloadURL.equals(link)) {
+            dispatchDownloadError(downloadGeneration);
+            return;
+        }
         Context appContext = context.getApplicationContext();
         if (updateDownloaded && apkFile != null && apkFile.exists()) {
             installApk(context, apkFile.getAbsolutePath());
@@ -469,7 +416,8 @@ public class NimarkoUpdater {
         final int generation;
         synchronized (downloadBindingLock) {
             if (activeBinding == null || activeBinding.ownerToken != ownerToken
-                    || downloading || downloadPaused || hasPersistedDownloadLocked()) {
+                    || checkingForUpdates || downloading || downloadPaused || hasPersistedDownloadLocked()) {
+                dispatchDownloadError(downloadGeneration);
                 return;
             }
             downloading = true;
@@ -504,142 +452,7 @@ public class NimarkoUpdater {
             updateBoundButton(generation, 0, false);
             startProgressSmoother(generation);
         });
-        if (lastDocument != null) {
-            startTgFileLoaderDownload(appContext, UserConfig.selectedAccount, lastDocument, generation);
-        } else if (link != null && (link.startsWith("tg://") || (lastUpdate != null && lastUpdate.uniMessageId > 0))) {
-            int targetMsgId = (lastUpdate != null && lastUpdate.uniMessageId > 0)
-                    ? lastUpdate.uniMessageId
-                    : Integer.parseInt(link.substring(link.lastIndexOf('/') + 1));
-            downloadFromTelegram(appContext, targetMsgId, generation);
-        } else {
-            nmDownloadLoop(appContext, link, 0, generation, false);
-        }
-    }
-
-    private static void downloadFromTelegram(Context context, int messageId, int myGeneration) {
-        otaQueue.postRunnable(() -> {
-            int account = UserConfig.selectedAccount;
-            Runnable fetchDocWithChannel = () -> {
-                TLRPC.TL_channels_getMessages req = new TLRPC.TL_channels_getMessages();
-                TLRPC.TL_inputChannel inputChannel = new TLRPC.TL_inputChannel();
-                inputChannel.channel_id = BaseRemoteHelper.getResolvedChannelId();
-                inputChannel.access_hash = BaseRemoteHelper.getResolvedChannelAccessHash();
-                req.channel = inputChannel;
-                req.id.add(messageId);
-                ConnectionsManager.getInstance(account).sendRequest(req, (response, error) -> {
-                    if (myGeneration != downloadGeneration) return;
-                    if (response instanceof TLRPC.messages_Messages) {
-                        TLRPC.messages_Messages res = (TLRPC.messages_Messages) response;
-                        if (res.messages != null && !res.messages.isEmpty()) {
-                            TLRPC.Message msg = res.messages.get(0);
-                            if (msg.media != null && msg.media.document != null) {
-                                startTgFileLoaderDownload(context, account, msg.media.document, myGeneration);
-                                return;
-                            }
-                        }
-                    }
-                    AndroidUtilities.runOnUIThread(() -> dispatchDownloadError(myGeneration));
-                });
-            };
-
-            long accessHash = BaseRemoteHelper.getResolvedChannelAccessHash();
-            if (accessHash == 0) {
-                TLRPC.TL_contacts_resolveUsername resolve = new TLRPC.TL_contacts_resolveUsername();
-                resolve.username = BaseRemoteHelper.CHANNEL_METADATA_NAME;
-                ConnectionsManager.getInstance(account).sendRequest(resolve, (res, err) -> {
-                    if (myGeneration != downloadGeneration) return;
-                    if (res instanceof TLRPC.TL_contacts_resolvedPeer) {
-                        TLRPC.TL_contacts_resolvedPeer peer = (TLRPC.TL_contacts_resolvedPeer) res;
-                        if (peer.chats != null && !peer.chats.isEmpty()) {
-                            TLRPC.Chat chat = peer.chats.get(0);
-                            ApplicationLoader.applicationContext.getSharedPreferences("nekoremoteconfig", Context.MODE_PRIVATE)
-                                    .edit()
-                                    .putLong("resolved_channel_id", chat.id)
-                                    .putLong("resolved_channel_access_hash", chat.access_hash)
-                                    .apply();
-                            fetchDocWithChannel.run();
-                            return;
-                        }
-                    }
-                    AndroidUtilities.runOnUIThread(() -> dispatchDownloadError(myGeneration));
-                });
-            } else {
-                fetchDocWithChannel.run();
-            }
-        });
-    }
-
-    private static void startTgFileLoaderDownload(Context context, int account, TLRPC.Document doc, int myGeneration) {
-        AndroidUtilities.runOnUIThread(() -> {
-            File targetDir = new File(context.getExternalFilesDir(null), "ota/" + version);
-            if (!targetDir.exists()) targetDir.mkdirs();
-            File targetApk = new File(targetDir, "update.apk");
-
-            NotificationCenter.NotificationCenterDelegate observer = new NotificationCenter.NotificationCenterDelegate() {
-                @Override
-                public void didReceivedNotification(int id, int accountNum, Object... args) {
-                    if (myGeneration != downloadGeneration) {
-                        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoaded);
-                        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
-                        NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoadFailed);
-                        return;
-                    }
-                    if (id == NotificationCenter.fileLoadProgressChanged) {
-                        String location = (String) args[0];
-                        long loaded = (Long) args[1];
-                        long total = (Long) args[2];
-                        String fileName = FileLoader.getAttachFileName(doc);
-                        if (fileName.equals(location) && total > 0) {
-                            dlRealProgress = (int) (loaded * 100L / total);
-                            NimarkoUpdateConfig.setUpdateDownloadingProgress(dlRealProgress);
-                            showProgressNotification(context, dlRealProgress);
-                        }
-                    } else if (id == NotificationCenter.fileLoaded) {
-                        String location = (String) args[0];
-                        String fileName = FileLoader.getAttachFileName(doc);
-                        if (fileName.equals(location)) {
-                            NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoaded);
-                            NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
-                            NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoadFailed);
-
-                            File downloadedFile = (File) args[1];
-                            if (downloadedFile == null || !downloadedFile.exists()) {
-                                downloadedFile = FileLoader.getInstance(account).getPathToAttach(doc, true);
-                            }
-                            try {
-                                AndroidUtilities.copyFile(downloadedFile, targetApk);
-                            } catch (Exception e) {
-                                FileLog.e(e);
-                            }
-                            apkFile = targetApk;
-                            updateDownloaded = isApkValid(apkFile);
-                            downloading = false;
-                            cancelUpdateNotification();
-                            showReadyNotification(context, apkFile);
-                            AndroidUtilities.runOnUIThread(() -> {
-                                dispatchDownloadComplete(myGeneration);
-                                installApk(context, apkFile.getAbsolutePath());
-                            });
-                        }
-                    } else if (id == NotificationCenter.fileLoadFailed) {
-                        String location = (String) args[0];
-                        String fileName = FileLoader.getAttachFileName(doc);
-                        if (fileName.equals(location)) {
-                            NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoaded);
-                            NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
-                            NotificationCenter.getInstance(account).removeObserver(this, NotificationCenter.fileLoadFailed);
-                            dispatchDownloadError(myGeneration);
-                        }
-                    }
-                }
-            };
-
-            NotificationCenter.getInstance(account).addObserver(observer, NotificationCenter.fileLoaded);
-            NotificationCenter.getInstance(account).addObserver(observer, NotificationCenter.fileLoadProgressChanged);
-            NotificationCenter.getInstance(account).addObserver(observer, NotificationCenter.fileLoadFailed);
-
-            FileLoader.getInstance(account).loadFile(doc, "apk", 0, 1);
-        });
+        nmDownloadLoop(appContext, link, 0, generation, false);
     }
 
     private static void nmDownloadLoop(Context context, String link, long startOffset,
@@ -648,7 +461,7 @@ public class NimarkoUpdater {
             HttpURLConnection connection = null;
             try {
                 if (myGeneration != downloadGeneration) return;
-                File baseDir = new File(context.getExternalFilesDir(null), "ota/" + version);
+                File baseDir = new File(context.getCacheDir(), "velora-updates/" + versionCode);
                 if (!baseDir.exists() && !baseDir.mkdirs() && !baseDir.exists()) {
                     throw new IllegalStateException("Cannot create dir: " + baseDir.getAbsolutePath());
                 }
@@ -715,7 +528,7 @@ public class NimarkoUpdater {
                 }
 
                 boolean hashVerified = false;
-                if (expectedSha256 != null && !expectedSha256.isEmpty()) {
+                if (expectedSha256 != null && SHA256_PATTERN.matcher(expectedSha256).matches()) {
                     String got = sha256OfFile(outFile);
                     if (got == null || !got.equalsIgnoreCase(expectedSha256)) {
                         outFile.delete();
@@ -725,7 +538,7 @@ public class NimarkoUpdater {
                     hashVerified = true;
                     NimarkoUpdateConfig.setApkSha256(expectedSha256);
                 } else {
-                    NimarkoUpdateConfig.setApkSha256(null);
+                    throw new java.io.IOException("Missing mandatory release digest");
                 }
 
                 boolean sizeVerified = (expectedSizeBytes > 0 && outFile.length() == expectedSizeBytes)
@@ -771,7 +584,7 @@ public class NimarkoUpdater {
                 if (downloadCanceled || downloadPaused || myGeneration != downloadGeneration) {
                     if (downloadPaused && !downloadCanceled && myGeneration == downloadGeneration) {
                         try {
-                            File baseDir = new File(context.getExternalFilesDir(null), "ota/" + version);
+                            File baseDir = new File(context.getCacheDir(), "velora-updates/" + versionCode);
                             File outFile = new File(baseDir, "update.apk");
                             long onDisk = outFile.exists() ? outFile.length() : 0;
                             pausedBytes = onDisk;
@@ -812,48 +625,14 @@ public class NimarkoUpdater {
         }, 50);
     }
 
-    private static HttpURLConnection openApkConnection(String link) throws Exception {
-        return openApkConnection(link, 0);
-    }
 
-    private static boolean isHttps(String url) {
-        if (url == null || url.isEmpty()) return false;
-        try {
-            String scheme = new URI(url).getScheme();
-            return scheme != null && scheme.equalsIgnoreCase("https");
-        } catch (Exception e) {
-            return false;
-        }
-    }
+
+
 
     private static HttpURLConnection openApkConnection(String link, long rangeStart) throws Exception {
-        String current = link;
-        if (!isHttps(current)) throw new java.io.IOException("refusing non-https download url: " + current);
-        for (int i = 0; i < 5; i++) {
-            HttpURLConnection c = (HttpURLConnection) new URI(current).toURL().openConnection();
-            c.setRequestProperty("User-Agent", "Velora-OTA");
-            c.setRequestProperty("Accept-Encoding", "identity");
-            if (rangeStart > 0) c.setRequestProperty("Range", "bytes=" + rangeStart + "-");
-            c.setConnectTimeout(15000);
-            c.setReadTimeout(30000);
-            c.setInstanceFollowRedirects(false);
-            c.connect();
-            int code = c.getResponseCode();
-            if (code >= 300 && code < 400) {
-                String loc = c.getHeaderField("Location");
-                c.disconnect();
-                if (loc == null) throw new java.io.IOException("redirect without Location");
-                current = new URI(current).resolve(loc).toString();
-                if (!isHttps(current)) throw new java.io.IOException("refusing non-https redirect target: " + current);
-                continue;
-            }
-            if (code != 200 && code != 206) {
-                c.disconnect();
-                throw new java.io.IOException("HTTP " + code);
-            }
-            return c;
-        }
-        throw new java.io.IOException("too many redirects");
+        Update update = getOrRestoreLastUpdate();
+        if (update == null || !update.downloadURL.equals(link)) throw new java.io.IOException("Not the selected GitHub release");
+        return GitHubReleaseClient.openDownload(link, rangeStart);
     }
 
     private static void startProgressSmoother(int generation) {
@@ -1021,26 +800,24 @@ public class NimarkoUpdater {
     public static void installApk(Context context, String path) {
         if (context == null || path == null) return;
         File file = new File(path);
-        if (!file.exists()) return;
-        Context applicationContext = context.getApplicationContext();
-        if (applicationContext == null) {
-            applicationContext = ApplicationLoader.applicationContext;
-        }
-        final Context appContext = applicationContext;
-        final WeakReference<Activity> activityRef =
-                new WeakReference<>(AndroidUtilities.findActivity(context));
-        String wantHash = wantedApkHash();
-        if (!isApkValidatedCached(file, wantHash)) {
-            otaQueue.postRunnable(() -> {
-                boolean valid = validateApkFully(file, wantHash);
-                AndroidUtilities.runOnUIThread(() -> {
-                    if (valid) launchInstaller(appContext, activityRef, file);
-                    else rejectInvalidApk(file);
-                });
+        Update selected = getOrRestoreLastUpdate();
+        File expected = selected == null ? null : new File(new File(
+                ApplicationLoader.applicationContext.getCacheDir(), "velora-updates/" + selected.versionCode), "update.apk");
+        if (expected == null || !expected.equals(file) || !file.isFile()) return;
+        Context appContext = ApplicationLoader.applicationContext;
+        WeakReference<Activity> activityRef = new WeakReference<>(AndroidUtilities.findActivity(context));
+        otaQueue.postRunnable(() -> {
+            boolean valid = validateApkFully(file, selected.metadata.sha256);
+            AndroidUtilities.runOnUIThread(() -> {
+                if (valid) launchInstaller(appContext, activityRef, file);
+                else {
+                    rejectInvalidApk(file);
+                    Activity activity = resolveInstallerActivity(activityRef);
+                    if (activity != null) AlertsCreator.createSimpleAlert(activity,
+                            LocaleController.getString(R.string.VeloraUpdateRejected)).show();
+                }
             });
-            return;
-        }
-        launchInstaller(appContext, activityRef, file);
+        });
     }
 
     private static void rejectInvalidApk(File file) {
@@ -1097,21 +874,36 @@ public class NimarkoUpdater {
         if (fileUri != null) {
             install.setDataAndType(fileUri, "application/vnd.android.package-archive");
             install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (install.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(install);
-                cancelUpdateNotification();
+            java.util.List<android.content.pm.ResolveInfo> installers = context.getPackageManager()
+                    .queryIntentActivities(install, android.content.pm.PackageManager.MATCH_DEFAULT_ONLY
+                            | android.content.pm.PackageManager.MATCH_SYSTEM_ONLY);
+            if (!installers.isEmpty()) {
+                android.content.pm.ActivityInfo target = installers.get(0).activityInfo;
+                install.setComponent(new android.content.ComponentName(target.packageName, target.name));
+                try {
+                    context.startActivity(install);
+                    cancelUpdateNotification();
+                    return;
+                } catch (android.content.ActivityNotFoundException | SecurityException e) {
+                    FileLog.e(e);
+                }
             }
+            Activity activity = resolveInstallerActivity(activityRef);
+            if (activity != null) AlertsCreator.createSimpleAlert(activity,
+                    LocaleController.getString(R.string.VeloraInstallerUnavailable)).show();
         }
     }
 
     public static String getOtaDirSize() {
-        if (!checkDirs()) return "0 B";
-        return AndroidUtilities.formatFileSize(Utilities.getDirSize(otaPath.getAbsolutePath(), 5, true), true, false);
+        File directory = new File(ApplicationLoader.applicationContext.getCacheDir(), "velora-updates");
+        return AndroidUtilities.formatFileSize(Utilities.getDirSize(directory.getAbsolutePath(), 5, true), true, false);
     }
 
     public static void cleanOtaDir() {
-        if (!checkDirs()) return;
-        cleanFolder(otaPath);
+        cancelDownload(ApplicationLoader.applicationContext, id);
+        updateDownloaded = false;
+        otaQueue.postRunnable(() -> cleanFolder(new File(
+                ApplicationLoader.applicationContext.getCacheDir(), "velora-updates")));
     }
 
     public static void cleanFolder(File folder) {
@@ -1143,6 +935,8 @@ public class NimarkoUpdater {
             try { c.disconnect(); } catch (Throwable ignore) {}
         }
         stopProgressSmoother();
+        File canceledFile = apkFile;
+        otaQueue.postRunnable(() -> { if (canceledFile != null) canceledFile.delete(); });
         AndroidUtilities.runOnUIThread(() -> {
             updateBoundButtonError(canceledGeneration);
             dispatchDownloadError(canceledGeneration);
@@ -1164,6 +958,14 @@ public class NimarkoUpdater {
     }
 
     public static void resumeDownload(Context context) {
+        Update selected = getOrRestoreLastUpdate();
+        if (selected == null || !selected.downloadURL.equals(NimarkoUpdateConfig.getPausedDownloadLink())
+                || !selected.version.equals(NimarkoUpdateConfig.getPausedDownloadVersion())
+                || selected.metadata.size != NimarkoUpdateConfig.getPausedDownloadSize()
+                || !selected.metadata.sha256.equals(NimarkoUpdateConfig.getPausedDownloadSha256())) {
+            cancelDownload(context, id);
+            return;
+        }
         if (context == null) return;
         final int resumedGeneration;
         final long resumeFrom;
@@ -1192,7 +994,7 @@ public class NimarkoUpdater {
 
             long candidate = pausedBytes;
             try {
-                File partial = new File(new File(context.getExternalFilesDir(null), "ota/" + version), "update.apk");
+                File partial = new File(new File(context.getCacheDir(), "velora-updates/" + versionCode), "update.apk");
                 long onDisk = partial.exists() ? partial.length() : 0;
                 if (onDisk < candidate || candidate <= 0) candidate = onDisk;
                 pausedBytes = candidate;
@@ -1222,29 +1024,23 @@ public class NimarkoUpdater {
                 resumedGeneration, true);
     }
 
-    public static class Update {
+    public static final class Update {
         public final String version, size, downloadURL, uploadDate, changelog;
         public final int versionCode;
-        public int uniMessageId = 0;
+        public final VeloraRelease metadata;
 
-        public Update(String version, int versionCode, String changelog, String size, String downloadURL, String uploadDate) {
-            this(version, versionCode, changelog, size, downloadURL, uploadDate, 0);
-        }
-
-        public Update(String version, int versionCode, String changelog, String size, String downloadURL, String uploadDate, int uniMessageId) {
-            this.version = version;
-            this.versionCode = versionCode;
-            this.changelog = changelog;
-            this.size = size;
-            this.downloadURL = downloadURL;
+        Update(VeloraRelease metadata, String changelog, String uploadDate) {
+            this.metadata = metadata;
+            this.version = metadata.versionName;
+            this.versionCode = metadata.versionCode;
+            this.size = AndroidUtilities.formatFileSize(metadata.size);
+            this.downloadURL = metadata.downloadUrl();
             this.uploadDate = uploadDate;
-            this.uniMessageId = uniMessageId;
+            this.changelog = changelog;
         }
 
         public boolean isNew() {
-            boolean isNew = versionCode > getCurrentVersionCode();
-            NimarkoUpdateConfig.setUpdateAvailable(isNew);
-            return isNew;
+            return metadata.isNewerThan(getCurrentVersionCode(), Build.VERSION.SDK_INT);
         }
     }
 }

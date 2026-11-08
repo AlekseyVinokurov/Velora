@@ -6,8 +6,7 @@ GOOGLE_AUTH_CLIENT_ID=
 GOOGLE_SAFETYNET_KEY=
 GOOGLE_MAPS_API_KEY=
 HUAWEI_APP_ID=
-# Optional Velora services; blank disables automatic updates / remote badges.
-VELORA_UPDATE_CHANNEL=
+# Optional remote badges only. Stable updates use public GitHub Releases.
 VELORA_BADGES_URL=
 NIMARKO_MEDIA_API_URL=
 NIMARKO_API_BASE_URL=

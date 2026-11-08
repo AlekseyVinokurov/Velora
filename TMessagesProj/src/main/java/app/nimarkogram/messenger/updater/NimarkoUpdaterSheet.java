@@ -224,6 +224,17 @@ public class NimarkoUpdaterSheet extends BottomSheet implements NimarkoUpdater.D
                 }
             });
             footerLayout.addView(downloadButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 14, 16, 0));
+            ButtonWithCounterView cancelButton = new ButtonWithCounterView(context, resourcesProvider).setRound();
+            cancelButton.setText(getString(R.string.Cancel), false);
+            cancelButton.setOnClickListener(v -> {
+                NimarkoUpdater.DownloadUiState state = NimarkoUpdater.getDownloadUiState();
+                if (!state.downloading && !state.paused) { dismiss(); return; }
+                NimarkoUpdater.cancelDownload(context, NimarkoUpdater.id);
+                downloadButtonClicked = false;
+                downloadFinished = false;
+                downloadButton.setText(getUpdateSizeString(update), false);
+            });
+            footerLayout.addView(cancelButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 8, 16, 0));
 
             ButtonWithCounterView scheduleButton = new ButtonWithCounterView(context, resourcesProvider).setRound();
             scheduleButton.setText(getString(R.string.AppUpdateRemindMeLater), false);
@@ -261,7 +272,8 @@ public class NimarkoUpdaterSheet extends BottomSheet implements NimarkoUpdater.D
             checkUpdatesButton.setText(getString(R.string.UP_CheckForUpdates), true);
             checkUpdatesButton.setOnClickListener(v ->
                     NimarkoUpdater.checkUpdates(fragment, true,
-                            () -> BulletinFactory.of(getContainer(), resourcesProvider).createErrorBulletin(getString(R.string.UP_Not_Found)).show(),
+                            () -> BulletinFactory.of(getContainer(), resourcesProvider).createErrorBulletin(getString(
+                                    NimarkoUpdater.noPublishedRelease ? R.string.VeloraNoRelease : R.string.UP_Not_Found)).show(),
                             this::dismiss,
                             () -> BulletinFactory.of(getContainer(), resourcesProvider).createErrorBulletin(getString(R.string.UP_CheckFailed)).show()));
             footerLayout.addView(checkUpdatesButton, LayoutHelper.createLinear(LayoutHelper.MATCH_PARENT, 48, 16, 16, 16, 16));
@@ -579,7 +591,7 @@ public class NimarkoUpdaterSheet extends BottomSheet implements NimarkoUpdater.D
         if (fragment == null || fragment.getParentActivity() == null || fragment.getContext() == null) {
             return;
         }
-        if (org.telegram.messenger.BuildConfig.VELORA_UPDATE_CHANNEL.isEmpty()) {
+        if (!NimarkoUpdater.isStableUpdaterEnabled()) {
             fragment.showDialog(new org.telegram.ui.ActionBar.AlertDialog.Builder(fragment.getParentActivity())
                     .setTitle(LocaleController.getString(R.string.VeloraProject))
                     .setMessage(LocaleController.getString(R.string.VeloraUpdateUnavailable))
@@ -587,7 +599,21 @@ public class NimarkoUpdaterSheet extends BottomSheet implements NimarkoUpdater.D
                     .create());
             return;
         }
-        showPreparedAlert(fragment, available, update);
+        if (available && update != null && update.isNew()) {
+            showPreparedAlert(fragment, true, update);
+            return;
+        }
+        NimarkoUpdater.Update cached = NimarkoUpdater.getOrRestoreLastUpdate();
+        if (cached != null) NimarkoUpdater.checkDirs();
+        NimarkoUpdaterSheet sheet = new NimarkoUpdaterSheet(fragment.getContext(), fragment.getResourceProvider(), cached != null, cached);
+        sheet.setFragmentParams(fragment);
+        fragment.showDialog(sheet);
+        NimarkoUpdater.checkUpdates(fragment, true,
+                () -> BulletinFactory.of(sheet.getContainer(), sheet.resourcesProvider)
+                        .createSimpleBulletin(R.raw.info, getString(NimarkoUpdater.noPublishedRelease ? R.string.VeloraNoRelease : R.string.UP_Not_Found)).show(),
+                sheet::dismiss,
+                () -> BulletinFactory.of(sheet.getContainer(), sheet.resourcesProvider)
+                        .createErrorBulletin(getString(R.string.UP_CheckFailed)).show());
     }
 
     private static void showPreparedAlert(BaseFragment fragment, boolean available, NimarkoUpdater.Update update) {

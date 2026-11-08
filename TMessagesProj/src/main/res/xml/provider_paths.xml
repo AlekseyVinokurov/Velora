@@ -6,6 +6,7 @@
     <!-- Scoped entry for OTA update APKs (getExternalFilesDir/ota) so the install intent resolves
          through this precise root instead of the over-broad external-path/root-path ones. -->
     <external-files-path name="ota" path="ota/"/>
+    <cache-path name="velora_ota" path="velora-updates/"/>
     <files-path name="logs" path="/logs/"/>
     <files-path name="cache" path="/cache/"/>
     <files-path name="temp" path="/temp/"/>

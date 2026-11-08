@@ -123,3 +123,5 @@ subprojects {
         }
     }
 }
+
+apply from: rootProject.file("gradle/velora-release.gradle")

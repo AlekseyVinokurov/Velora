@@ -1,73 +1,76 @@
+[English](README.md) · **Русский**
+
 # Velora
 
-[English](README.md) · [Инструкция по сборке](docs/BUILDING.md) · [Issues](https://github.com/AlekseyVinokurov/Velora/issues)
+Velora — независимый Telegram-клиент для Android, ориентированный на музыку, производительность, удобство и лаконичный интерфейс.
 
-Velora — самостоятельный открытый неофициальный клиент Telegram для Android. Разработка начинается с существующего кода [SoundGram](https://github.com/soundgram-project/SoundGram), основанного на [Telegram для Android](https://github.com/DrKLO/Telegram). Это продолжение развития клиента с сохранением архитектуры и унаследованной функциональности. Velora не связана с Telegram и не одобрена им.
+Это направления разработки, а не подтвержденное измерениями превосходство в скорости, безопасности или надежности. Velora — неофициальный клиент, не связанный с Telegram и не одобренный им.
 
-В исходном коде уже присутствуют:
+## Существующие возможности
 
-- Переписка, аккаунты, звонки и работа с медиа Telegram.
-- Музыкальная библиотека и плеер, плейлисты, импорт треков, аудиоэффекты и DSP-эквалайзер.
-- Настройки оформления, цвета Monet, наборы иконок, обои и анимации текста.
-- Дополнительные настройки приватности и чатов, экспорт/импорт настроек клиента и интеграция плагинов.
-- Настройки MTProto-прокси и унаследованная интеграция локального WebSocket-прокси.
+В унаследованном клиенте есть переписка Telegram, несколько аккаунтов, звонки и медиа; музыкальная библиотека и плеер, плейлисты, импорт, аудиоэффекты и DSP-эквалайзер; темы, цвета Monet, наборы иконок, обои и анимации текста; дополнительные настройки чатов/приватности, резервные копии настроек и интеграция плагинов. В коде сохранены существующие прокси-интеграции. Внешние провайдеры и сервисы могут быть недоступны.
 
-Это существующие реализации, а не новые функции данного этапа. Внешние музыкальные провайдеры и дополнительные сервисы зависят от их доступности. Проверка на устройстве не выполнялась; фактические результаты проверки приведены в [docs/VELORA_STATUS.md](docs/VELORA_STATUS.md).
+Инфраструктура выпуска теперь включает отдельную DEV-сборку, проверку постоянного ключа и updater через GitHub Releases. **Создание настоящего стабильного ключа, полная сборка APK Velora и проверка обновления на устройстве еще не завершены.** Фактические результаты и блокировки — в [VELORA_STATUS.md](docs/VELORA_STATUS.md). До отдельного дизайна оставлены исходные иконки.
 
-## Сборка
+WS Proxy в этом выпуске отключён, включая прежние сохранённые флаги автозапуска, восстановление после перезагрузки и автодетектор. Native/JNI-код сохранён для следующего этапа. Настройки прокси Telegram и VPN пользователя автоматически не меняются. Музыкальные HTTPS-запросы используют штатную проверку сертификата и имени сервера.
 
-Основной модуль — `TMessagesProj_AppStandalone`: Android 7.0+ (API 24), ARM64 и ARMv7. Нужны JDK 17 или 21, Gradle 8.13 (wrapper включен), Android SDK 36, Build Tools 36.0.0, NDK 26.3.11579264 и CMake 3.22.1.
+## Совместимость и тестирование
+
+**Основное устройство тестирования: Google Pixel 8, Android 17.** Проверка на устройстве в этой сессии подготовки не выполнялась. Другие устройства пока не проверены.
+
+Основная сборка декларирует Android 7.0+ (API 24), ARM64 и ARMv7. Минимальная версия SDK сама по себе не подтверждает работу на всех устройствах. Приглашаем тестировать другие устройства и сообщать о проблемах через [GitHub Issues](https://github.com/AlekseyVinokurov/Velora/issues).
+
+## Установка
+
+Когда появится подписанный стабильный APK, берите его из [Velora Releases](https://github.com/AlekseyVinokurov/Velora/releases), проверяйте контрольную сумму/сертификат и подтверждайте установку в Android. Реальный отпечаток доверенного сертификата после создания будет указан в [SIGNING_CERTIFICATE.md](docs/SIGNING_CERTIFICATE.md). Пока он не настроен, не устанавливайте APK, выдаваемые за стабильный выпуск.
+
+- STABLE: `io.github.alekseyvinokurov.velora`, единый постоянный release-ключ.
+- DEV: `io.github.alekseyvinokurov.velora.dev`, отдельный локальный debug-ключ Android.
+
+DEV устанавливается рядом со STABLE и не заменяет его. Приватные данные разделены; аккаунты из Telegram, SoundGram или DEV автоматически не копируются. Не удаляйте STABLE ради обновления: удаление приложения стирает его приватные данные.
+
+## Обновления из приложения
+
+В настроенной подписанной STABLE-сборке откройте **Проверить обновления** в настройках Velora. Updater использует публичный Releases API `AlekseyVinokurov/Velora`, игнорирует draft/prerelease и принимает только больший `versionCode`. Включенная автопроверка выполняется при возвращении приложения на передний план не чаще раза в 24 часа; постоянного фонового опроса нет.
+
+Приложение показывает версию и список изменений, загружает APK с прогрессом и возможностью отмены. Проверяются метаданные, размер, SHA-256, пакет/версия и закрепленный сертификат через Android APK signature verifier. Чужая подпись, несовпадающий или устаревший APK отклоняются. Установка передается штатному установщику Android с необходимым разрешением и подтверждением пользователя. Тихой установки, удаления приложения или сброса данных нет.
+
+Одинаковые пакет и ключ вместе с растущим кодом версии — основа сохранения аккаунтов, настроек и локальных данных при обновлении. **Тест установки второй сборки поверх первой на устройстве пока не подтвержден.** DEV обновляется вручную. Отсутствие релиза, интернета или лимит GitHub API не должны считаться найденным обновлением. Подробности — в [описании протокола](docs/UPDATES.md).
+
+## Ошибки и предложения
+
+В [GitHub Issues](https://github.com/AlekseyVinokurov/Velora/issues) указывайте:
+
+- Модель устройства и версию Android.
+- Версию Velora, желательно с `versionCode`, и тип STABLE/DEV.
+- Описание проблемы, ожидаемый результат и точные шаги воспроизведения.
+
+Если **Issues** отключены, владелец репозитория может включить их в настройках GitHub. Удаляйте персональные данные, токены, номера телефонов, идентификаторы аккаунтов и содержимое сообщений из публичных журналов и скриншотов. Об уязвимостях сообщайте по [SECURITY.md](SECURITY.md), не публикуя секреты.
+
+## Самостоятельная сборка
+
+Нужны JDK 21 (проект также поддерживает JDK 17), включенный Gradle wrapper 8.13, SDK 36, Build Tools 36.0.0, NDK 26.3.11579264 и CMake 3.22.1.
 
 ```bash
 git clone --recursive https://github.com/AlekseyVinokurov/Velora.git
 cd Velora
-cp private.properties.example private.properties
+python3 scripts/setup-android.py
 ```
 
-В `private.properties` укажите собственные `TELEGRAM_API_ID` и `TELEGRAM_API_HASH` с [my.telegram.org](https://my.telegram.org). Задайте `ANDROID_HOME` или `sdk.dir` в `local.properties`. Локальные настройки и секреты не должны попадать в Git.
-
-Сборка для разработки с локальным debug-ключом:
+Скрипт загружает Android-пакеты Google, запрашивает принятие лицензий SDK и записывает путь SDK в игнорируемый `local.properties`. Создайте игнорируемый `private.properties` по примеру и внесите в локальном редакторе **собственные** `TELEGRAM_API_ID` / `TELEGRAM_API_HASH` с [my.telegram.org](https://my.telegram.org). Не вставляйте секреты в историю команд или Git.
 
 ```bash
-./gradlew :TMessagesProj_AppStandalone:assembleAfatDebug
+./gradlew --no-daemon :TMessagesProj_AppStandalone:assembleAfatDebug
 ```
 
-Результат: `TMessagesProj_AppStandalone/build/outputs/apk/afat/debug/app.apk`.
+Путь DEV APK: `TMessagesProj_AppStandalone/build/outputs/apk/afat/debug/app.apk`. Для стабильного выпуска сначала создайте постоянный ключ, сделайте резервные копии и закоммитьте публичный отпечаток, затем интерактивно запустите `scripts/build-stable.sh`. Точные шаги подписи, проверки, создания метаданных и ручной публикации — в [инструкции по сборке](docs/BUILDING.ru.md) и [инструкции по выпуску](docs/RELEASING.ru.md). Release-ключ не загружается в Actions, автоматическая публикация не включена.
 
-Основная standalone-конфигурация проекта:
+## Лицензии и Credits
 
-```bash
-./gradlew :TMessagesProj_AppStandalone:assembleAfatStandalone
-```
+Velora развивается самостоятельно на открытом коде [SoundGram](https://github.com/soundgram-project/SoundGram), основанном на [Telegram для Android](https://github.com/DrKLO/Telegram). Сохранены copyright, лицензионные уведомления и история Git. Ребрендинг не меняет авторство использованного кода.
 
-Результат: `TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk`. Для распространения и установки этой конфигурации настройте собственный release-ключ: готовая release-подпись не предоставляется. Подпись, дополнительные интеграции и остальные варианты описаны в [docs/BUILDING.md](docs/BUILDING.md). Успешная компиляция и создание APK в текущей среде пока не подтверждены.
+Благодарности: [SoundGram](https://github.com/soundgram-project/SoundGram), [Telegram for Android](https://github.com/DrKLO/Telegram) и первоначальные авторы, [AyuGram](https://github.com/AyuGram/AyuGram4A), [Cherrygram](https://github.com/arsLan4k1390/Cherrygram), [Nagram](https://github.com/NextAlone/Nagram) / [Nekogram](https://github.com/Nekogram/Nekogram), [exteraGram](https://github.com/exteraSquad/exteraGram).
 
-## Идентификатор и совместимость
+Лицензия проекта — [GPL-2.0](LICENSE); компоненты сохраняют свои лицензии и notices. Вместе с распространяемыми сборками обеспечьте доступ к соответствующему исходному коду, зафиксированным версиям компонентов и уведомлениям. Правила участия — в [CONTRIBUTING.md](CONTRIBUTING.md).
 
-Основной applicationId — `io.github.alekseyvinokurov.velora`. Внутренние Java-пакеты и Gradle namespace сохранены для совместимости с кодом Telegram, JNI и плагинами. Это отдельное Android-приложение: оно не обновляет SoundGram или официальный Telegram, их приватные данные автоматически не переносятся.
-
-До отдельного этапа дизайна сохранены технически корректные исходные и альтернативные иконки. Для совместимости оставлены старые ключи настроек, идентификаторы резервных копий, пути хранения и идентификаторы музыкальных каналов. Автообновления и удаленные значки поддержки требуют явной настройки сервисов Velora; чужие сервисы обновлений и пожертвований по умолчанию не используются. Собственный домен, платежные реквизиты и публикации в магазинах не заявляются.
-
-## Структура проекта
-
-| Путь | Назначение |
-| --- | --- |
-| `TMessagesProj` | Общий клиент Telegram, унаследованные расширения и ресурсы Android |
-| `TMessagesProj_AppStandalone` | Основное standalone-приложение |
-| `TMessagesProj_App` | Обычное приложение, в том числе release и beta |
-| `TMessagesProj_AppHuawei`, `TMessagesProj_AppHockeyApp`, `TMessagesProj_AppTests` | Унаследованные альтернативные приложения и тестовый модуль |
-| `buildSrc` | Плагины генерации ресурсов и локализации |
-| `TMessagesProj/jni`, `TMessagesProj_Modules/media`, `TMessagesProj/lib/jlatexmath` | Нативный код и зафиксированные субмодули компонентов |
-
-## Авторство и лицензия
-
-Velora использует работу авторов SoundGram и Telegram для Android, включая первоначальных авторов Telegram. Сохранены copyright-заголовки, notices, лицензии компонентов и история Git. Унаследованные благодарности также включают:
-
-- [SoundGram](https://github.com/soundgram-project/SoundGram)
-- [Telegram for Android](https://github.com/DrKLO/Telegram)
-- [AyuGram](https://github.com/AyuGram/AyuGram4A)
-- [Cherrygram](https://github.com/arsLan4k1390/Cherrygram)
-- [Nagram](https://github.com/NextAlone/Nagram) / [Nekogram](https://github.com/Nekogram/Nekogram)
-- [exteraGram](https://github.com/exteraSquad/exteraGram)
-
-Лицензия проекта — [GPL-2.0](LICENSE). У отдельных компонентов сохраняются собственные лицензии и уведомления; ребрендинг не меняет авторство их кода. Перед участием прочтите [CONTRIBUTING.md](CONTRIBUTING.md), перед сообщением об уязвимости — [SECURITY.md](SECURITY.md).
+Для проверки обновлений используется Android [apksig](https://android.googlesource.com/platform/tools/apksig/); его лицензия Apache-2.0 сохранена в `TMessagesProj/src/main/assets/third_party_licenses/apksig-LICENSE.txt`.

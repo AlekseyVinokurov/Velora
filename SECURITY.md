@@ -8,6 +8,6 @@ Include the affected version, impact, reproduction steps and any proposed mitiga
 
 ## Sensitive project data
 
-Telegram API credentials, signing keys, Firebase or Huawei service files, private service endpoints and production tokens must remain outside the repository. Use `private.properties` or environment variables for local builds.
+Telegram API credentials, signing keys, Firebase or Huawei service files, private service endpoints and production tokens must remain outside version control. Keep signing keystores outside every Git working tree; use ignored `private.properties` or environment variables for local build parameters. Never include a keystore in release or CI artifacts.
 
 Only the current source state is actively maintained. Reports against older builds may require reproduction on the latest version before they can be investigated.

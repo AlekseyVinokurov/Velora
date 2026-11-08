@@ -8,7 +8,7 @@ Issues and pull requests may be written in English, Russian or Chinese.
 
 - Search existing issues for duplicates.
 - Reproduce the problem on the latest available build.
-- Record the Android version, device model, Velora version and exact steps.
+- Record the Android version, device model, Velora version/versionCode, STABLE or DEV, and exact steps.
 - Remove account identifiers, chat content and other personal data from diagnostics.
 
 ## Pull requests
@@ -25,11 +25,13 @@ Do not commit API credentials, signing keys, service configuration files, privat
 
 ## Build
 
-Follow [docs/BUILDING.md](docs/BUILDING.md). The primary standalone variant is built with:
+Follow [docs/BUILDING.md](docs/BUILDING.md). Build the isolated DEV variant while developing:
 
 ```bash
-./gradlew :TMessagesProj_AppStandalone:assembleAfatStandalone
+./gradlew --no-daemon :TMessagesProj_AppStandalone:assembleAfatDebug
 ```
+
+Stable release builds require the permanent external key and public certificate pin. Follow [RELEASING.md](docs/RELEASING.md); never put the release key in Actions or artifacts.
 
 ## Security
 

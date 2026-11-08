@@ -7,19 +7,19 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping improve Velora. Remove account identifiers and other private data from logs and screenshots.
+        Thank you for helping improve Velora. Remove personal data, tokens, phone numbers, account identifiers and message content from logs and screenshots.
   - type: input
     id: version
     attributes:
       label: Velora version
-      placeholder: 12.9.2 (build 75500)
+      placeholder: 0.1.0 (versionCode 100000), STABLE or DEV
     validations:
       required: true
   - type: input
     id: device
     attributes:
       label: Device and Android version
-      placeholder: Pixel 8, Android 16
+      placeholder: Google Pixel 8, Android 17
     validations:
       required: true
   - type: dropdown

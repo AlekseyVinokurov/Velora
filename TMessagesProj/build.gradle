@@ -90,6 +90,8 @@ dependencies {
     implementation 'com.google.mlkit:language-id:17.0.6'
     implementation 'com.android.billingclient:billing:8.0.0'
     implementation 'com.google.code.gson:gson:2.11.0'
+    // Small official Android verifier; validates APK signatures before installation.
+    implementation 'com.android.tools.build:apksig:8.13.2'
     implementation 'com.google.guava:guava:31.1-android'
     implementation 'com.google.android.play:integrity:1.3.0'
     implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
@@ -257,7 +259,8 @@ android {
         }
         buildConfigField "int", "TELEGRAM_API_ID", apiId
         buildConfigField "String", "TELEGRAM_API_HASH", rootProject.ext.buildConfigString(apiHash)
-        buildConfigField "String", "VELORA_UPDATE_CHANNEL", rootProject.ext.buildConfigString(getProps("VELORA_UPDATE_CHANNEL"))
+        buildConfigField "String", "VELORA_UPDATE_CHANNEL", rootProject.ext.buildConfigString("")
+        buildConfigField "String", "VELORA_RELEASE_CERT_SHA256", rootProject.ext.buildConfigString(rootProject.ext.veloraReleaseCertificateSha256)
         buildConfigField "String", "VELORA_BADGES_URL", rootProject.ext.buildConfigString(getProps("VELORA_BADGES_URL"))
         buildConfigField "String", "GOOGLE_SAFETYNET_KEY", "\"" + getProps("GOOGLE_SAFETYNET_KEY") + "\""
         buildConfigField "String", "GOOGLE_AUTH_CLIENT_ID", "\"" + getProps("GOOGLE_AUTH_CLIENT_ID") + "\""

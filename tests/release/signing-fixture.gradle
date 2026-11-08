@@ -1,0 +1,43 @@
+// Standalone fixture executes the production Gradle key validator, without configuring Telegram.
+ext.APP_PACKAGE = 'io.github.alekseyvinokurov.velora'
+ext.APP_VERSION_NAME = '0.1.1'
+ext.APP_VERSION_CODE = '100001'
+ext.releaseSigning = [storeFile: System.getenv('VELORA_FIXTURE_KEY'),
+        storePassword: System.getenv('VELORA_TEST_PASSWORD'), keyAlias: 'fixture',
+        keyPassword: System.getenv('VELORA_TEST_PASSWORD')]
+ext.hasReleaseSigning = true
+apply from: file(project.property('veloraSigningScript'))
+
+tasks.register('testSigningPolicy') {
+    dependsOn tasks.named('validateVeloraReleaseSigning')
+    doLast {
+        def originalSigning = new HashMap(rootProject.ext.releaseSigning)
+        def originalPin = rootProject.ext.veloraReleaseCertificateSha256
+        def cases = 0
+        def reject = { String expectedMessage, Closure change ->
+            rootProject.ext.releaseSigning = new HashMap(originalSigning)
+            rootProject.ext.hasReleaseSigning = true
+            rootProject.ext.veloraReleaseCertificateSha256 = originalPin
+            change()
+            boolean rejected = false
+            try { rootProject.ext.validateVeloraSigningMaterial() }
+            catch (GradleException error) {
+                rejected = error.message.contains(expectedMessage)
+            }
+            assert rejected: "Expected signing rejection: ${expectedMessage}"
+            cases++
+        }
+        reject('Stable signing is not configured') { rootProject.ext.hasReleaseSigning = false }
+        reject('public pin') { rootProject.ext.veloraReleaseCertificateSha256 = '0' * 64 }
+        reject('Unable to open') { rootProject.ext.releaseSigning.keyPassword = UUID.randomUUID().toString() }
+        reject('RSA private key') { rootProject.ext.releaseSigning.keyAlias = 'missing-alias' }
+        reject('outside every Git') { rootProject.ext.releaseSigning.storeFile = file('inside-git.p12').absolutePath }
+        reject('at least 4096') { rootProject.ext.releaseSigning.storeFile = System.getenv('VELORA_FIXTURE_WEAK_KEY') }
+        reject('at least 30 years') { rootProject.ext.releaseSigning.storeFile = System.getenv('VELORA_FIXTURE_SHORT_KEY') }
+        rootProject.ext.releaseSigning = originalSigning
+        rootProject.ext.veloraReleaseCertificateSha256 = originalPin
+        rootProject.ext.hasReleaseSigning = true
+        println "PASS: permanent-key validator accepts the temporary RSA-4096/12000-day fixture and rejects ${cases} invalid configurations."
+        println 'Only a standalone test fixture was configured; no application APK was built.'
+    }
+}
