@@ -67,6 +67,8 @@ After the interactive local setup above, use `scripts/build-stable.sh --local` t
 
 On a host with about 8 GiB RAM shared with an IDE, use `scripts/build-stable.sh --local --low-memory`. It limits the Gradle heap to 3 GiB, runs one Gradle worker, compiles Kotlin in-process, and uses CMake/Ninja job pools (two native compile jobs, one link job). `--max-workers` alone does not limit Ninja. This changes build concurrency, not the application features or signing identity.
 
+For the Pixel 8 ARM64 APK, add `--arm64-only`: `scripts/build-stable.sh --local --low-memory --arm64-only`. This applies the existing `ngArm64Only` option to both the library and standalone app ABI filters; the APK then supports ARM64 only. Omitting the option retains the hybrid ARM64/ARMv7 build. Package, version and permanent signer are the same in either mode.
+
 The underlying task is `:TMessagesProj_AppStandalone:assembleAfatStandalone`; output is `TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk`. Application ID remains **`io.github.alekseyvinokurov.velora`**. Gradle refuses stable builds without the pinned external RSA-4096 key and a valid certificate originally lasting at least 30 years. The key's certificate must match `release/certificate.sha256`.
 
 The wrapper verifies the finished APK and writes a public build receipt to ignored `.local-build/stable-build.json`. This identifies the APK digest, version, certificate and clean source commit for release preparation. No keystore is copied. A build receipt is generated only after a real APK has been verified.

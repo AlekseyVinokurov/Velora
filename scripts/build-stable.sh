@@ -6,11 +6,13 @@ repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 cd -- "$repo_dir"
 local_config=false
 low_memory=false
+arm64_only=false
 for argument in "$@"; do
     case "$argument" in
         --local) local_config=true ;;
         --low-memory) low_memory=true ;;
-        *) echo 'Usage: build-stable.sh [--local] [--low-memory]' >&2; exit 1 ;;
+        --arm64-only) arm64_only=true ;;
+        *) echo 'Usage: build-stable.sh [--local] [--low-memory] [--arm64-only]' >&2; exit 1 ;;
     esac
 done
 [[ -z $(git status --porcelain=v1 --untracked-files=all) ]] || { echo 'Commit reviewed source changes before a stable build.' >&2; exit 1; }
@@ -40,6 +42,7 @@ if $low_memory; then
         '-Dorg.gradle.jvmargs=-Xmx3072M -XX:MaxMetaspaceSize=768M -XX:+UseG1GC -Dfile.encoding=UTF-8'
         -Pkotlin.compiler.execution.strategy=in-process -PveloraNativeJobs=2)
 fi
+if $arm64_only; then build_options+=(-PngArm64Only); fi
 ./gradlew --no-daemon --no-configuration-cache "${build_options[@]}" :TMessagesProj_AppStandalone:assembleAfatStandalone
 unset RELEASE_STORE_PASSWORD RELEASE_KEY_PASSWORD TELEGRAM_API_HASH
 [[ $(git rev-parse HEAD) == "$source_commit" && -z $(git status --porcelain=v1 --untracked-files=all) ]] || {

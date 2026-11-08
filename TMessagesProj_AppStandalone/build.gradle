@@ -133,8 +133,12 @@ android {
     productFlavors {
         afat {
             ndk {
-                // Hybrid ARM-only APK covering 64-bit and 32-bit ARM devices.
-                abiFilters "arm64-v8a", "armeabi-v7a"
+                // Match the library's existing ARM64-only option (Pixel 8 / local builds).
+                if (project.hasProperty('ngArm64Only')) {
+                    abiFilters 'arm64-v8a'
+                } else {
+                    abiFilters 'arm64-v8a', 'armeabi-v7a'
+                }
             }
             ext {
                 abiVersionCode = 3
