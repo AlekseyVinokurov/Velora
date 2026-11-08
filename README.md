@@ -10,7 +10,7 @@ This is a development focus, not a measured claim of greater speed, security or 
 
 The inherited client includes Telegram messaging, multiple accounts, calls and media; a music library and player, playlists, imports, audio effects and a DSP equalizer; themes, Monet colors, icon packs, wallpapers and text animations; additional chat/privacy preferences, configuration backups and plugin integration. Existing proxy integrations remain in the code. External providers and services may be unavailable.
 
-The release infrastructure now implements a separate DEV identity, permanent-key validation and a GitHub Releases updater. **A real stable signing key, a complete Velora APK build and device upgrade validation are still pending.** See [current results and blockers](docs/VELORA_STATUS.md). Original icon resources remain until a dedicated design is ready.
+The release infrastructure now implements a separate DEV identity, permanent-key validation and a GitHub Releases updater. **The permanent release certificate is pinned; a complete Velora APK build and device upgrade validation are still pending.** See [current results and blockers](docs/VELORA_STATUS.md). Original icon resources remain until a dedicated design is ready.
 
 WS Proxy is disabled in this release, including legacy saved auto-start settings, boot restoration and the detector. Native/JNI sources remain for a later explicit opt-in. Telegram proxy settings and the user’s VPN are not changed automatically. Music HTTPS uses Android certificate and hostname validation.
 
@@ -47,23 +47,27 @@ Use [GitHub Issues](https://github.com/AlekseyVinokurov/Velora/issues) and inclu
 
 If **Issues** are disabled, the repository owner can enable them in GitHub settings. Remove personal data, tokens, phone numbers, account identifiers and message content from public logs or screenshots. Report vulnerabilities according to [SECURITY.md](SECURITY.md), rather than posting secrets publicly.
 
-## Build it yourself
+## Build on GitHub Actions
 
-Use JDK 21 (JDK 17 is supported by the project), the included Gradle 8.13 wrapper, SDK 36, Build Tools 36.0.0, NDK 26.3.11579264 and CMake 3.22.1.
+Use the [Android release APK workflow](https://github.com/AlekseyVinokurov/Velora/actions/workflows/android-release.yml).
+It runs manually on trusted `main`, checks out all 19 submodules, installs the
+pinned Android toolchain on a GitHub-hosted Ubuntu runner, builds through the
+existing release script, and verifies the resulting APK before saving an artifact.
+No local Android build or SDK installation is required.
+
+The owner first uploads the **existing** permanent key and Telegram credentials
+through `python3 scripts/configure-github-secrets.py` in their own terminal.
+Secrets stay in the `velora-release` environment, restricted to branch `main`.
+Never generate a replacement key or send passwords through chat.
 
 ```bash
-git clone --recursive https://github.com/AlekseyVinokurov/Velora.git
-cd Velora
-python3 scripts/setup-android.py
+gh workflow run android-release.yml --repo AlekseyVinokurov/Velora --ref main -f abi=universal
 ```
 
-The setup downloads Google's Android packages, asks for SDK license acceptance and writes the SDK path to ignored `local.properties`. Create ignored `private.properties` from the example, then enter **your own** `TELEGRAM_API_ID` / `TELEGRAM_API_HASH` from [my.telegram.org](https://my.telegram.org) in a local editor. Do not put secrets in shell history or Git.
-
-```bash
-./gradlew --no-daemon :TMessagesProj_AppStandalone:assembleAfatDebug
-```
-
-The DEV APK path is `TMessagesProj_AppStandalone/build/outputs/apk/afat/debug/app.apk`. For a real stable build, first create/back up your permanent key and commit its public fingerprint, then run `scripts/build-stable.sh` interactively. See [BUILDING.md](docs/BUILDING.md) and the [release guide](docs/RELEASING.md) for exact signing, verification, metadata and manual publication steps. No release key is uploaded to Actions and no automatic publisher is enabled.
+See [cloud setup and acceptance artifacts](docs/GITHUB_ACTIONS.md) and
+[current results and blockers](docs/VELORA_STATUS.md). No GitHub Release or
+public release asset is created automatically. Device acceptance and subsequent
+release publication remain separate steps.
 
 ## License and Credits
 

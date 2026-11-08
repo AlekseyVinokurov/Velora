@@ -2,6 +2,8 @@
 
 # Building Velora
 
+The primary release build now runs in [GitHub Actions](GITHUB_ACTIONS.md), using the existing permanent key. No local Android build or SDK download is required. The local commands below are retained as reference and were not run for this migration.
+
 Actual verification results are in [VELORA_STATUS.md](VELORA_STATUS.md). A Gradle invocation or a host policy test is not a successful Android app build.
 
 ## Environment
