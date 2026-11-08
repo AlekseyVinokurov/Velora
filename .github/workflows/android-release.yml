@@ -34,33 +34,6 @@ jobs:
       GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.caching=false
 
     steps:
-      - name: Check required secrets without printing values
-        env:
-          VELORA_KEYSTORE_BASE64: ${{ secrets.VELORA_KEYSTORE_BASE64 }}
-          VELORA_KEYSTORE_PASSWORD: ${{ secrets.VELORA_KEYSTORE_PASSWORD }}
-          VELORA_KEY_ALIAS: ${{ secrets.VELORA_KEY_ALIAS }}
-          VELORA_KEY_PASSWORD: ${{ secrets.VELORA_KEY_PASSWORD }}
-          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
-          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
-        run: |
-          set +x
-          set -euo pipefail
-          python3 - <<'PY'
-          import os
-          import re
-          names = ('VELORA_KEYSTORE_BASE64', 'VELORA_KEYSTORE_PASSWORD', 'VELORA_KEY_ALIAS',
-                   'VELORA_KEY_PASSWORD', 'TELEGRAM_API_ID', 'TELEGRAM_API_HASH')
-          missing = [name for name in names if not os.environ.get(name)]
-          if missing:
-              raise SystemExit('Missing Secrets in main-only environment velora-release: ' + ', '.join(missing))
-          api_id = os.environ['TELEGRAM_API_ID']
-          if not re.fullmatch('[1-9][0-9]{0,9}', api_id) or int(api_id) > 2147483647:
-              raise SystemExit('Invalid TELEGRAM_API_ID format (value hidden)')
-          if not re.fullmatch('[0-9a-fA-F]{32}', os.environ['TELEGRAM_API_HASH']):
-              raise SystemExit('Invalid TELEGRAM_API_HASH format (value hidden)')
-          print('All six Secrets are configured; values hidden.')
-          PY
-
       - name: Prepare disk space on the GitHub-hosted runner
         run: |
           set -euo pipefail
@@ -128,6 +101,33 @@ jobs:
             echo '::error::Less than 25 GiB free after toolchain setup. Use a larger GitHub-hosted runner.'
             exit 1
           fi
+
+      - name: Check required secrets without printing values
+        env:
+          VELORA_KEYSTORE_BASE64: ${{ secrets.VELORA_KEYSTORE_BASE64 }}
+          VELORA_KEYSTORE_PASSWORD: ${{ secrets.VELORA_KEYSTORE_PASSWORD }}
+          VELORA_KEY_ALIAS: ${{ secrets.VELORA_KEY_ALIAS }}
+          VELORA_KEY_PASSWORD: ${{ secrets.VELORA_KEY_PASSWORD }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+        run: |
+          set +x
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          import re
+          names = ('VELORA_KEYSTORE_BASE64', 'VELORA_KEYSTORE_PASSWORD', 'VELORA_KEY_ALIAS',
+                   'VELORA_KEY_PASSWORD', 'TELEGRAM_API_ID', 'TELEGRAM_API_HASH')
+          missing = [name for name in names if not os.environ.get(name)]
+          if missing:
+              raise SystemExit('Missing Secrets in main-only environment velora-release: ' + ', '.join(missing))
+          api_id = os.environ['TELEGRAM_API_ID']
+          if not re.fullmatch('[1-9][0-9]{0,9}', api_id) or int(api_id) > 2147483647:
+              raise SystemExit('Invalid TELEGRAM_API_ID format (value hidden)')
+          if not re.fullmatch('[0-9a-fA-F]{32}', os.environ['TELEGRAM_API_HASH']):
+              raise SystemExit('Invalid TELEGRAM_API_HASH format (value hidden)')
+          print('All six Secrets are configured; values hidden.')
+          PY
 
       - name: Build and verify with the existing permanent release key
         env:
