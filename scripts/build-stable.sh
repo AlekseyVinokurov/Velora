@@ -4,10 +4,18 @@ set -euo pipefail
 umask 077
 repo_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 cd -- "$repo_dir"
-[[ $# -le 1 && ( $# -eq 0 || "$1" == --local ) ]] || { echo 'Usage: build-stable.sh [--local]' >&2; exit 1; }
+local_config=false
+low_memory=false
+for argument in "$@"; do
+    case "$argument" in
+        --local) local_config=true ;;
+        --low-memory) low_memory=true ;;
+        *) echo 'Usage: build-stable.sh [--local] [--low-memory]' >&2; exit 1 ;;
+    esac
+done
 [[ -z $(git status --porcelain=v1 --untracked-files=all) ]] || { echo 'Commit reviewed source changes before a stable build.' >&2; exit 1; }
 source_commit=$(git rev-parse HEAD)
-if [[ ${1:-} == --local ]]; then
+if $local_config; then
     [[ -f private.properties ]] || { echo 'Run python3 scripts/configure-local-release.py interactively first.' >&2; exit 1; }
 else
     [[ -t 0 ]] || { echo 'Run interactively, or use --local after local setup.' >&2; exit 1; }
@@ -26,7 +34,13 @@ else
     fi
 fi
 # One-shot daemon; configuration cache is disabled so signing parameters are not serialized.
-./gradlew --no-daemon --no-configuration-cache :TMessagesProj_AppStandalone:assembleAfatStandalone
+build_options=()
+if $low_memory; then
+    build_options+=(--max-workers=1 --no-parallel
+        '-Dorg.gradle.jvmargs=-Xmx3072M -XX:MaxMetaspaceSize=768M -XX:+UseG1GC -Dfile.encoding=UTF-8'
+        -Pkotlin.compiler.execution.strategy=in-process -PveloraNativeJobs=2)
+fi
+./gradlew --no-daemon --no-configuration-cache "${build_options[@]}" :TMessagesProj_AppStandalone:assembleAfatStandalone
 unset RELEASE_STORE_PASSWORD RELEASE_KEY_PASSWORD TELEGRAM_API_HASH
 [[ $(git rev-parse HEAD) == "$source_commit" && -z $(git status --porcelain=v1 --untracked-files=all) ]] || {
     echo 'Source changed during the build; do not release this artifact.' >&2; exit 1;

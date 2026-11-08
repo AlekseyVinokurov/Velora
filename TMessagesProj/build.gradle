@@ -270,6 +270,16 @@ android {
             cmake {
                 version '3.22.1'
                 arguments '-DANDROID_STL=c++_static', '-DANDROID_PLATFORM=android-24' //, '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON'
+                // Bound Ninja separately from Gradle workers on memory-constrained hosts.
+                if (project.hasProperty('veloraNativeJobs')) {
+                    def nativeJobs = project.property('veloraNativeJobs').toString()
+                    if (!(nativeJobs ==~ /[1-9][0-9]*/) || nativeJobs.toBigInteger() > 64) {
+                        throw new GradleException('veloraNativeJobs must be between 1 and 64.')
+                    }
+                    arguments "-DCMAKE_JOB_POOLS=velora_compile=${nativeJobs};velora_link=1",
+                            '-DCMAKE_JOB_POOL_COMPILE=velora_compile',
+                            '-DCMAKE_JOB_POOL_LINK=velora_link'
+                }
                 targets 'tmessages.49', 'tgwsproxy_jni'
             }
         }

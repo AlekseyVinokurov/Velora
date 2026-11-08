@@ -65,6 +65,8 @@ scripts/build-stable.sh
 
 После интерактивной локальной настройки выше используйте `scripts/build-stable.sh --local`: параметры берутся из игнорируемой локальной конфигурации без повторного ввода. Проверки чистоты исходников и постоянного сертификата сохраняются.
 
+В среде с примерно 8 ГиБ RAM, разделяемой с IDE, используйте `scripts/build-stable.sh --local --low-memory`. Режим ограничивает heap Gradle до 3 ГиБ, оставляет один Gradle worker, компилирует Kotlin в том же процессе и задаёт CMake/Ninja job pools: две native-компиляции и одна линковка. Сам по себе `--max-workers` не ограничивает Ninja. Меняются только ресурсы сборки; функциональность и постоянная подпись остаются прежними.
+
 Основная задача — `:TMessagesProj_AppStandalone:assembleAfatStandalone`; результат — `TMessagesProj_AppStandalone/build/outputs/apk/afat/standalone/app.apk`. ApplicationId остается **`io.github.alekseyvinokurov.velora`**. Gradle отклоняет стабильную сборку без закрепленного внешнего RSA-4096 ключа и действительного сертификата с исходным сроком не менее 30 лет. Сертификат должен совпадать с `release/certificate.sha256`.
 
 После проверки реального APK wrapper создает игнорируемый `.local-build/stable-build.json`: хеш APK, версия, сертификат и чистый source commit. Это вход для подготовки релиза. Keystore не копируется. Без реально проверенного APK receipt не создается.
