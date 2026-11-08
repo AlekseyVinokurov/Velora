@@ -428,35 +428,7 @@ public class ApplicationLoader extends Application {
         // AndroidUtilities must be initialized before FileLog
         final String helloWorld = AndroidUtilities.getHelloWorld();
 
-        new Thread(() -> {
-            try {
-                soundgram.wsproxy.ProxyAutoDetector.init(this);
-                android.content.SharedPreferences prefs = getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-                boolean isVpn = soundgram.wsproxy.ProxyAutoDetector.isVpnActive(this);
-                boolean manualEnabled = prefs.getBoolean("manual_enabled", false);
-                boolean autoStart = prefs.getBoolean("auto_start", true);
-
-                if (isVpn) {
-                    // VPN is active: proxy must stay in sleep mode!
-                    return;
-                }
-
-                if (manualEnabled && !soundgram.wsproxy.TgWsProxyService.isRunning) {
-                    // User manually started bypass through settings -> start it
-                    soundgram.wsproxy.ProxyAutoDetector.startProxyService(this, prefs);
-                } else if (!manualEnabled && !autoStart) {
-                    // Auto-start is OFF and user did not manually start bypass: ensure proxy is disabled
-                    android.content.SharedPreferences mainPrefs = getSharedPreferences("mainconfig", Context.MODE_PRIVATE);
-                    if (mainPrefs.getBoolean("proxy_enabled", false) && "127.0.0.1".equals(mainPrefs.getString("proxy_ip", ""))) {
-                        mainPrefs.edit().putBoolean("proxy_enabled", false).apply();
-                        org.telegram.tgnet.ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
-                    }
-                }
-                // If autoStart is true and not manual, ProxyAutoDetector.init() checks TG DC connectivity after delay
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        soundgram.wsproxy.WsProxyPolicy.disableLegacyPreferences(this);
 
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d(helloWorld);

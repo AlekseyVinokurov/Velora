@@ -1133,17 +1133,13 @@ public class MusicWebSearcher {
         String resolved = null;
 
         try {
-            resolved = resolveRedirectInternal(originalUrl, false, 0);
+            resolved = resolveRedirectInternal(originalUrl, 0);
             if (resolved != null && !resolved.isEmpty()) return forceHttps(resolved);
         } catch (Exception e) {}
 
-        try {
-            resolved = resolveRedirectInternal(originalUrl, true, 0);
-            if (resolved != null && !resolved.isEmpty()) return forceHttps(resolved);
-        } catch (Exception e) {}
 
         try {
-            resolved = resolveRedirectDirect(originalUrl, true, 0);
+            resolved = resolveRedirectDirect(originalUrl, 0);
             if (resolved != null && !resolved.isEmpty()) return forceHttps(resolved);
         } catch (Exception e) {}
 
@@ -1188,7 +1184,7 @@ public class MusicWebSearcher {
         return urlString;
     }
 
-    private static String resolveRedirectDirect(String urlString, boolean trustAll, int depth) throws Exception {
+    private static String resolveRedirectDirect(String urlString, int depth) throws Exception {
         if (depth > 10) return urlString;
         URL url = new URL(urlString);
         HttpURLConnection conn = MusicNetworkHelper.openConnection(url);
@@ -1206,35 +1202,18 @@ public class MusicWebSearcher {
             conn.disconnect();
             if (location == null || location.isEmpty()) return urlString;
             if (!location.startsWith("http")) location = new URL(url, location).toString();
-            return resolveRedirectDirect(location, trustAll, depth + 1);
+            return resolveRedirectDirect(location, depth + 1);
         }
         conn.disconnect();
         return urlString;
     }
 
-    private static String resolveRedirectInternal(String urlString, boolean trustAll, int depth)
+    private static String resolveRedirectInternal(String urlString, int depth)
             throws Exception {
         if (depth > 10) return urlString; // защита от петель
 
         URL url = new URL(urlString);
         HttpURLConnection conn = MusicNetworkHelper.openConnection(url);
-
-        if (trustAll && conn instanceof javax.net.ssl.HttpsURLConnection) {
-            try {
-                javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext.getInstance("TLS");
-                sc.init(null, new javax.net.ssl.TrustManager[]{
-                        new javax.net.ssl.X509TrustManager() {
-                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return new java.security.cert.X509Certificate[0];
-                            }
-                            public void checkClientTrusted(java.security.cert.X509Certificate[] c, String a) {}
-                            public void checkServerTrusted(java.security.cert.X509Certificate[] c, String a) {}
-                        }
-                }, new java.security.SecureRandom());
-                ((javax.net.ssl.HttpsURLConnection) conn).setSSLSocketFactory(sc.getSocketFactory());
-                ((javax.net.ssl.HttpsURLConnection) conn).setHostnameVerifier((h, s) -> true);
-            } catch (Exception ignored) {}
-        }
 
         try {
             conn.setRequestMethod("HEAD"); // только заголовки — не качаем файл
@@ -1262,7 +1241,7 @@ public class MusicWebSearcher {
                     location = new URL(url, location).toString();
                 }
                 FileLog.d("resolveRedirectUrl: " + urlString + " → " + location);
-                return resolveRedirectInternal(location, trustAll, depth + 1);
+                return resolveRedirectInternal(location, depth + 1);
             }
 
             conn.disconnect();
@@ -1272,58 +1251,23 @@ public class MusicWebSearcher {
 
         } catch (javax.net.ssl.SSLException e) {
             conn.disconnect();
-            if (!trustAll) {
-                // VPN иногда ломает TLS — пробуем trust-all
-                return resolveRedirectInternal(urlString, true, depth);
-            }
             throw e;
         }
     }
 
     public static String fetchHtml(String urlString) throws Exception {
         try {
-            return fetchHtmlInternal(urlString, false);
+            return fetchHtmlInternal(urlString);
         } catch (javax.net.ssl.SSLException e) {
-            // VPN ломает TLS — пробуем trust-all, затем напрямую
-            try {
-                return fetchHtmlInternal(urlString, true);
-            } catch (Exception e2) {
-                try {
-                    return fetchHtmlDirect(urlString);
-                } catch (Exception e3) {
-                    FileLog.e("fetchHtml all attempts failed: " + e3);
-                    throw e2;
-                }
-            }
-        } catch (java.net.SocketTimeoutException e) {
-            // Таймаут — пробуем напрямую без прокси
-            try {
-                return fetchHtmlDirect(urlString);
-            } catch (Exception e2) {
-                throw e;
-            }
-        } catch (java.net.SocketException e) {
-            // ConnectException (подкласс SocketException) или обрыв соединения —
-            // пробуем сначала trust-all, потом напрямую без прокси
-            try {
-                return fetchHtmlInternal(urlString, true);
-            } catch (Exception e2) {
-                try {
-                    return fetchHtmlDirect(urlString);
-                } catch (Exception e3) {
-                    throw e;
-                }
-            }
+            // Certificate and hostname failures must never weaken TLS verification.
+            throw e;
+        } catch (java.net.SocketTimeoutException | java.net.SocketException e) {
+            return fetchHtmlDirect(urlString);
         } catch (java.net.UnknownHostException e) {
-            // DNS-блокировка при VPN — пробуем через системный прокси, затем напрямую
             try {
                 return fetchHtmlViaSystemProxy(urlString);
-            } catch (Exception e2) {
-                try {
-                    return fetchHtmlDirect(urlString);
-                } catch (Exception e3) {
-                    throw e;
-                }
+            } catch (Exception retryError) {
+                return fetchHtmlDirect(urlString);
             }
         }
     }
@@ -1401,26 +1345,9 @@ public class MusicWebSearcher {
     }
 
 
-    private static String fetchHtmlInternal(String urlString, boolean trustAll) throws Exception {
+    private static String fetchHtmlInternal(String urlString) throws Exception {
         URL url = new URL(urlString);
         HttpURLConnection conn = MusicNetworkHelper.openConnection(url);
-
-        if (trustAll && conn instanceof javax.net.ssl.HttpsURLConnection) {
-            try {
-                javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext.getInstance("TLS");
-                sc.init(null, new javax.net.ssl.TrustManager[]{
-                        new javax.net.ssl.X509TrustManager() {
-                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return new java.security.cert.X509Certificate[0];
-                            }
-                            public void checkClientTrusted(java.security.cert.X509Certificate[] c, String a) {}
-                            public void checkServerTrusted(java.security.cert.X509Certificate[] c, String a) {}
-                        }
-                }, new java.security.SecureRandom());
-                ((javax.net.ssl.HttpsURLConnection) conn).setSSLSocketFactory(sc.getSocketFactory());
-                ((javax.net.ssl.HttpsURLConnection) conn).setHostnameVerifier((hostname, session) -> true);
-            } catch (Exception ignored) {}
-        }
 
         applyStandardHeaders(conn);
         conn.setConnectTimeout(15000);
@@ -1476,15 +1403,15 @@ public class MusicWebSearcher {
 
         String safeUrl = forceHttps(fileUrl);
 
-        // 1. Пробуем первичную загрузку через системный прокси с trust-all
-        boolean ok = downloadTrackInternal(safeUrl, destFile, true);
+        // 1. Загрузка с системной проверкой сертификата и имени сервера
+        boolean ok = downloadTrackInternal(safeUrl, destFile);
         if (ok && destFile.exists() && destFile.length() > 1024 && !isHtmlOrInvalidAudio(destFile)) return true;
 
         // 2. Пробуем резолв финального URL редиректа и загрузку
         String resolved = resolveRedirectUrl(safeUrl);
         if (resolved != null && !resolved.isEmpty() && !resolved.equals(safeUrl)) {
             resolved = forceHttps(resolved);
-            ok = downloadTrackInternal(resolved, destFile, true);
+            ok = downloadTrackInternal(resolved, destFile);
             if (ok && destFile.exists() && destFile.length() > 1024 && !isHtmlOrInvalidAudio(destFile)) return true;
         }
 
@@ -1501,30 +1428,13 @@ public class MusicWebSearcher {
         return false;
     }
 
-    private static boolean downloadTrackInternal(String fileUrl, File destFile, boolean trustAll) {
+    private static boolean downloadTrackInternal(String fileUrl, File destFile) {
         HttpURLConnection conn = null;
         try {
             fileUrl = forceHttps(fileUrl);
             URL url = new URL(fileUrl);
 
             conn = MusicNetworkHelper.openConnection(url);
-
-            if (conn instanceof javax.net.ssl.HttpsURLConnection) {
-                try {
-                    javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext.getInstance("TLS");
-                    sc.init(null, new javax.net.ssl.TrustManager[]{
-                            new javax.net.ssl.X509TrustManager() {
-                                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                    return new java.security.cert.X509Certificate[0];
-                                }
-                                public void checkClientTrusted(java.security.cert.X509Certificate[] c, String a) {}
-                                public void checkServerTrusted(java.security.cert.X509Certificate[] c, String a) {}
-                            }
-                    }, new java.security.SecureRandom());
-                    ((javax.net.ssl.HttpsURLConnection) conn).setSSLSocketFactory(sc.getSocketFactory());
-                    ((javax.net.ssl.HttpsURLConnection) conn).setHostnameVerifier((h, s) -> true);
-                } catch (Exception ignored) {}
-            }
 
             conn.setRequestMethod("GET");
             conn.setRequestProperty("User-Agent",
@@ -1549,14 +1459,13 @@ public class MusicWebSearcher {
                         location = new URL(url, location).toString();
                     }
                     location = forceHttps(location);
-                    return downloadTrackInternal(location, destFile, trustAll);
+                    return downloadTrackInternal(location, destFile);
                 }
                 return false;
             }
 
             if (code != 200 && code != 206) {
                 conn.disconnect();
-                if (!trustAll) return downloadTrackInternal(fileUrl, destFile, true);
                 return false;
             }
 
@@ -1590,7 +1499,6 @@ public class MusicWebSearcher {
 
         } catch (javax.net.ssl.SSLException e) {
             if (conn != null) conn.disconnect();
-            if (!trustAll) return downloadTrackInternal(fileUrl, destFile, true);
             FileLog.e("downloadTrack SSL failed: " + e);
             return downloadTrackDirect(fileUrl, destFile);
         } catch (java.net.SocketTimeoutException | java.net.UnknownHostException | java.net.SocketException e) {

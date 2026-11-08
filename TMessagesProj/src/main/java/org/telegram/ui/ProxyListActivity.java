@@ -437,7 +437,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         useProxySettings = preferences.getBoolean("proxy_enabled", false) && !SharedConfig.proxyList.isEmpty();
         // Sync TG WS Proxy state from its own preferences
         SharedPreferences wsPrefs = ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-        useTgvsProxy = wsPrefs.getBoolean("enabled", false);
+        useTgvsProxy = soundgram.wsproxy.WsProxyPolicy.isAvailable() && wsPrefs.getBoolean("enabled", false);
 
         updateRows(true);
 
@@ -447,7 +447,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             public void onReceive(Context context, Intent intent) {
                 if (listAdapter != null) {
                     SharedPreferences prefs = ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-                    useTgvsProxy = prefs.getBoolean("enabled", false);
+                    useTgvsProxy = soundgram.wsproxy.WsProxyPolicy.isAvailable() && prefs.getBoolean("enabled", false);
                     listAdapter.notifyItemChanged(tgvsProxyRow, ListAdapter.PAYLOAD_CHECKED_CHANGED);
                 }
             }
@@ -797,6 +797,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     @SuppressLint("ApplySharedPref")
     private void toggleTgWsProxy() {
+        if (!soundgram.wsproxy.WsProxyPolicy.isAvailable()) {
+            presentFragment(new NekoWsProxyActivity());
+            return;
+        }
         SharedPreferences wsPrefs = ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
         boolean on = !wsPrefs.getBoolean("enabled", false);
         wsPrefs.edit().putBoolean("enabled", on).commit();

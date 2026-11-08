@@ -59,6 +59,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
     private static volatile long sLastAutoCheckTime = 0;
 
     public static void init(Context context) {
+        if (!WsProxyPolicy.isAvailable()) return;
         if (isInitialized) return;
         isInitialized = true;
         sContext = context.getApplicationContext();
@@ -78,7 +79,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
 
         // Delay initial check on startup so Telegram has a chance to connect directly
         SharedPreferences prefs = sContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-        boolean autoStart = prefs.getBoolean("auto_start", true);
+        boolean autoStart = prefs.getBoolean("auto_start", false);
         if (autoStart && !isVpnActive(sContext)) {
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 new Thread(() -> {
@@ -90,13 +91,14 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
 
     @Override
     public void didReceivedNotification(int id, int account, Object... args) {
+        if (!WsProxyPolicy.isAvailable()) return;
         if (id == NotificationCenter.didUpdateConnectionState) {
             if (account != UserConfig.selectedAccount) return;
             if (sContext == null) return;
             SharedPreferences prefs = sContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
 
             // 1. If auto_start is turned OFF: bypass MUST NOT start automatically
-            if (!prefs.getBoolean("auto_start", true)) return;
+            if (!prefs.getBoolean("auto_start", false)) return;
 
             // 2. If VPN is active: bypass sleeps
             if (isVpnActive(sContext)) return;
@@ -236,7 +238,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
                     if (isVpnActive(context)) return;
 
                     boolean manual = prefs.getBoolean("manual_enabled", false);
-                    boolean autoStart = prefs.getBoolean("auto_start", true);
+                    boolean autoStart = prefs.getBoolean("auto_start", false);
 
                     if (manual) {
                         Log.i(TAG, "Resuming manual bypass after VPN");
@@ -251,7 +253,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
             }
 
             // Normal network switch (e.g. Wi-Fi <-> Cellular)
-            boolean autoStart = prefs.getBoolean("auto_start", true);
+            boolean autoStart = prefs.getBoolean("auto_start", false);
             boolean manual = prefs.getBoolean("manual_enabled", false);
 
             if (TgWsProxyService.isRunning) {
@@ -358,6 +360,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
     }
 
     public static void checkAndAutoEnable(Context ctx) {
+        if (!WsProxyPolicy.isAvailable()) return;
         if (ctx == null) return;
         long now = System.currentTimeMillis();
         if (now - sLastAutoCheckTime < 6000) {
@@ -367,7 +370,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
         SharedPreferences prefs = ctx.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
 
         // 1. If auto_start is OFF: bypass MUST NOT start automatically
-        if (!prefs.getBoolean("auto_start", true)) {
+        if (!prefs.getBoolean("auto_start", false)) {
             Log.i(TAG, "Auto-start is disabled — skipping bypass auto-enable");
             return;
         }
@@ -417,6 +420,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
     }
 
     public static void startProxyService(Context ctx, SharedPreferences prefs) {
+        if (!WsProxyPolicy.isAvailable()) return;
         int port = prefs.getInt("port", 1443);
         String secret = getOrCreateSecret(prefs);
         
@@ -527,6 +531,7 @@ public class ProxyAutoDetector implements NotificationCenter.NotificationCenterD
     }
 
     public static void disableTelegramProxy() {
+        if (!WsProxyPolicy.isAvailable()) return;
         new Handler(Looper.getMainLooper()).post(() -> {
             try {
                 org.telegram.messenger.MessagesController.getGlobalMainSettings()

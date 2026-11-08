@@ -68,6 +68,16 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
         fragmentView.setBackgroundColor(Theme.getColor(Theme.key_windowBackgroundGray));
         FrameLayout frameLayout = (FrameLayout) fragmentView;
 
+        if (!WsProxyPolicy.isAvailable()) {
+            android.widget.TextView message = new android.widget.TextView(context);
+            message.setText(org.telegram.messenger.LocaleController.getString(R.string.VeloraWsProxyDisabled));
+            message.setTextColor(Theme.getColor(Theme.key_windowBackgroundWhiteBlackText));
+            message.setGravity(android.view.Gravity.CENTER);
+            message.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(24), AndroidUtilities.dp(24), AndroidUtilities.dp(24));
+            frameLayout.addView(message, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
+            return fragmentView;
+        }
+
         listView = new RecyclerListView(context);
         listView.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false));
         listView.setVerticalScrollBarEnabled(false);
@@ -99,7 +109,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     private static final String  DEFAULT_CF_DOMAIN   = "";
     private static final boolean DEFAULT_FAKE_TLS    = false;
     private static final String  DEFAULT_FAKE_DOMAIN = "google.com";
-    private static final boolean DEFAULT_AUTO_START  = true;
+    private static final boolean DEFAULT_AUTO_START  = false;
     private static final String  DEFAULT_DC_IPS      = "";
 
     // ── Row indices ──────────────────────────────────────────────────────────
@@ -139,6 +149,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     @Override
     public void onResume() {
         super.onResume();
+        if (!WsProxyPolicy.isAvailable()) return;
         statusReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {

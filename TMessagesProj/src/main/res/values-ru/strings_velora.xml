@@ -3,5 +3,9 @@
     <string name="VeloraProject">Проект Velora</string>
     <string name="VeloraCredits">Velora — независимый неофициальный клиент на основе SoundGram и Telegram для Android. Проект не связан с Telegram и не одобрен им. Благодарности: SoundGram, Telegram, AyuGram, Cherrygram, Nagram, Nekogram и exteraGram.</string>
     <string name="VeloraUpstreamSource">Исходный код и авторство SoundGram</string>
-    <string name="VeloraUpdateUnavailable">Автообновления не настроены. Следите за изменениями в репозитории Velora.</string>
+    <string name="VeloraUpdateUnavailable">Обновления из приложения доступны только в подписанных стабильных сборках Velora с доверенным сертификатом. DEV-сборки устанавливаются вручную.</string>
+    <string name="VeloraNoRelease">Публичных стабильных релизов пока нет.</string>
+    <string name="VeloraUpdateRejected">Не удалось подтвердить подлинность APK. Установка не запускалась. Повторите проверку обновлений.</string>
+    <string name="VeloraInstallerUnavailable">Не удалось открыть системный установщик APK Android. Приложение не удалялось, данные не сбрасывались.</string>
+    <string name="VeloraWsProxyDisabled">WS Proxy отключён в этой версии Velora.</string>
 </resources>

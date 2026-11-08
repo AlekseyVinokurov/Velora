@@ -15,15 +15,9 @@ import java.net.ProxySelector;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URL;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.Collections;
 import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 public final class MusicNetworkHelper {
 
@@ -33,7 +27,6 @@ public final class MusicNetworkHelper {
             + "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
     private static volatile boolean sInitialized = false;
-    private static javax.net.ssl.SSLSocketFactory sTrustAllSslSocketFactory = null;
 
     static {
         init();
@@ -67,19 +60,6 @@ public final class MusicNetworkHelper {
             });
         } catch (Exception e) {
             FileLog.e(TAG + " init authenticator failed: " + e);
-        }
-
-        try {
-            // Setup trust-all SSL context for CDN mirrors
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, new TrustManager[]{new X509TrustManager() {
-                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-                public void checkClientTrusted(X509Certificate[] c, String a) {}
-                public void checkServerTrusted(X509Certificate[] c, String a) {}
-            }}, new SecureRandom());
-            sTrustAllSslSocketFactory = sc.getSocketFactory();
-        } catch (Exception e) {
-            FileLog.e(TAG + " init ssl failed: " + e);
         }
 
         installProxySelector();
@@ -125,6 +105,7 @@ public final class MusicNetworkHelper {
     }
 
     public static void ensureBypassServiceRunning() {
+        if (!soundgram.wsproxy.WsProxyPolicy.isAvailable()) return;
         try {
             android.content.Context ctx = org.telegram.messenger.ApplicationLoader.applicationContext;
             if (ctx == null) return;
@@ -226,13 +207,6 @@ public final class MusicNetworkHelper {
         }
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(proxy);
 
-        if (conn instanceof HttpsURLConnection && sTrustAllSslSocketFactory != null) {
-            try {
-                ((HttpsURLConnection) conn).setSSLSocketFactory(sTrustAllSslSocketFactory);
-                ((HttpsURLConnection) conn).setHostnameVerifier((hostname, session) -> true);
-            } catch (Exception ignored) {}
-        }
-
         conn.setConnectTimeout(15000);
         conn.setReadTimeout(20000);
         return conn;
@@ -243,13 +217,6 @@ public final class MusicNetworkHelper {
      */
     public static HttpURLConnection openConnectionDirect(URL url) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection(Proxy.NO_PROXY);
-
-        if (conn instanceof HttpsURLConnection && sTrustAllSslSocketFactory != null) {
-            try {
-                ((HttpsURLConnection) conn).setSSLSocketFactory(sTrustAllSslSocketFactory);
-                ((HttpsURLConnection) conn).setHostnameVerifier((hostname, session) -> true);
-            } catch (Exception ignored) {}
-        }
 
         conn.setConnectTimeout(15000);
         conn.setReadTimeout(20000);

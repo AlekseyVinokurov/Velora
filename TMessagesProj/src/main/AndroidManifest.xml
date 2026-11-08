@@ -89,6 +89,11 @@
     <uses-sdk tools:overrideLibrary="com.google.mlkit.vision.segmentation.subject"/>
 
     <queries>
+        <!-- Visibility of the system APK installer, not every installed package. -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="application/vnd.android.package-archive" />
+        </intent>
         <package android:name="com.google.android.apps.maps"/>
         <intent>
             <action android:name="android.intent.action.VIEW"/>
@@ -580,7 +585,7 @@
 
         <service
             android:name="soundgram.wsproxy.TgWsProxyService"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property
@@ -590,7 +595,7 @@
 
         <receiver
             android:name="soundgram.wsproxy.BootReceiver"
-            android:enabled="true"
+            android:enabled="false"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
