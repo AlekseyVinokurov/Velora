@@ -82,6 +82,11 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Check icon resources and launcher switching on the host JVM
+        run: |
+          python3 tests/icons/check_resources.py
+          python3 tests/icons/run.py
+
       - name: Install the pinned Android toolchain on GitHub
         run: |
           set -euo pipefail

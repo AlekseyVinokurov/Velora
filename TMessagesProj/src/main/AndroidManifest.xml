@@ -103,8 +103,8 @@
 
     <application
         android:name="org.telegram.messenger.ApplicationLoader"
-        android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/velora_launcher"
+        android:roundIcon="@mipmap/velora_launcher_round"
         android:allowBackup="true"
         android:restoreAnyVersion="true"
         android:backupAgent=".BackupAgent"
@@ -122,6 +122,28 @@
     >
         <!-- usesCleartextTraffic for browser supporting opening http:// links -->
 
+        <receiver android:name="org.telegram.messenger.LauncherIconUpdateReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <activity-alias
+            android:enabled="true"
+            android:name="org.telegram.messenger.VeloraIcon"
+            android:targetActivity="org.telegram.ui.LaunchActivity"
+            android:icon="@mipmap/velora_launcher"
+            android:roundIcon="@mipmap/velora_launcher_round"
+            android:theme="@style/Theme.TMessages.Start.VeloraIcon"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
+            </intent-filter>
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
+        </activity-alias>
+
         <activity-alias
             android:enabled="false"
             android:name="org.telegram.messenger.DefaultIcon"
@@ -131,7 +153,7 @@
             android:exported="false" />
 
         <activity-alias
-            android:enabled="true"
+            android:enabled="false"
             android:name="org.telegram.messenger.BlueIcon"
             android:targetActivity="org.telegram.ui.LaunchActivity"
             android:icon="@mipmap/ic_launcher"
@@ -344,8 +366,8 @@
 
         <activity
             android:name="org.telegram.ui.LaunchActivity"
-            android:icon="@mipmap/ic_launcher"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:icon="@mipmap/velora_launcher"
+            android:roundIcon="@mipmap/velora_launcher_round"
             android:theme="@style/Theme.TMessages.Start"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode|smallestScreenSize|screenLayout"
             android:supportsPictureInPicture="true"

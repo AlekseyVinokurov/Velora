@@ -240,6 +240,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     private int appIconHeaderRow;
     @Keep
     private int appIconSelectorRow;
+    private int notificationIconRow;
     private int appIconShadowRow;
 
     private int rowCount;
@@ -616,6 +617,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         appIconHeaderRow = -1;
         appIconSelectorRow = -1;
+        notificationIconRow = -1;
         appIconShadowRow = -1;
         lastShadowRow = -1;
 
@@ -682,6 +684,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
             appIconHeaderRow = rowCount++;
             appIconSelectorRow = rowCount++;
+            notificationIconRow = rowCount++;
             appIconShadowRow = rowCount++;
 
             swipeGestureHeaderRow = rowCount++;
@@ -1111,7 +1114,18 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         frameLayout.addView(listView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         actionBar.setAdaptiveBackground(listView);
         listView.setOnItemClickListener((view, position, x, y) -> {
-            if (position == enableAnimationsRow) {
+            if (position == notificationIconRow) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                builder.setTitle(getString(R.string.VeloraNotificationIcon));
+                builder.setItems(new CharSequence[]{getString(R.string.VeloraNotificationBrand), getString(R.string.VeloraClassicIcon)},
+                        new int[]{R.drawable.velora_notification, R.drawable.notification}, (dialog, which) -> {
+                    if (!LauncherIconController.setVeloraNotificationIcon(which == 0)) {
+                        android.widget.Toast.makeText(getParentActivity(), getString(R.string.ErrorOccurred), android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                    listAdapter.notifyItemChanged(notificationIconRow);
+                });
+                showDialog(builder.create());
+            } else if (position == enableAnimationsRow) {
                 SharedPreferences preferences = MessagesController.getGlobalMainSettings();
                 boolean animations = preferences.getBoolean("view_animations", true);
                 SharedPreferences.Editor editor = preferences.edit();
@@ -2501,6 +2515,10 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         cell.setTextAndValue(getString("AutoNightTo", R.string.AutoNightTo), String.format("%02d:%02d", currentHour, currentMinute), false);
                     } else if (position == scheduleUpdateLocationRow) {
                         cell.setTextAndValue(getString("AutoNightUpdateLocation", R.string.AutoNightUpdateLocation), Theme.autoNightCityName, false);
+                    } else if (position == notificationIconRow) {
+                        cell.setTextAndValue(getString(R.string.VeloraNotificationIcon),
+                                getString(LauncherIconController.useVeloraNotificationIcon()
+                                        ? R.string.VeloraNotificationBrand : R.string.VeloraClassicIcon), false);
                     } else if (position == contactsSortRow) {
                         String value;
                         SharedPreferences preferences = MessagesController.getGlobalMainSettings();
@@ -2745,7 +2763,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (position == scheduleFromRow || position == distanceRow ||
                     position == scheduleToRow || position == scheduleUpdateLocationRow ||
                     position == contactsReimportRow || position == contactsSortRow ||
-                    position == bluetoothScoRow || position == searchEngineRow) {
+                    position == bluetoothScoRow || position == searchEngineRow || position == notificationIconRow) {
                 return TYPE_TEXT_SETTING;
             } else if (position == automaticBrightnessInfoRow || position == scheduleLocationInfoRow || position == swipeGestureInfoRow || position == stickersInfoRow || position == liteModeInfoRow) {
                 return TYPE_TEXT_INFO_PRIVACY;

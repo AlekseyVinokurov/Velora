@@ -1,5 +1,30 @@
 # Velora: состояние проекта
 
+## Velora V Fusion — 2026-11-09
+
+Реализованы собственные adaptive launcher layers (включая Android 13+ monochrome),
+обычные/круглые PNG fallback в пяти плотностях и белый 24 dp notification vector.
+Существующий выбор иконок с миниатюрами расширен V Fusion и доступными старыми
+standalone-вариантами; добавлен независимый выбор Velora/«Классическая» для
+уведомлений. Исходные ресурсы сохранены. Миграция сохраняет явный выбор, без
+выбора применяется Velora; aliases синхронизируются при запуске и обновлении.
+Android 13+ переключает aliases атомарно, старые версии включают новый до
+отключения прежнего. Ошибки переключения/сохранения обрабатываются с возвратом.
+
+Проверены ссылки ресурсов, XML, 16 вариантов aliases, десять PNG fallback и
+production-controller на host JVM (API-ветки 24/26/32/33/36/37, перезапуск,
+миграция, независимость notification-выбора и ошибки PackageManager/записи).
+Локальные Android SDK/NDK/CMake, Gradle и Android-сборки не запускались.
+Текущая проверка GitHub: все шесть Secrets уже настроены, предыдущая
+[сборка a9fa9328b](https://github.com/AlekseyVinokurov/Velora/actions/runs/42518972421)
+успешна; это ещё не проверка нового оформления. Результат нового CI будет
+зафиксирован после запуска существующего workflow. Release не публикуется.
+
+Детали, ограничение Telegram API Terms §2.4 и обязательный тест на Pixel 8 /
+Android 17: [ICONS.md](ICONS.md). applicationId, постоянный ключ, авторизация,
+Credits/лицензии и механизмы обновления сохранены.
+
+
 ## Облачная подготовка — 2026-11-09
 
 Код сборки опубликован в `main`; [workflow](https://github.com/AlekseyVinokurov/Velora/actions/workflows/android-release.yml)

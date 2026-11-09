@@ -3,6 +3,13 @@ package org.telegram.ui;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
+import android.content.Intent;
+import android.os.Build;
+
+import java.util.ArrayList;
+import java.util.List;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -42,114 +49,153 @@ public class LauncherIconController {
         if (active != null) {
             return active.getComponentName(ctx);
         }
-        return new ComponentName(ctx.getPackageName(), "org.telegram.messenger.BlueIcon");
+        return new ComponentName(ctx.getPackageName(), "org.telegram.messenger.VeloraIcon");
     }
 
-    public static void tryFixLauncherIconIfNeeded() {
+    private static SharedPreferences preferences(Context ctx) {
+        return ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+    }
+
+    // Query only launcher aliases. Never disable LaunchActivity (deep links) or services.
+    private static List<ComponentName> launcherComponents(Context ctx) {
+        Intent intent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+                .setPackage(ctx.getPackageName());
+        List<ComponentName> result = new ArrayList<>();
+        for (ResolveInfo info : ctx.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DISABLED_COMPONENTS)) {
+            ActivityInfo activity = info.activityInfo;
+            if (activity != null && activity.exported && activity.targetActivity != null
+                    && ctx.getPackageName().equals(activity.packageName)) {
+                ComponentName component = new ComponentName(activity.packageName, activity.name);
+                if (!result.contains(component)) result.add(component);
+            }
+        }
+        return result;
+    }
+
+    public static List<LauncherIcon> getAvailableIcons(Context ctx) {
+        List<ComponentName> components = launcherComponents(ctx);
+        List<LauncherIcon> result = new ArrayList<>();
+        for (LauncherIcon icon : LauncherIcon.values()) {
+            if (components.contains(icon.getComponentName(ctx))) result.add(icon);
+        }
+        return result;
+    }
+
+    private static boolean componentEnabled(Context ctx, ComponentName component) {
+        PackageManager pm = ctx.getPackageManager();
+        int state = pm.getComponentEnabledSetting(component);
+        if (state != PackageManager.COMPONENT_ENABLED_STATE_DEFAULT) {
+            return state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+        }
+        try {
+            return pm.getActivityInfo(component, PackageManager.MATCH_DISABLED_COMPONENTS).enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    public static synchronized void tryFixLauncherIconIfNeeded() {
         Context ctx = ApplicationLoader.applicationContext;
         if (ctx == null) return;
-        PackageManager pm = ctx.getPackageManager();
-        LauncherIcon active = getActiveIcon();
-        ComponentName activeComponent = active.getComponentName(ctx);
-
-        try {
-            int currentStatus = pm.getComponentEnabledSetting(activeComponent);
-            if (currentStatus != PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
-                pm.setComponentEnabledSetting(activeComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-            }
-        } catch (Throwable e) {
-            org.telegram.messenger.FileLog.e(e);
-        }
-
-        for (LauncherIcon icon : LauncherIcon.values()) {
-            if (icon != active) {
-                try {
-                    ComponentName comp = icon.getComponentName(ctx);
-                    int status = pm.getComponentEnabledSetting(comp);
-                    if (status != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                        pm.setComponentEnabledSetting(comp, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                    }
-                } catch (Throwable ignore) {}
-            }
-        }
-
-        for (String legacyKey : LEGACY_LAUNCHER_KEYS) {
-            try {
-                ComponentName comp = new ComponentName(ctx.getPackageName(), "org.telegram.messenger." + legacyKey);
-                int status = pm.getComponentEnabledSetting(comp);
-                if (status != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {
-                    pm.setComponentEnabledSetting(comp, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                }
-            } catch (Throwable ignore) {}
-        }
-
-        try {
-            android.content.Intent mainIntent = new android.content.Intent(android.content.Intent.ACTION_MAIN);
-            mainIntent.addCategory(android.content.Intent.CATEGORY_LAUNCHER);
-            mainIntent.setPackage(ctx.getPackageName());
-            java.util.List<android.content.pm.ResolveInfo> list = pm.queryIntentActivities(
-                    mainIntent,
-                    PackageManager.MATCH_ALL | PackageManager.GET_DISABLED_COMPONENTS
-            );
-            if (list != null) {
-                for (android.content.pm.ResolveInfo ri : list) {
-                    if (ri.activityInfo != null && ri.activityInfo.name != null) {
-                        if (!ri.activityInfo.name.equals(activeComponent.getClassName())) {
-                            ComponentName c = new ComponentName(ctx.getPackageName(), ri.activityInfo.name);
-                            pm.setComponentEnabledSetting(c, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                        }
-                    }
-                }
-            }
-        } catch (Throwable e) {
-            org.telegram.messenger.FileLog.e(e);
+        LauncherIcon selected = getActiveIcon();
+        if (applyLauncherIcon(ctx, selected)) {
+            // Also records the one-time migration, retaining names from older versions.
+            preferences(ctx).edit().putString(KEY_ACTIVE_ICON, selected.name()).commit();
+            sCachedActiveIcon = selected;
         }
     }
 
     public static boolean isEnabled(LauncherIcon icon) {
         Context ctx = ApplicationLoader.applicationContext;
-        int i = ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx));
-        return i == PackageManager.COMPONENT_ENABLED_STATE_ENABLED || i == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && icon == LauncherIcon.DEFAULT;
+        return ctx != null && componentEnabled(ctx, icon.getComponentName(ctx));
     }
 
-    public static LauncherIcon getActiveIcon() {
-        LauncherIcon cached = sCachedActiveIcon;
-        if (cached != null) {
-            return cached;
+    public static synchronized LauncherIcon getActiveIcon() {
+        if (sCachedActiveIcon != null) return sCachedActiveIcon;
+        Context ctx = ApplicationLoader.applicationContext;
+        if (ctx == null) return LauncherIcon.VELORA;
+        List<LauncherIcon> available = getAvailableIcons(ctx);
+        String name = preferences(ctx).getString(KEY_ACTIVE_ICON, null);
+        if (name != null) {
+            for (LauncherIcon icon : available) {
+                if (icon.name().equalsIgnoreCase(name) || icon.key.equalsIgnoreCase(name)
+                        || icon == LauncherIcon.DEFAULT && "DefaultIcon".equalsIgnoreCase(name)) {
+                    return sCachedActiveIcon = icon;
+                }
+            }
         }
+        // Older versions sometimes recorded only PackageManager state. Preserve an
+        // explicitly enabled alternate alias; the old automatically enabled BlueIcon
+        // without a saved preference is not an explicit user choice.
+        for (LauncherIcon icon : available) {
+            if (icon != LauncherIcon.VELORA && icon != LauncherIcon.DEFAULT
+                    && ctx.getPackageManager().getComponentEnabledSetting(icon.getComponentName(ctx))
+                    == PackageManager.COMPONENT_ENABLED_STATE_ENABLED) {
+                return sCachedActiveIcon = icon;
+            }
+        }
+        return sCachedActiveIcon = LauncherIcon.VELORA;
+    }
+
+    private static boolean applyLauncherIcon(Context ctx, LauncherIcon icon) {
+        PackageManager pm = ctx.getPackageManager();
+        ComponentName selected = icon.getComponentName(ctx);
         try {
-            Context ctx = ApplicationLoader.applicationContext;
-            if (ctx != null) {
-                SharedPreferences pref = ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-                String name = pref.getString(KEY_ACTIVE_ICON, null);
-                if (name != null) {
-                    for (LauncherIcon icon : LauncherIcon.values()) {
-                        if (icon.name().equalsIgnoreCase(name) || icon.key.equalsIgnoreCase(name)) {
-                            sCachedActiveIcon = icon;
-                            return icon;
-                        }
+            List<ComponentName> components = launcherComponents(ctx);
+            if (!components.contains(selected)) return false;
+            if (Build.VERSION.SDK_INT >= 33) {
+                // Pixel: one atomic transaction, without an intermediate duplicate.
+                List<PackageManager.ComponentEnabledSetting> changes = new ArrayList<>();
+                for (ComponentName component : components) {
+                    int state = component.equals(selected) ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                            : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
+                    if (pm.getComponentEnabledSetting(component) != state) {
+                        changes.add(new PackageManager.ComponentEnabledSetting(component, state, PackageManager.DONT_KILL_APP));
+                    }
+                }
+                if (!changes.isEmpty()) pm.setComponentEnabledSettings(changes);
+            } else {
+                // On older Android, enable and verify first. Never leave zero launchers.
+                pm.setComponentEnabledSetting(selected, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+                if (!componentEnabled(ctx, selected)) return false;
+                for (ComponentName component : components) {
+                    if (!component.equals(selected)) {
+                        pm.setComponentEnabledSetting(component, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
                     }
                 }
             }
-        } catch (Throwable ignore) {}
-
-        for (LauncherIcon icon : LauncherIcon.values()) {
-            if (icon != LauncherIcon.DEFAULT && isEnabled(icon)) {
-                sCachedActiveIcon = icon;
-                return icon;
-            }
+            return true;
+        } catch (Exception e) {
+            org.telegram.messenger.FileLog.e(e);
+            return false;
         }
-        if (isEnabled(LauncherIcon.DEFAULT)) {
-            sCachedActiveIcon = LauncherIcon.DEFAULT;
-            return LauncherIcon.DEFAULT;
-        }
-        sCachedActiveIcon = LauncherIcon.DEFAULT;
-        return LauncherIcon.DEFAULT;
     }
 
     public static int getActiveIconRes() {
         LauncherIcon icon = getActiveIcon();
+        try {
+            Context ctx = ApplicationLoader.applicationContext;
+            // Standalone manifests override some classic artwork in the app module.
+            int resource = ctx.getPackageManager().getActivityInfo(icon.getComponentName(ctx),
+                    PackageManager.MATCH_DISABLED_COMPONENTS).icon;
+            if (resource != 0) return resource;
+        } catch (Exception e) {
+            org.telegram.messenger.FileLog.e(e);
+        }
         switch (icon) {
+            case VELORA:
+                return R.mipmap.velora_launcher;
+            case VINTAGE:
+                return R.mipmap.icon_6_launcher;
+            case AQUA:
+                return R.mipmap.icon_4_launcher;
+            case PREMIUM:
+                return R.mipmap.icon_3_launcher;
+            case TURBO:
+                return R.mipmap.icon_5_launcher;
+            case NOX:
+                return R.mipmap.icon_2_launcher;
             case COSMOS:
                 return R.mipmap.icon_cosmos_launcher;
             case ANIME:
@@ -197,52 +243,44 @@ public class LauncherIconController {
         return bitmap;
     }
 
-    // Все алиасы в AndroidManifest.xml. Должны совпадать с ключами LauncherIcon enum.
-    // При смене иконки все неактивные алиасы отключаются, активный — включается.
-    private static String[] getAllLauncherKeys() {
-        LauncherIcon[] icons = LauncherIcon.values();
-        String[] keys = new String[icons.length + LEGACY_LAUNCHER_KEYS.length];
-        for (int i = 0; i < icons.length; i++) {
-            keys[i] = icons[i].key;
-        }
-        System.arraycopy(LEGACY_LAUNCHER_KEYS, 0, keys, icons.length, LEGACY_LAUNCHER_KEYS.length);
-        return keys;
-    }
-
-    public static void setIcon(LauncherIcon icon) {
-        sCachedActiveIcon = icon;
+    public static synchronized boolean setIcon(LauncherIcon icon) {
         Context ctx = ApplicationLoader.applicationContext;
-        try {
-            SharedPreferences pref = ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-            pref.edit().putString(KEY_ACTIVE_ICON, icon.name()).commit();
-        } catch (Throwable e) {
-            org.telegram.messenger.FileLog.e(e);
+        LauncherIcon previous = getActiveIcon();
+        if (!applyLauncherIcon(ctx, icon)) {
+            applyLauncherIcon(ctx, previous);
+            return false;
         }
-
-        PackageManager pm = ctx.getPackageManager();
-        try {
-            String[] allKeys = getAllLauncherKeys();
-            String activeKey = icon.key;
-            // Включаем новую иконку с флагом DONT_KILL_APP, чтобы процесс не убивался на первой итерации
-            ComponentName newComponent = icon.getComponentName(ctx);
-            pm.setComponentEnabledSetting(newComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-            // Затем отключаем все остальные
-            for (String key : allKeys) {
-                if (!key.equals(activeKey)) {
-                    ComponentName comp = new ComponentName(ctx.getPackageName(), "org.telegram.messenger." + key);
-                    try {
-                        pm.setComponentEnabledSetting(comp, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-                    } catch (Exception ignore) {
-                        // Алиас может отсутствовать в манифесте — игнорируем
-                    }
-                }
-            }
-        } catch (Exception e) {
-            org.telegram.messenger.FileLog.e(e);
+        if (!preferences(ctx).edit().putString(KEY_ACTIVE_ICON, icon.name()).commit()) {
+            applyLauncherIcon(ctx, previous);
+            return false;
         }
-
+        sCachedActiveIcon = icon;
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appIconChanged, icon);
         refreshNotifications();
+        return true;
+    }
+
+    public static boolean useVeloraNotificationIcon() {
+        Context ctx = ApplicationLoader.applicationContext;
+        return ctx == null || preferences(ctx).getBoolean("velora_notification_icon", true);
+    }
+
+    public static int getNotificationIcon() {
+        return getNotificationIcon(R.drawable.notification);
+    }
+
+    // Preserve the original service-specific icon in Classic mode.
+    public static int getNotificationIcon(int classicResource) {
+        return useVeloraNotificationIcon() ? R.drawable.velora_notification : classicResource;
+    }
+
+    public static boolean setVeloraNotificationIcon(boolean velora) {
+        Context ctx = ApplicationLoader.applicationContext;
+        if (!preferences(ctx).edit().putBoolean("velora_notification_icon", velora).commit()) return false;
+        // Existing observers redraw music and resident notifications without restarting playback.
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appIconChanged, getActiveIcon());
+        refreshNotifications();
+        return true;
     }
 
     public static int getActiveStartThemeRes() {
@@ -251,6 +289,18 @@ public class LauncherIconController {
             return R.style.Theme_TMessages_Start_BlueIcon;
         }
         switch (icon) {
+            case VELORA:
+                return R.style.Theme_TMessages_Start_VeloraIcon;
+            case VINTAGE:
+                return R.style.Theme_TMessages_Start_VintageIcon;
+            case AQUA:
+                return R.style.Theme_TMessages_Start_AquaIcon;
+            case PREMIUM:
+                return R.style.Theme_TMessages_Start_PremiumIcon;
+            case TURBO:
+                return R.style.Theme_TMessages_Start_TurboIcon;
+            case NOX:
+                return R.style.Theme_TMessages_Start_NoxIcon;
             case COSMOS:
                 return R.style.Theme_TMessages_Start_CosmosIcon;
             case ANIME:
@@ -318,25 +368,13 @@ public class LauncherIconController {
             } catch (Throwable e) {
                 org.telegram.messenger.FileLog.e(e);
             }
-            try {
-                if (org.telegram.messenger.MediaController.getInstance().getPlayingMessageObject() != null) {
-                    android.content.Intent intent = new android.content.Intent(ApplicationLoader.applicationContext, org.telegram.messenger.MusicPlayerService.class);
-                    ApplicationLoader.applicationContext.startService(intent);
-                }
-            } catch (Throwable e) {
-                org.telegram.messenger.FileLog.e(e);
-            }
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O && app.nimarkogram.messenger.NimarkoConfig.residentNotification) {
-                    android.content.Intent intent = new android.content.Intent(ApplicationLoader.applicationContext, org.telegram.messenger.NotificationsService.class);
-                    ApplicationLoader.applicationContext.startService(intent);
-                }
-            } catch (Throwable ignore) {}
+
         });
     }
 
     public enum LauncherIcon {
-        DEFAULT("BlueIcon", R.mipmap.ic_launcher_background, R.mipmap.ic_launcher_foreground, R.string.AppIconDefault),
+        VELORA("VeloraIcon", R.drawable.velora_icon_background, R.drawable.velora_icon_foreground, R.string.VeloraAppIcon),
+        DEFAULT("BlueIcon", R.mipmap.ic_launcher_background, R.mipmap.ic_launcher_foreground, R.string.VeloraClassicIcon),
         ANIME("AnimeIcon", R.mipmap.icon_anime_background, R.mipmap.icon_anime_foreground, R.string.AppIconAnime),
         COSMOS("CosmosIcon", R.mipmap.icon_cosmos_background, R.mipmap.icon_cosmos_foreground, R.string.AppIconCosmos),
         MATRIX("MatrixIcon", R.mipmap.icon_matrix_background, R.mipmap.icon_matrix_foreground, R.string.AppIconMatrix),
@@ -345,7 +383,12 @@ public class LauncherIconController {
         EMERALD("EmeraldIcon", R.mipmap.icon_emerald_background, R.mipmap.icon_emerald_foreground, R.string.AppIconEmerald),
         MIDNIGHT("MidnightIcon", R.mipmap.icon_midnight_background, R.mipmap.icon_midnight_foreground, R.string.AppIconMidnight),
         GOLD("GoldIcon", R.mipmap.icon_gold_background, R.mipmap.icon_gold_foreground, R.string.AppIconGold),
-        CRIMSON("CrimsonIcon", R.mipmap.icon_crimson_background, R.mipmap.icon_crimson_foreground, R.string.AppIconCrimson);
+        CRIMSON("CrimsonIcon", R.mipmap.icon_crimson_background, R.mipmap.icon_crimson_foreground, R.string.AppIconCrimson),
+        VINTAGE("VintageIcon", R.drawable.icon_6_background_sa, R.mipmap.icon_6_foreground_sa, R.string.AppIconVintage),
+        AQUA("AquaIcon", R.drawable.icon_4_background_sa, R.mipmap.icon_4_foreground_sa, R.string.AppIconAqua),
+        PREMIUM("PremiumIcon", R.drawable.icon_3_background_sa, R.mipmap.icon_3_foreground_sa, R.string.AppIconPremium),
+        TURBO("TurboIcon", R.drawable.icon_5_background_sa, R.mipmap.icon_5_foreground_sa, R.string.AppIconTurbo),
+        NOX("NoxIcon", R.mipmap.icon_2_background_sa, R.mipmap.icon_2_foreground_sa, R.string.AppIconNox);
 
         public final String key;
         public final int background;

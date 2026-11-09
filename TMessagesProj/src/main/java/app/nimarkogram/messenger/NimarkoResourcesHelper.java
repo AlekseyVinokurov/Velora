@@ -57,11 +57,11 @@ public final class NimarkoResourcesHelper {
 
     @DrawableRes
     public static int getProperNotificationIcon() {
-        return R.drawable.notification;
+        return org.telegram.ui.LauncherIconController.getNotificationIcon();
     }
 
     @DrawableRes
     public static int getResidentNotificationIcon() {
-        return R.drawable.notification;
+        return org.telegram.ui.LauncherIconController.getNotificationIcon();
     }
 }

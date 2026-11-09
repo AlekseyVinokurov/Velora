@@ -18,6 +18,7 @@
         <item name="android:forceDarkAllowed">false</item>
         <item name="android:windowSplashScreenAnimationDuration">@integer/splash_screen_duration</item>
         <item name="android:windowSplashScreenBackground">@android:color/system_neutral1_900</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/velora_launcher</item>
     </style>
 
     <style name="Theme.TMessages.Start.DefaultIcon" parent="Theme.TMessages.Start">

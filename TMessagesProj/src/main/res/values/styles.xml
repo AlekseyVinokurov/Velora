@@ -13,6 +13,12 @@
         <item name="android:textViewStyle">@style/MyTextViewStyle</item>
         <item name="android:windowSplashScreenAnimationDuration">@integer/splash_screen_duration</item>
         <item name="android:windowSplashScreenBackground">@android:color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/velora_launcher</item>
+    </style>
+
+    <style name="Theme.TMessages.Start.VeloraIcon" parent="Theme.TMessages.Start">
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/velora_launcher</item>
+        <item name="android:windowSplashScreenBackground">#090B2B</item>
     </style>
 
     <style name="Theme.TMessages.Start.DefaultIcon" parent="Theme.TMessages.Start">

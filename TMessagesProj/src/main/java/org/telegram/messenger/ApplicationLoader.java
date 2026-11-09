@@ -427,6 +427,7 @@ public class ApplicationLoader extends Application {
 
         // AndroidUtilities must be initialized before FileLog
         final String helloWorld = AndroidUtilities.getHelloWorld();
+        LauncherIconController.tryFixLauncherIconIfNeeded();
 
         soundgram.wsproxy.WsProxyPolicy.disableLegacyPreferences(this);
 
@@ -489,7 +490,6 @@ public class ApplicationLoader extends Application {
 
         AndroidUtilities.runOnUIThread(ApplicationLoader::startPushService);
 
-        Utilities.globalQueue.postRunnable(LauncherIconController::tryFixLauncherIconIfNeeded, 3000);
         ProxyRotationController.init();
         try {
             app.nimarkogram.messenger.NimarkoFeatureHooks.setDiscussInsteadOfMute(

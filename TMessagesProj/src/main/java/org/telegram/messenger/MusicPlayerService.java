@@ -451,7 +451,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             }
             Notification.Builder bldr = new Notification.Builder(this);
             org.telegram.ui.LauncherIconController.applyNotificationAppInfo(bldr, this);
-            bldr.setSmallIcon(R.drawable.player)
+            bldr.setSmallIcon(org.telegram.ui.LauncherIconController.getNotificationIcon(R.drawable.player))
                     .setOngoing(isPlaying)
                     .setContentTitle(contentTitle)
                     .setContentText(contentText)
@@ -574,7 +574,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             }
 
             NotificationCompat.Builder compatBldr = new NotificationCompat.Builder(getApplicationContext())
-                    .setSmallIcon(R.drawable.player)
+                    .setSmallIcon(org.telegram.ui.LauncherIconController.getNotificationIcon(R.drawable.player))
                     .setContentIntent(contentIntent)
                     .setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL)
                     .setContentTitle(contentTitle);

@@ -780,7 +780,7 @@ public class NimarkoUpdater {
             NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             ensureUpdateChannel(nm);
             NotificationCompat.Builder b = new NotificationCompat.Builder(context, UPDATE_CHANNEL)
-                    .setSmallIcon(R.drawable.notification)
+                    .setSmallIcon(org.telegram.ui.LauncherIconController.getNotificationIcon())
                     .setContentTitle(LocaleController.getString(R.string.NM_UpdateReady))
                     .setContentText(LocaleController.formatString(R.string.NM_UpdateReadyText, version == null ? "" : version))
                     .setAutoCancel(true)

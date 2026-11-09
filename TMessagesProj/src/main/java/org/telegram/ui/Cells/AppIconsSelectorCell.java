@@ -45,7 +45,6 @@ import org.telegram.ui.LauncherIconController;
 import org.telegram.ui.PremiumPreviewFragment;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AppIconsSelectorCell extends RecyclerListView implements NotificationCenter.NotificationCenterDelegate {
@@ -110,7 +109,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
             IconHolderView holderView = (IconHolderView) view;
             LauncherIconController.LauncherIcon icon = availableIcons.get(position);
 
-            if (LauncherIconController.isEnabled(icon)) {
+            if (LauncherIconController.getActiveIcon() == icon && LauncherIconController.isEnabled(icon)) {
                 return;
             }
 
@@ -128,7 +127,10 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
             smoothScroller.setTargetPosition(position);
             linearLayoutManager.startSmoothScroll(smoothScroller);
 
-            LauncherIconController.setIcon(icon);
+            if (!LauncherIconController.setIcon(icon)) {
+                android.widget.Toast.makeText(context, LocaleController.getString(R.string.ErrorOccurred), android.widget.Toast.LENGTH_SHORT).show();
+                return;
+            }
             holderView.setSelected(true, true);
 
             for (int i = 0; i < getChildCount(); i++) {
@@ -146,7 +148,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
     @SuppressLint("NotifyDataSetChanged")
     private void updateIconsVisibility() {
         availableIcons.clear();
-        availableIcons.addAll(Arrays.asList(LauncherIconController.LauncherIcon.values()));
+        availableIcons.addAll(LauncherIconController.getAvailableIcons(getContext()));
         if (MessagesController.getInstance(currentAccount).premiumFeaturesBlocked()) {
             for (int i = 0; i < availableIcons.size(); i++) {
                 if (availableIcons.get(i).premium) {
@@ -291,6 +293,7 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
 
     public static class AdaptiveIconImageView extends ImageView {
         private Drawable foreground;
+        private boolean adaptiveForeground;
         private Path path = new Path();
         private int outerPadding = AndroidUtilities.dp(5);
         private int backgroundOuterPadding = AndroidUtilities.dp(42);
@@ -301,7 +304,10 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
 
         public void setForeground(int res) {
             foreground = ContextCompat.getDrawable(getContext(), res);
-            outerPadding = AndroidUtilities.dp(5);
+            // Adaptive layers include overscan: crop 108 dp to the visible 72 dp.
+            outerPadding = res == R.drawable.velora_icon_foreground
+                    ? 0 : AndroidUtilities.dp(5);
+            adaptiveForeground = res == R.drawable.velora_icon_foreground;
             invalidate();
         }
 
@@ -335,7 +341,15 @@ public class AppIconsSelectorCell extends RecyclerListView implements Notificati
                 
                 canvas.save();
                 canvas.clipPath(path);
-                foreground.setBounds(-outerPadding, -outerPadding, getWidth() + outerPadding, getHeight() + outerPadding);
+                if (adaptiveForeground) {
+                    int size = Math.round(Math.min(getWidth() - getPaddingLeft() - getPaddingRight(),
+                            getHeight() - getPaddingTop() - getPaddingBottom()) * 1.5f);
+                    int left = (getWidth() - size) / 2;
+                    int top = (getHeight() - size) / 2;
+                    foreground.setBounds(left, top, left + size, top + size);
+                } else {
+                    foreground.setBounds(-outerPadding, -outerPadding, getWidth() + outerPadding, getHeight() + outerPadding);
+                }
                 foreground.draw(canvas);
                 canvas.restore();
             }

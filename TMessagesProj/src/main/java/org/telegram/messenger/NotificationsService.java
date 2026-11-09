@@ -98,7 +98,7 @@ public class NotificationsService extends Service implements NotificationCenter.
         );
 
         NotificationCompat.Builder bldr = new NotificationCompat.Builder(this, "nimarkoPush")
-                .setSmallIcon(R.drawable.notification)
+                .setSmallIcon(org.telegram.ui.LauncherIconController.getNotificationIcon())
                 .setLargeIcon(org.telegram.ui.LauncherIconController.getActiveIconBitmap(this))
                 .setShowWhen(false)
                 .setOngoing(true)
