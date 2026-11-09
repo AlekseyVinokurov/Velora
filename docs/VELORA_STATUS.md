@@ -16,10 +16,25 @@ production-controller на host JVM (API-ветки 24/26/32/33/36/37, пере�
 миграция, перепривязка shortcuts, независимость notification-выбора и ошибки
 PackageManager/записи).
 Локальные Android SDK/NDK/CMake, Gradle и Android-сборки не запускались.
-Текущая проверка GitHub: все шесть Secrets уже настроены, предыдущая
-[сборка a9fa9328b](https://github.com/AlekseyVinokurov/Velora/actions/runs/42518972421)
-успешна; это ещё не проверка нового оформления. Результат нового CI будет
-зафиксирован после запуска существующего workflow. Release не публикуется.
+[GitHub Actions #42647476834](https://github.com/AlekseyVinokurov/Velora/actions/runs/42647476834)
+успешно собрал и проверил arm64 APK из `5d274abb4c611e3c1b525fc58dc9d72eb5ea6f6a`
+на GitHub-hosted Ubuntu: host-проверки иконок, компиляция Android, проверка
+applicationId/версии/подписи и загрузка артефакта — success.
+[APK и публичная квитанция](https://github.com/AlekseyVinokurov/Velora/actions/runs/42647476834/artifacts/13690261710)
+доступны в Artifacts (хранение семь дней). Постоянный SHA-256 сертификата:
+`a32f7e8239e47cc061ebabf226a88ab7dc3cf6224625f98ac6166b2966ea1842`.
+Скачанный APK дополнительно прочитан локально как ZIP/AXML/ARSC без Android SDK:
+16 launcher-aliases, активен только VeloraIcon, v26 adaptive + v33 monochrome,
+пять PNG-плотностей, белый notification vector, сохранённые BlueIcon и tg deep
+links. Сертификат APK совпадает с постоянным pin; SHA-256 совпадает с квитанцией CI.
+Размер APK — 76 471 343 байта, SHA-256:
+`f3d62d041ad3aa5385e8e973dd3f14acf4c81787110910123b623e003840dc24`.
+Локальная копия: `.local-build/ci-icons-42647476834/Velora-0.1.0-100000.apk`
+(игнорируется Git). Это не тест поведения на устройстве.
+
+Первый промежуточный запуск отменён до сборки, чтобы включить перенос shortcuts;
+приёмочным результатом является только указанный успешный запуск. GitHub Release
+не публиковался.
 
 Детали, ограничение Telegram API Terms §2.4 и обязательный тест на Pixel 8 /
 Android 17: [ICONS.md](ICONS.md). applicationId, постоянный ключ, авторизация,
