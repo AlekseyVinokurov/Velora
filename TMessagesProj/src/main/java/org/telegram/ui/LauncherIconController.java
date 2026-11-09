@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.Intent;
 import android.os.Build;
 
@@ -25,6 +27,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.R;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 
 public class LauncherIconController {
     private static final String PREF_NAME = "launcher_icon_pref";
@@ -103,6 +106,7 @@ public class LauncherIconController {
             // Also records the one-time migration, retaining names from older versions.
             preferences(ctx).edit().putString(KEY_ACTIVE_ICON, selected.name()).commit();
             sCachedActiveIcon = selected;
+            updateShortcutActivities(ctx);
         }
     }
 
@@ -255,9 +259,39 @@ public class LauncherIconController {
             return false;
         }
         sCachedActiveIcon = icon;
+        updateShortcutActivities(ctx);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appIconChanged, icon);
         refreshNotifications();
         return true;
+    }
+
+    private static void updateShortcutActivities(Context ctx) {
+        if (Build.VERSION.SDK_INT < 25) return;
+        Utilities.globalQueue.postRunnable(() -> updateShortcutActivitiesOnQueue(ctx));
+    }
+
+    private static void updateShortcutActivitiesOnQueue(Context ctx) {
+        // Read the latest choice on the same worker queue used to publish shortcuts.
+        LauncherIcon icon = getActiveIcon();
+        try {
+            ShortcutManager manager = ctx.getSystemService(ShortcutManager.class);
+            if (manager == null) return;
+            List<ShortcutInfo> existing = new ArrayList<>(manager.getDynamicShortcuts());
+            existing.addAll(manager.getPinnedShortcuts());
+            List<ShortcutInfo> changes = new ArrayList<>();
+            java.util.HashSet<String> ids = new java.util.HashSet<>();
+            ComponentName activity = icon.getComponentName(ctx);
+            for (ShortcutInfo shortcut : existing) {
+                if (shortcut.isEnabled() && !shortcut.isImmutable()
+                        && !activity.equals(shortcut.getActivity()) && ids.add(shortcut.getId())) {
+                    // Partial update retains the existing intents, labels and artwork.
+                    changes.add(new ShortcutInfo.Builder(ctx, shortcut.getId()).setActivity(activity).build());
+                }
+            }
+            if (!changes.isEmpty()) manager.updateShortcuts(changes);
+        } catch (Exception e) {
+            org.telegram.messenger.FileLog.e(e);
+        }
     }
 
     public static boolean useVeloraNotificationIcon() {

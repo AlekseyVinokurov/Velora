@@ -13,7 +13,8 @@ Android 13+ переключает aliases атомарно, старые вер
 
 Проверены ссылки ресурсов, XML, 16 вариантов aliases, десять PNG fallback и
 production-controller на host JVM (API-ветки 24/26/32/33/36/37, перезапуск,
-миграция, независимость notification-выбора и ошибки PackageManager/записи).
+миграция, перепривязка shortcuts, независимость notification-выбора и ошибки
+PackageManager/записи).
 Локальные Android SDK/NDK/CMake, Gradle и Android-сборки не запускались.
 Текущая проверка GitHub: все шесть Secrets уже настроены, предыдущая
 [сборка a9fa9328b](https://github.com/AlekseyVinokurov/Velora/actions/runs/42518972421)

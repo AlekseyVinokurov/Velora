@@ -88,6 +88,8 @@ public class LauncherIconControllerTest {
     static class Ctx extends Context {
         final Prefs prefs = new Prefs();
         final PM pm = new PM();
+        final ShortcutManager shortcuts = new ShortcutManager();
+        @Override public <T> T getSystemService(Class<T> type) {return type.cast(shortcuts);}
         public String getPackageName() { return "io.github.alekseyvinokurov.velora"; }
         public PackageManager getPackageManager() { return pm; }
         public SharedPreferences getSharedPreferences(String key, int mode) { return prefs; }
@@ -98,7 +100,15 @@ public class LauncherIconControllerTest {
     }
     static Ctx fresh(int sdk) throws Exception {
         clearCache(); Build.VERSION.SDK_INT = sdk;
-        Ctx context = new Ctx(); ApplicationLoader.applicationContext = context; return context;
+        Ctx context = new Ctx(); ApplicationLoader.applicationContext = context;
+        for (int i = 0; i < 4; i++) {
+            ShortcutInfo shortcut = new ShortcutInfo.Builder(context, "shortcut" + i)
+                    .setActivity(LauncherIcon.DEFAULT.getComponentName(context)).build();
+            shortcut.immutable = i == 2; shortcut.enabled = i != 3;
+            context.shortcuts.pinned.add(shortcut);
+            if (i == 0) context.shortcuts.dynamic.add(shortcut);
+        }
+        return context;
     }
     static void selected(Ctx ctx, LauncherIcon icon) {
         check(ctx.pm.count() == 1, "only one enabled launcher");
@@ -106,6 +116,11 @@ public class LauncherIconControllerTest {
         check(LauncherIconController.getActiveIcon() == icon, "cached selected icon: " + icon);
         check(ctx.prefs.getString("active_icon", "").equals(icon.name()), "selection persisted: " + icon);
         check(LauncherIconController.getActiveLauncherComponent(ctx).equals(icon.getComponentName(ctx)), "notification launch intent follows choice");
+        for (ShortcutInfo shortcut : ctx.shortcuts.pinned) {
+            boolean migrated = Build.VERSION.SDK_INT >= 25 && !shortcut.isImmutable() && shortcut.isEnabled();
+            check(shortcut.getActivity().equals((migrated ? icon : LauncherIcon.DEFAULT).getComponentName(ctx)), "shortcut activity follows choice");
+            check(shortcut.label.equals("retained") && shortcut.intent.equals("retained") && shortcut.artwork.equals("retained"), "shortcut contents retained");
+        }
     }
     public static void main(String[] args) throws Exception {
         for (int sdk : new int[]{24, 26, 32, 33, 36, 37}) {

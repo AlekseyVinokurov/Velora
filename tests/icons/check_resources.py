@@ -101,6 +101,8 @@ def main():
     theme = (java / 'org/telegram/ui/ThemeActivity.java').read_text()
     for expected in ['notificationIconRow = rowCount++', 'position == notificationIconRow', 'setVeloraNotificationIcon(which == 0)']:
         assert expected in theme
+    shortcuts = (java / 'org/telegram/messenger/MediaDataController.java').read_text()
+    assert shortcuts.count('.setActivity(org.telegram.ui.LauncherIconController.getActiveLauncherComponent(ApplicationLoader.applicationContext))') == 3
     print(f'Icon resources, {xml_count} XML files, all 16 aliases, 10 fallbacks, notification wiring: OK')
 
 

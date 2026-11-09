@@ -5112,6 +5112,7 @@ public class MediaDataController extends BaseController {
                 intent.setAction("new_dialog");
                 ArrayList<ShortcutInfoCompat> arrayList = new ArrayList<>();
                 ShortcutInfoCompat shortcut = new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, "compose")
+                        .setActivity(org.telegram.ui.LauncherIconController.getActiveLauncherComponent(ApplicationLoader.applicationContext))
                         .setShortLabel(LocaleController.getString(R.string.NewConversationShortcut))
                         .setLongLabel(LocaleController.getString(R.string.NewConversationShortcut))
                         .setIcon(IconCompat.createWithResource(ApplicationLoader.applicationContext, R.drawable.shortcut_compose))
@@ -5211,6 +5212,7 @@ public class MediaDataController extends BaseController {
                         name = " ";
                     }
                     ShortcutInfoCompat.Builder builder = new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, id)
+                        .setActivity(org.telegram.ui.LauncherIconController.getActiveLauncherComponent(ApplicationLoader.applicationContext))
                             .setShortLabel(name)
                             .setLongLabel(name)
                             .setRank(1 + a)
@@ -5863,6 +5865,7 @@ public class MediaDataController extends BaseController {
                 String idPrefix = type == SHORTCUT_TYPE_USER_OR_CHAT ? "sdid_" : "bdid_";
                 ShortcutInfoCompat.Builder pinShortcutInfo =
                     new ShortcutInfoCompat.Builder(ApplicationLoader.applicationContext, idPrefix + dialogId)
+                        .setActivity(org.telegram.ui.LauncherIconController.getActiveLauncherComponent(ApplicationLoader.applicationContext))
                         .setShortLabel(name)
                         .setIntent(shortcutIntent);
 
