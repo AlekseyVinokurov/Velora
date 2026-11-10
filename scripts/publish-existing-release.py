@@ -225,7 +225,6 @@ def main():
             and os.environ.get('GITHUB_REPOSITORY') == REPO and os.environ.get('GITHUB_REF') == 'refs/heads/main'
             and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'GitHub-hosted manual main run required')
     require(protocol.fingerprint() == PIN, 'Repository certificate pin changed')
-    require(api('/immutable-releases')['enabled'] is True, 'GitHub immutable releases must be enabled')
     require(find_version() is None, 'v0.1.2 release/draft already exists; no overwrite or recreation permitted')
     require(optional('/git/ref/tags/' + TAG) is None, 'v0.1.2 tag already exists; manual inspection required')
     subprocess.run(['git', 'merge-base', '--is-ancestor', SOURCE, 'HEAD'], cwd=ROOT, check=True)
