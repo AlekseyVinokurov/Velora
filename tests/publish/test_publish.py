@@ -89,6 +89,13 @@ class PromotionTest(unittest.TestCase):
                                'browser_download_url': f'https://github.com/{p.REPO}/releases/download/{p.TAG}/{name}'}
                               for name, data in files.items()]}
         p.check_assets(release, files)
+        draft = copy.deepcopy(release)
+        draft['draft'] = True
+        for asset in draft['assets']:
+            asset['browser_download_url'] = asset['browser_download_url'].replace(p.TAG, 'untagged-bbe0420cf8a4f0abfe64')
+        p.check_assets(draft, files)
+        draft['draft'] = False
+        with self.assertRaises(ValueError): p.check_assets(draft, files)
         missing = copy.deepcopy(release)
         missing['assets'].pop()
         with self.assertRaises(ValueError): p.check_assets(missing, files)

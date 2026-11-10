@@ -24,6 +24,8 @@ TAG = 'v0.1.1'
 SOURCE = '1c73e72079023fd7ed14fbdb7f0ee83ac13752a3'
 RUN = 42773454999
 ARTIFACT = 13743927737
+# The complete unpublished draft created by this workflow's first attempt. Never recreate it.
+RESUMABLE_DRAFT = 440073389
 ARCHIVE_SHA = 'ee396009ca7a82b045c56e00cd42d9ee56d8aaf23c0b80ef1a2844b79a0971e6'
 APK_NAME = 'Velora-0.1.1-100001.apk'
 APK_SHA = '58650c102147abc3f9d594c246b121911e9a140fc03b79a40f4428ff09b291f1'
@@ -183,9 +185,17 @@ def check_assets(release, files):
         require(len(matches) == 1, 'Missing or duplicate release asset: ' + name)
         asset = matches[0]
         require(asset['state'] == 'uploaded' and asset['size'] == len(data)
-                and asset['digest'] == 'sha256:' + sha(data)
-                and asset['browser_download_url'] == f'https://github.com/{REPO}/releases/download/{TAG}/{name}',
+                and asset['digest'] == 'sha256:' + sha(data),
                 'Release asset verification failed: ' + name)
+        url = asset['browser_download_url']
+        canonical = f'https://github.com/{REPO}/releases/download/{TAG}/{name}'
+        if release.get('draft') is True:
+            # GitHub assigns temporary untagged-* URLs until a draft is published.
+            prefix = f'https://github.com/{REPO}/releases/download/untagged-'
+            require(url == canonical or (url.startswith(prefix) and url.endswith('/' + name)
+                    and '/' not in url[len(prefix):-(len(name)+1)]), 'Unexpected draft asset URL')
+        else:
+            require(url == canonical, 'Unexpected public release asset URL')
 
 
 def main():
@@ -193,8 +203,13 @@ def main():
             and os.environ.get('GITHUB_REPOSITORY') == REPO and os.environ.get('GITHUB_REF') == 'refs/heads/main'
             and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'GitHub-hosted manual main run required')
     require(protocol.fingerprint() == PIN, 'Repository certificate pin changed')
-    # Fail before downloading/uploading if this version or its tag already exists, including drafts.
-    require(optional('/releases/tags/' + TAG) is None, 'v0.1.1 already exists; no overwrite or recreation permitted')
+    # A published version is immutable. Only our exact, complete private draft may be resumed.
+    existing = optional('/releases/tags/' + TAG)
+    if existing is not None:
+        require(existing['id'] == RESUMABLE_DRAFT and existing['draft'] is True
+                and existing['target_commitish'] == SOURCE and existing['tag_name'] == TAG
+                and existing['prerelease'] is False and existing['author']['login'] == 'github-actions[bot]',
+                'v0.1.1 already exists; no overwrite or recreation permitted')
     require(optional('/git/ref/tags/' + TAG) is None, 'v0.1.1 tag already exists; manual inspection required')
     subprocess.run(['git', 'merge-base', '--is-ancestor', SOURCE, 'HEAD'], cwd=ROOT, check=True)
     immutable = ['.github/workflows/android-release.yml', 'gradle.properties', 'release/certificate.sha256',
@@ -224,23 +239,30 @@ def main():
     candidate_path.write_text(json.dumps(candidate))
     subprocess.run(updater_check + [str(directory / 'velora-release.json'), str(candidate_path)], check=True)
     notes = (ROOT / 'release/notes-v0.1.1.md').read_text()
-    # Recheck immediately before mutation; create never updates an existing release.
-    require(optional('/releases/tags/' + TAG) is None and optional('/git/ref/tags/' + TAG) is None,
-            'Version appeared during verification; publication refused')
-    draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': SOURCE, 'name': 'Velora 0.1.1',
-                                    'body': notes, 'draft': True, 'prerelease': False})
+    # A resumed draft is never edited, re-uploaded, deleted or recreated.
+    if existing is not None:
+        draft = api(f'/releases/{RESUMABLE_DRAFT}')
+        require(draft['draft'] is True and draft['body'] == notes, 'Known draft changed; publication refused')
+    else:
+        require(optional('/releases/tags/' + TAG) is None and optional('/git/ref/tags/' + TAG) is None,
+                'Version appeared during verification; publication refused')
+        draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': SOURCE, 'name': 'Velora 0.1.1',
+                                        'body': notes, 'draft': True, 'prerelease': False})
     release_id = draft['id']
-    print(f'Created private draft {release_id}; failures leave it unpublished and never replace it.', flush=True)
+    print(f'Verifying private draft {release_id}; failures leave it unpublished.', flush=True)
     files = {name: (directory / name).read_bytes() for name in (APK_NAME, 'velora-release.json')}
-    upload_base = draft['upload_url'].split('{', 1)[0]
-    require(upload_base == f'https://uploads.github.com/repos/{REPO}/releases/{release_id}/assets', 'Unexpected upload URL')
-    for name, content in files.items():
-        request(upload_base + '?name=' + urllib.parse.quote(name), 'POST', content,
-                content_type='application/octet-stream')
+    if existing is None:
+        upload_base = draft['upload_url'].split('{', 1)[0]
+        require(upload_base == f'https://uploads.github.com/repos/{REPO}/releases/{release_id}/assets', 'Unexpected upload URL')
+        for name, content in files.items():
+            request(upload_base + '?name=' + urllib.parse.quote(name), 'POST', content,
+                    content_type='application/octet-stream')
     complete = api(f'/releases/{release_id}')
     require(complete['draft'] is True, 'Release ceased to be a draft during staging')
     check_assets(complete, files)
-    candidate_path.write_text(json.dumps({**complete, 'draft': False}))
+    candidate_path.write_text(json.dumps({**complete, 'draft': False,
+        'assets': [{**asset, 'browser_download_url': f'https://github.com/{REPO}/releases/download/{TAG}/{asset["name"]}'}
+                   for asset in complete['assets']]}))
     subprocess.run(updater_check + [str(directory / 'velora-release.json'), str(candidate_path)], check=True)
     published = api(f'/releases/{release_id}', 'PATCH', {'draft': False, 'prerelease': False, 'make_latest': 'true'})
     require(published['draft'] is False, 'Release publication failed')
