@@ -77,6 +77,13 @@ class PromotionTest(unittest.TestCase):
                         self.assertEqual(metadata['apk']['size'], len(payload))
                         self.assertEqual((Path(directory)/p.APK_NAME).read_bytes(), payload)
 
+    def test_draft_discovery_does_not_depend_on_tag_endpoint(self):
+        draft = {'id': p.RESUMABLE_DRAFT, 'tag_name': p.TAG, 'draft': True}
+        with patch.object(p, 'api', return_value=[draft]), patch.object(p, 'optional', return_value=None):
+            self.assertEqual(p.find_version(), draft)
+        with patch.object(p, 'api', return_value=[draft, {**draft, 'id': 2}]), patch.object(p, 'optional', return_value=None):
+            with self.assertRaises(ValueError): p.find_version()
+
     def test_duplicate_json_and_host_only_guard(self):
         with self.assertRaises(ValueError): p.parse('{"versionCode":100001,"versionCode":1}')
         with patch.dict(p.os.environ, {}, clear=True), self.assertRaises(ValueError): p.main()

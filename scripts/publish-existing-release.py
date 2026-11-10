@@ -103,6 +103,17 @@ def optional(path):
         raise
 
 
+def find_version():
+    # Unpublished drafts are omitted by /releases/tags/{tag}; enumerate them explicitly.
+    releases = api('/releases?per_page=100')
+    matches = [release for release in releases if release.get('tag_name') == TAG]
+    by_tag = optional('/releases/tags/' + TAG)
+    if by_tag is not None and all(release['id'] != by_tag['id'] for release in matches):
+        matches.append(by_tag)
+    require(len(matches) <= 1, 'Multiple matching releases/drafts; no automatic changes allowed')
+    return matches[0] if matches else None
+
+
 def check_provenance(run, artifact):
     require(run['id'] == RUN and run['status'] == 'completed' and run['conclusion'] == 'success'
             and run['event'] == 'workflow_dispatch' and run['path'] == '.github/workflows/android-release.yml'
@@ -204,7 +215,7 @@ def main():
             and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'GitHub-hosted manual main run required')
     require(protocol.fingerprint() == PIN, 'Repository certificate pin changed')
     # A published version is immutable. Only our exact, complete private draft may be resumed.
-    existing = optional('/releases/tags/' + TAG)
+    existing = find_version()
     if existing is not None:
         require(existing['id'] == RESUMABLE_DRAFT and existing['draft'] is True
                 and existing['target_commitish'] == SOURCE and existing['tag_name'] == TAG
@@ -244,7 +255,7 @@ def main():
         draft = api(f'/releases/{RESUMABLE_DRAFT}')
         require(draft['draft'] is True and draft['body'] == notes, 'Known draft changed; publication refused')
     else:
-        require(optional('/releases/tags/' + TAG) is None and optional('/git/ref/tags/' + TAG) is None,
+        require(find_version() is None and optional('/git/ref/tags/' + TAG) is None,
                 'Version appeared during verification; publication refused')
         draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': SOURCE, 'name': 'Velora 0.1.1',
                                         'body': notes, 'draft': True, 'prerelease': False})
