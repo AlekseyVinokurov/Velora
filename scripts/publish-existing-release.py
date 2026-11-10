@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Promote only the explicitly authorized v0.1.2 CI artifact on a GitHub-hosted runner.
+"""Manually promote one verified Android CI artifact on a GitHub-hosted runner.
 
 No Android toolchain, build, signing key or local APK download. The APK hash binds
 its identity and verified signer to the immutable, successful CI verification receipt.
@@ -21,13 +21,6 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'AlekseyVinokurov/Velora'
-TAG = 'v0.1.2'
-SOURCE = 'b2bc4a5781ccbe117c8ba083a06ff9ac9d748898'
-RUN = 42797176789
-ARTIFACT = 13755532358
-ARCHIVE_SHA = '30e4bcaeb85a270d65e2b4775b0f879a204e932f8d37f04fd5059093fac5ca5a'
-APK_NAME = 'Velora-0.1.2-100002.apk'
-APK_SHA = 'c63ae85cf165168d062cafbf7365c4958357179e56e1d8d3481aa5d6e893f389'
 PIN = 'a32f7e8239e47cc061ebabf226a88ab7dc3cf6224625f98ac6166b2966ea1842'
 API = 'https://api.github.com/repos/' + REPO
 LIMIT = 512 * 1024 * 1024
@@ -36,7 +29,7 @@ PUBLICATION_FILES = frozenset({
     'scripts/publish-existing-release.py',
     'tests/publish/test_publish.py',
     'tests/publish/UpdaterDiscoveryCheck.java',
-    'release/notes-v0.1.2.md',
+    'docs/PUBLISHING.ru.md',
 })
 spec = importlib.util.spec_from_file_location('velora_release_protocol', ROOT / 'scripts/release.py')
 protocol = importlib.util.module_from_spec(spec)
@@ -136,11 +129,11 @@ def optional(path):
         raise
 
 
-def find_version():
+def find_version(tag):
     # Unpublished drafts are omitted by /releases/tags/{tag}; enumerate them explicitly.
-    releases = api('/releases?per_page=100')
-    matches = [release for release in releases if release.get('tag_name') == TAG]
-    by_tag = optional('/releases/tags/' + TAG)
+    releases = pages('/releases')
+    matches = [release for release in releases if release.get('tag_name') == tag]
+    by_tag = optional('/releases/tags/' + tag)
     if by_tag is not None and all(release['id'] != by_tag['id'] for release in matches):
         matches.append(by_tag)
     require(len(matches) <= 1, 'Multiple matching releases/drafts; no automatic changes allowed')
@@ -153,57 +146,89 @@ def check_current_main(target):
             'Main advanced after dispatch; publication refused')
 
 
-def publication_target():
+def publication_target(source):
     target = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     require(re.fullmatch(r'[0-9a-f]{40}', target) is not None
             and os.environ.get('GITHUB_SHA') == target, 'Checkout does not match dispatched commit')
-    subprocess.run(['git', 'merge-base', '--is-ancestor', SOURCE, target], cwd=ROOT, check=True)
+    subprocess.run(['git', 'merge-base', '--is-ancestor', source, target], cwd=ROOT, check=True)
     require(not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'],
                                         cwd=ROOT, text=True), 'Tracked publication files are modified')
     # Inspect every intervening commit, including changes later reverted and both
     # sides of renames. A final tree diff alone would miss those changes.
     paths = subprocess.check_output(['git', 'log', '--format=', '--name-only', '-z', '--no-renames',
                                      '--diff-merges=first-parent',
-                                     SOURCE + '..' + target], cwd=ROOT, text=True)
+                                     source + '..' + target], cwd=ROOT, text=True)
     changed = {path for path in paths.split('\0') if path}
-    require(changed <= PUBLICATION_FILES, 'Non-publication changes after APK source; publication refused')
+    require(all(path in PUBLICATION_FILES or re.fullmatch(r'release/notes-v(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.md', path)
+                for path in changed), 'Non-publication changes after APK source; publication refused')
     check_current_main(target)
     return target
 
 
-def check_provenance(run, artifact):
-    require(run['id'] == RUN and run['status'] == 'completed' and run['conclusion'] == 'success'
-            and run['event'] == 'workflow_dispatch' and run['path'] == '.github/workflows/android-release.yml'
-            and run['head_sha'] == SOURCE and run['head_branch'] == 'main' and run['run_attempt'] == 1
-            and run['head_repository']['full_name'] == REPO, 'Build run provenance mismatch')
-    require(artifact['id'] == ARTIFACT and artifact['expired'] is False
-            and artifact['name'] == 'Velora-release-arm64-42797176789-1'
-            and artifact['digest'] == 'sha256:' + ARCHIVE_SHA
-            and artifact['workflow_run']['id'] == RUN and artifact['workflow_run']['head_sha'] == SOURCE
-            and artifact['workflow_run']['head_branch'] == 'main', 'Artifact provenance mismatch')
+def run_id(value):
+    require(isinstance(value, str) and re.fullmatch(r'[1-9][0-9]{0,18}', value) is not None,
+            'run_id must be a positive decimal Android build run ID')
+    return int(value)
 
 
-def validate_receipt(receipt, actual_hash, actual_size):
-    expected = {'applicationId': protocol.PACKAGE, 'versionCode': 100002, 'versionName': '0.1.2',
-                'minSdk': 24, 'sha256': APK_SHA, 'certificateSha256': PIN, 'sourceCommit': SOURCE}
-    require(set(receipt) == set(expected) | {'size'}, 'Unexpected CI receipt fields')
-    for key, value in expected.items():
-        require(type(receipt[key]) is type(value) and receipt[key] == value, 'CI receipt mismatch: ' + key)
-    require(type(receipt['size']) is int and receipt['size'] == actual_size and 0 < actual_size <= LIMIT,
-            'CI receipt APK size mismatch')
-    require(actual_hash == APK_SHA, 'APK SHA-256 mismatch')
+def pages(path, key=None):
+    for page in range(1, 101):
+        result = api(path + ('&' if '?' in path else '?') + f'per_page=100&page={page}')
+        items = result[key] if key else result
+        require(isinstance(items, list), 'Invalid GitHub collection')
+        yield from items
+        if len(items) < 100:
+            return
+    raise ValueError('GitHub collection exceeds safe pagination limit')
+
+
+def check_run(run, requested):
+    require(type(run['id']) is int and run['id'] == requested and run['status'] == 'completed'
+            and run['conclusion'] == 'success' and run['event'] == 'workflow_dispatch'
+            and run['path'] == '.github/workflows/android-release.yml' and run['head_branch'] == 'main'
+            and run['head_repository']['full_name'] == REPO and run['repository']['full_name'] == REPO
+            and isinstance(run['head_sha'], str) and re.fullmatch(r'[0-9a-f]{40}', run['head_sha'])
+            and type(run['run_attempt']) is int and run['run_attempt'] > 0,
+            'Expected a successful official Android release workflow run from main')
+
+
+def select_artifact(run, artifacts):
+    pattern = rf"Velora-release-(arm64|universal)-{run['id']}-{run['run_attempt']}"
+    matches = [artifact for artifact in artifacts if re.fullmatch(pattern, artifact['name'])]
+    require(len(matches) == 1, 'Expected exactly one release Artifact for this build attempt')
+    artifact = matches[0]
+    require(type(artifact['id']) is int and artifact['id'] > 0 and artifact['expired'] is False
+            and isinstance(artifact.get('digest'), str)
+            and re.fullmatch(r'sha256:[0-9a-f]{64}', artifact['digest'])
+            and artifact['workflow_run']['id'] == run['id']
+            and artifact['workflow_run']['head_sha'] == run['head_sha']
+            and artifact['workflow_run']['head_branch'] == 'main', 'Artifact provenance/expiry/digest mismatch')
+    return artifact
+
+
+def validate_receipt(receipt, source):
+    fields = {'applicationId', 'versionCode', 'versionName', 'minSdk', 'sha256',
+              'certificateSha256', 'sourceCommit', 'size'}
+    require(isinstance(receipt, dict) and set(receipt) == fields, 'Unexpected CI receipt fields')
+    require(receipt['sourceCommit'] == source and type(receipt['minSdk']) is int
+            and receipt['minSdk'] == 24, 'CI receipt source/minSdk mismatch')
+    # The authenticated Artifact digest binds these bytes to the successful CI
+    # signature/package verification. No Android SDK or signing key is used here.
+    version, code = receipt['versionName'], receipt['versionCode']
     metadata = {'schemaVersion': 1, 'repository': REPO, 'channel': 'stable',
-                'applicationId': receipt['applicationId'], 'versionName': receipt['versionName'],
-                'versionCode': receipt['versionCode'], 'tag': TAG, 'sourceCommit': SOURCE, 'minSdk': receipt['minSdk'],
-                'apk': {'name': APK_NAME, 'size': actual_size, 'sha256': APK_SHA, 'certificateSha256': PIN}}
+                'applicationId': receipt['applicationId'], 'versionName': version,
+                'versionCode': code, 'tag': 'v' + str(version), 'sourceCommit': source, 'minSdk': receipt['minSdk'],
+                'apk': {'name': f'Velora-{version}-{code}.apk', 'size': receipt['size'],
+                        'sha256': receipt['sha256'], 'certificateSha256': receipt['certificateSha256']}}
     return protocol.validate_metadata(metadata, PIN)
 
 
-def check_build_jobs(response):
-    require(response['total_count'] == 1 and len(response['jobs']) == 1, 'Unexpected build jobs')
-    job = response['jobs'][0]
-    require(job['run_id'] == RUN and job['run_attempt'] == 1 and job['conclusion'] == 'success'
-            and job['runner_group_name'] == 'GitHub Actions', 'Build did not pass on a GitHub-hosted runner')
+def check_build_jobs(run, jobs):
+    require(len(jobs) == 1, 'Unexpected build jobs')
+    job = jobs[0]
+    require(job['run_id'] == run['id'] and job['run_attempt'] == run['run_attempt']
+            and job['conclusion'] == 'success' and job['runner_group_name'] == 'GitHub Actions',
+            'Build did not pass on a GitHub-hosted runner')
     for name in ('Build and verify with the existing permanent release key',
                  'Validate and install Firebase client config from protected environment',
                  'Verify Firebase configuration in the signed APK'):
@@ -212,26 +237,29 @@ def check_build_jobs(response):
                 'Required CI verification did not pass: ' + name)
 
 
-def unpack(data, destination):
-    require(sha(data) == ARCHIVE_SHA, 'Artifact archive digest mismatch')
+def unpack(data, destination, run, artifact):
+    require(sha(data) == artifact['digest'][7:], 'Artifact archive digest mismatch')
     with zipfile.ZipFile(io.BytesIO(data)) as archive:
-        require(sorted(archive.namelist()) == sorted([APK_NAME, 'stable-build.json']), 'Unexpected artifact entries')
-        for entry in archive.infolist():
+        entries = archive.infolist()
+        require(len(entries) == 2 and len(set(archive.namelist())) == 2, 'Unexpected artifact entries')
+        for entry in entries:
             require(not entry.is_dir() and not entry.flag_bits & 1 and 0 < entry.file_size <= LIMIT,
                     'Invalid artifact entry')
         receipt_info = archive.getinfo('stable-build.json')
         require(receipt_info.file_size <= 64 * 1024, 'Oversized receipt')
-        receipt = parse(archive.read(receipt_info))
+        metadata = validate_receipt(parse(archive.read(receipt_info)), run['head_sha'])
+        name = metadata['apk']['name']
+        require(sorted(archive.namelist()) == sorted([name, 'stable-build.json']), 'Unexpected artifact entries')
         digest = hashlib.sha256()
         size = 0
-        target = destination / APK_NAME
-        with archive.open(APK_NAME) as source, target.open('xb') as out:
+        with archive.open(name) as source, (destination / name).open('xb') as out:
             while chunk := source.read(1024 * 1024):
                 size += len(chunk)
                 require(size <= LIMIT, 'Oversized APK')
                 digest.update(chunk)
                 out.write(chunk)
-    metadata = validate_receipt(receipt, digest.hexdigest(), size)
+    require(size == metadata['apk']['size'], 'CI receipt APK size mismatch')
+    require(digest.hexdigest() == metadata['apk']['sha256'], 'APK SHA-256 mismatch')
     (destination / 'velora-release.json').write_text(json.dumps(metadata, indent=2) + '\n')
     return metadata
 
@@ -256,8 +284,9 @@ def prepare_updater_check(directory):
     return ['java', '-cp', str(directory) + os.pathsep + classpath, 'UpdaterDiscoveryCheck', PIN]
 
 
-def check_assets(release, files, target):
-    require(release['tag_name'] == TAG and release['target_commitish'] == target
+def check_assets(release, files, target, metadata):
+    tag = metadata['tag']
+    require(release['tag_name'] == tag and release['target_commitish'] == target
             and release['prerelease'] is False, 'Release identity mismatch')
     assets = release['assets']
     require(len(assets) == len(files), 'Incomplete or unexpected release assets')
@@ -269,7 +298,7 @@ def check_assets(release, files, target):
                 and asset['digest'] == 'sha256:' + sha(data),
                 'Release asset verification failed: ' + name)
         url = asset['browser_download_url']
-        canonical = f'https://github.com/{REPO}/releases/download/{TAG}/{name}'
+        canonical = f'https://github.com/{REPO}/releases/download/{tag}/{name}'
         if release.get('draft') is True:
             # GitHub assigns temporary untagged-* URLs until a draft is published.
             prefix = f'https://github.com/{REPO}/releases/download/untagged-'
@@ -279,81 +308,135 @@ def check_assets(release, files, target):
             require(url == canonical, 'Unexpected public release asset URL')
 
 
+def release_notes(metadata, run, artifact, target):
+    path = ROOT / 'release' / ('notes-' + metadata['tag'] + '.md')
+    text = path.read_text() if path.is_file() else (
+        f"Velora {metadata['versionName']} ({metadata['versionCode']}).\n\n"
+        'Готовый проверенный APK из GitHub Actions, без пересборки. '
+        'Постоянная подпись и applicationId сохранены. '
+        'Устанавливайте поверх существующей Velora, не удаляя приложение.\n')
+    require(len(text.encode()) <= 32 * 1024, 'Release notes exceed safe limit')
+    marker = {'run': run['id'], 'attempt': run['run_attempt'], 'artifact': artifact['id'],
+              'archive': artifact['digest'], 'source': metadata['sourceCommit'], 'target': target}
+    return text.rstrip() + '\n\n<!-- velora-promotion:' + json.dumps(marker, sort_keys=True) + ' -->\n'
+
+
+def check_existing(existing, files, target, metadata, notes):
+    if existing is None:
+        return
+    require(existing['draft'] is True, 'Version is already published; no overwrite permitted')
+    require(existing['author']['login'] == 'github-actions[bot]' and existing['body'] == notes
+            and existing['name'] == 'Velora ' + metadata['versionName']
+            and existing.get('immutable') is not True, 'Unrecognized draft; manual inspection required')
+    # Only a complete, identical draft from this exact build and publication
+    # commit may resume. Never replace, delete or re-upload any existing asset.
+    check_assets(existing, files, target, metadata)
+
+
+def previous_version_code(metadata):
+    try:
+        return protocol.check_previous(metadata['versionCode'], metadata['versionName']) or 0
+    except urllib.error.HTTPError as error:
+        # The shared release protocol also fetches public metadata with GET.
+        # Give its failures the same bounded, redacted diagnostics as our API.
+        with error:
+            details = error.read(64 * 1024)
+        raise GitHubAPIError(error.code, 'GET', error.url, details) from None
+
+
+def candidate_release(metadata, files, target):
+    tag = metadata['tag']
+    return {'tag_name': tag, 'target_commitish': target, 'draft': False, 'prerelease': False,
+            'assets': [{'name': name, 'size': len(data), 'state': 'uploaded',
+                        'digest': 'sha256:' + sha(data),
+                        'browser_download_url': f'https://github.com/{REPO}/releases/download/{tag}/{name}'}
+                       for name, data in files.items()]}
+
+
 def main():
     require(os.environ.get('GITHUB_ACTIONS') == 'true' and os.environ.get('RUNNER_ENVIRONMENT') == 'github-hosted'
             and os.environ.get('GITHUB_REPOSITORY') == REPO and os.environ.get('GITHUB_REF') == 'refs/heads/main'
             and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'GitHub-hosted manual main run required')
+    requested = run_id(os.environ.get('RUN_ID'))
     require(protocol.fingerprint() == PIN, 'Repository certificate pin changed')
-    target = publication_target()
-    require(find_version() is None, 'v0.1.2 release/draft already exists; no overwrite or recreation permitted')
-    require(optional('/git/ref/tags/' + TAG) is None, 'v0.1.2 tag already exists; manual inspection required')
-    previous = api('/releases/latest')
-    require(previous['tag_name'] == 'v0.1.1' and previous['draft'] is False and previous['prerelease'] is False,
-            'Expected previous stable v0.1.1')
-    protocol.check_previous(100002, '0.1.2')
-    check_provenance(api(f'/actions/runs/{RUN}'), api(f'/actions/artifacts/{ARTIFACT}'))
-    check_build_jobs(api(f'/actions/runs/{RUN}/jobs?filter=latest&per_page=100'))
-    directory = Path(os.environ['RUNNER_TEMP']) / 'velora-v0.1.2-promotion'
+    run = api(f'/actions/runs/{requested}')
+    check_run(run, requested)
+    target = publication_target(run['head_sha'])
+    check_build_jobs(run, list(pages(f'/actions/runs/{requested}/jobs?filter=latest', 'jobs')))
+    artifact = select_artifact(run, list(pages(f'/actions/runs/{requested}/artifacts', 'artifacts')))
+    directory = Path(os.environ['RUNNER_TEMP']) / f'velora-promotion-{requested}'
     directory.mkdir(mode=0o700)
-    # This is the sole APK download, and the environment guard above requires a hosted runner.
-    data = request(API + f'/actions/artifacts/{ARTIFACT}/zip', limit=LIMIT + 1024 * 1024)
-    metadata = unpack(data, directory)
+    # Sole APK download: reachable only after the hosted-runner guard and provenance checks.
+    data = request(API + f"/actions/artifacts/{artifact['id']}/zip", limit=LIMIT + 1024 * 1024)
+    metadata = unpack(data, directory, run, artifact)
     del data
-    updater_check = prepare_updater_check(directory)
-    # Prove compatibility with the *installed client's production parser* before creating a draft.
-    candidate = {'tag_name': TAG, 'target_commitish': target, 'draft': False, 'prerelease': False,
-                 'assets': [{'name': name, 'size': path.stat().st_size, 'state': 'uploaded',
-                             'digest': 'sha256:' + protocol.digest(path),
-                             'browser_download_url': f'https://github.com/{REPO}/releases/download/{TAG}/{name}'}
-                            for name, path in [(APK_NAME, directory / APK_NAME),
-                                               ('velora-release.json', directory / 'velora-release.json')]]}
+    tag, name = metadata['tag'], metadata['apk']['name']
+    files = {asset: (directory / asset).read_bytes() for asset in (name, 'velora-release.json')}
+    notes = release_notes(metadata, run, artifact, target)
+    existing = find_version(tag)
+    check_existing(existing, files, target, metadata, notes)
+    require(optional('/git/ref/tags/' + tag) is None, 'Tag already exists; no overwrite permitted')
+    previous_code = previous_version_code(metadata)
+    updater_check = prepare_updater_check(directory) + [str(directory / 'velora-release.json'), str(previous_code)]
     candidate_path = directory / 'candidate.json'
-    candidate_path.write_text(json.dumps(candidate))
-    subprocess.run(updater_check + [str(directory / 'velora-release.json'), str(candidate_path)], check=True)
-    notes = (ROOT / 'release/notes-v0.1.2.md').read_text()
-    require(find_version() is None and optional('/git/ref/tags/' + TAG) is None,
-            'Version appeared during verification; publication refused')
+    candidate_path.write_text(json.dumps(candidate_release(metadata, files, target)))
+    subprocess.run(updater_check + [str(candidate_path)], check=True)
     check_current_main(target)
-    draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': target, 'name': 'Velora 0.1.2',
-                                    'body': notes, 'draft': True, 'prerelease': False})
+    if existing is None:
+        require(find_version(tag) is None and optional('/git/ref/tags/' + tag) is None,
+                'Version appeared during verification; publication refused')
+        draft = api('/releases', 'POST', {'tag_name': tag, 'target_commitish': target,
+                                        'name': 'Velora ' + metadata['versionName'],
+                                        'body': notes, 'draft': True, 'prerelease': False})
+        upload_base = draft['upload_url'].split('{', 1)[0]
+        require(upload_base == f"https://uploads.github.com/repos/{REPO}/releases/{draft['id']}/assets",
+                'Unexpected upload URL')
+        for asset, content in files.items():
+            request(upload_base + '?name=' + urllib.parse.quote(asset), 'POST', content,
+                    content_type='application/octet-stream')
+    else:
+        draft = existing
     release_id = draft['id']
     print(f'Verifying private draft {release_id}; failures leave it unpublished.', flush=True)
-    files = {name: (directory / name).read_bytes() for name in (APK_NAME, 'velora-release.json')}
-    upload_base = draft['upload_url'].split('{', 1)[0]
-    require(upload_base == f'https://uploads.github.com/repos/{REPO}/releases/{release_id}/assets', 'Unexpected upload URL')
-    for name, content in files.items():
-        request(upload_base + '?name=' + urllib.parse.quote(name), 'POST', content,
-                content_type='application/octet-stream')
     complete = api(f'/releases/{release_id}')
-    require(complete['draft'] is True, 'Release ceased to be a draft during staging')
-    check_assets(complete, files, target)
+    check_existing(complete, files, target, metadata, notes)
     candidate_path.write_text(json.dumps({**complete, 'draft': False,
-        'assets': [{**asset, 'browser_download_url': f'https://github.com/{REPO}/releases/download/{TAG}/{asset["name"]}'}
+        'assets': [{**asset, 'browser_download_url': f'https://github.com/{REPO}/releases/download/{tag}/{asset["name"]}'}
                    for asset in complete['assets']]}))
-    subprocess.run(updater_check + [str(directory / 'velora-release.json'), str(candidate_path)], check=True)
+    subprocess.run(updater_check + [str(candidate_path)], check=True)
+    check_current_main(target)
+    require(optional('/git/ref/tags/' + tag) is None, 'Tag appeared during staging; publication refused')
     published = api(f'/releases/{release_id}', 'PATCH', {'draft': False, 'prerelease': False, 'make_latest': 'true'})
     require(published['draft'] is False and published.get('immutable') is True,
             'Release publication/immutability verification failed')
-    check_assets(published, files, target)
-    ref = api('/git/ref/tags/' + TAG)['object']
+    check_assets(published, files, target, metadata)
+    # Confirm the published resource, not just the PATCH response.
+    confirmed = api(f'/releases/{release_id}')
+    require(confirmed['draft'] is False and confirmed.get('immutable') is True,
+            'GitHub has not confirmed the immutable published release')
+    check_assets(confirmed, files, target, metadata)
+    ref = api('/git/ref/tags/' + tag)['object']
     require(ref['type'] == 'commit' and ref['sha'] == target, 'Published tag target mismatch')
-    # Public API and actual production discovery (no token), allowing bounded CDN propagation.
+    # Read-only checks allow bounded CDN propagation; publication is never retried.
     for attempt in range(5):
         try:
             public = parse(request(API + '/releases/latest', authenticated=False))
-            require(public['draft'] is False and public['tag_name'] == TAG, 'Public latest endpoint has not propagated')
-            check_assets(public, files, target)
+            require(public['draft'] is False and public['tag_name'] == tag, 'Public latest endpoint has not propagated')
+            check_assets(public, files, target, metadata)
             subprocess.run(updater_check, check=True)
             break
         except (ValueError, urllib.error.URLError, subprocess.CalledProcessError):
             if attempt == 4:
                 raise
             time.sleep(10)
-    url = f'https://github.com/{REPO}/releases/download/{TAG}/{APK_NAME}'
+    release_url = f'https://github.com/{REPO}/releases/tag/{tag}'
+    url = f'https://github.com/{REPO}/releases/download/{tag}/{name}'
     print('PUBLISHED AND DISCOVERED: ' + url)
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
-        summary.write(f'## Velora 0.1.2 published\n\n[APK]({url})\n\n'
-                      f'- APK source: `{SOURCE}`\n- Release/tag target: `{target}`\n- APK SHA-256: `{APK_SHA}`\n'
+        summary.write(f'## Velora {metadata["versionName"]} published\n\n[Release]({release_url}) · [APK]({url})\n\n'
+                      f'- Build: `{requested}`, Artifact: `{artifact["id"]}`\n'
+                      f'- APK source: `{metadata["sourceCommit"]}`\n- Release/tag target: `{target}`\n'
+                      f'- APK SHA-256: `{metadata["apk"]["sha256"]}`\n'
                       '- Existing CI receipt and archive verified; no Android build or SDK used.\n'
                       '- Both assets verified before leaving draft. Public production updater discovery: PASS.\n')
 
