@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Promote only the explicitly authorized v0.1.1 CI artifact on a GitHub-hosted runner.
+"""Promote only the explicitly authorized v0.1.2 CI artifact on a GitHub-hosted runner.
 
 No Android toolchain, build, signing key or local APK download. The APK hash binds
 its identity and verified signer to the immutable, successful CI verification receipt.
@@ -20,15 +20,13 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = 'AlekseyVinokurov/Velora'
-TAG = 'v0.1.1'
-SOURCE = '1c73e72079023fd7ed14fbdb7f0ee83ac13752a3'
-RUN = 42773454999
-ARTIFACT = 13743927737
-# The complete unpublished draft created by this workflow's first attempt. Never recreate it.
-RESUMABLE_DRAFT = 440073389
-ARCHIVE_SHA = 'ee396009ca7a82b045c56e00cd42d9ee56d8aaf23c0b80ef1a2844b79a0971e6'
-APK_NAME = 'Velora-0.1.1-100001.apk'
-APK_SHA = '58650c102147abc3f9d594c246b121911e9a140fc03b79a40f4428ff09b291f1'
+TAG = 'v0.1.2'
+SOURCE = 'b2bc4a5781ccbe117c8ba083a06ff9ac9d748898'
+RUN = 42797176789
+ARTIFACT = 13755532358
+ARCHIVE_SHA = '30e4bcaeb85a270d65e2b4775b0f879a204e932f8d37f04fd5059093fac5ca5a'
+APK_NAME = 'Velora-0.1.2-100002.apk'
+APK_SHA = 'c63ae85cf165168d062cafbf7365c4958357179e56e1d8d3481aa5d6e893f389'
 PIN = 'a32f7e8239e47cc061ebabf226a88ab7dc3cf6224625f98ac6166b2966ea1842'
 API = 'https://api.github.com/repos/' + REPO
 LIMIT = 512 * 1024 * 1024
@@ -120,14 +118,14 @@ def check_provenance(run, artifact):
             and run['head_sha'] == SOURCE and run['head_branch'] == 'main' and run['run_attempt'] == 1
             and run['head_repository']['full_name'] == REPO, 'Build run provenance mismatch')
     require(artifact['id'] == ARTIFACT and artifact['expired'] is False
-            and artifact['name'] == 'Velora-release-arm64-42773454999-1'
+            and artifact['name'] == 'Velora-release-arm64-42797176789-1'
             and artifact['digest'] == 'sha256:' + ARCHIVE_SHA
             and artifact['workflow_run']['id'] == RUN and artifact['workflow_run']['head_sha'] == SOURCE
             and artifact['workflow_run']['head_branch'] == 'main', 'Artifact provenance mismatch')
 
 
 def validate_receipt(receipt, actual_hash, actual_size):
-    expected = {'applicationId': protocol.PACKAGE, 'versionCode': 100001, 'versionName': '0.1.1',
+    expected = {'applicationId': protocol.PACKAGE, 'versionCode': 100002, 'versionName': '0.1.2',
                 'minSdk': 24, 'sha256': APK_SHA, 'certificateSha256': PIN, 'sourceCommit': SOURCE}
     require(set(receipt) == set(expected) | {'size'}, 'Unexpected CI receipt fields')
     for key, value in expected.items():
@@ -140,6 +138,19 @@ def validate_receipt(receipt, actual_hash, actual_size):
                 'versionCode': receipt['versionCode'], 'tag': TAG, 'sourceCommit': SOURCE, 'minSdk': receipt['minSdk'],
                 'apk': {'name': APK_NAME, 'size': actual_size, 'sha256': APK_SHA, 'certificateSha256': PIN}}
     return protocol.validate_metadata(metadata, PIN)
+
+
+def check_build_jobs(response):
+    require(response['total_count'] == 1 and len(response['jobs']) == 1, 'Unexpected build jobs')
+    job = response['jobs'][0]
+    require(job['run_id'] == RUN and job['run_attempt'] == 1 and job['conclusion'] == 'success'
+            and job['runner_group_name'] == 'GitHub Actions', 'Build did not pass on a GitHub-hosted runner')
+    for name in ('Build and verify with the existing permanent release key',
+                 'Validate and install Firebase client config from protected environment',
+                 'Verify Firebase configuration in the signed APK'):
+        matches = [step for step in job['steps'] if step['name'] == name]
+        require(len(matches) == 1 and matches[0]['conclusion'] == 'success',
+                'Required CI verification did not pass: ' + name)
 
 
 def unpack(data, destination):
@@ -214,25 +225,21 @@ def main():
             and os.environ.get('GITHUB_REPOSITORY') == REPO and os.environ.get('GITHUB_REF') == 'refs/heads/main'
             and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'GitHub-hosted manual main run required')
     require(protocol.fingerprint() == PIN, 'Repository certificate pin changed')
-    # A published version is immutable. Only our exact, complete private draft may be resumed.
-    existing = find_version()
-    if existing is not None:
-        require(existing['id'] == RESUMABLE_DRAFT and existing['draft'] is True
-                and existing['target_commitish'] == SOURCE and existing['tag_name'] == TAG
-                and existing['prerelease'] is False and existing['author']['login'] == 'github-actions[bot]',
-                'v0.1.1 already exists; no overwrite or recreation permitted')
-    require(optional('/git/ref/tags/' + TAG) is None, 'v0.1.1 tag already exists; manual inspection required')
+    require(api('/immutable-releases')['enabled'] is True, 'GitHub immutable releases must be enabled')
+    require(find_version() is None, 'v0.1.2 release/draft already exists; no overwrite or recreation permitted')
+    require(optional('/git/ref/tags/' + TAG) is None, 'v0.1.2 tag already exists; manual inspection required')
     subprocess.run(['git', 'merge-base', '--is-ancestor', SOURCE, 'HEAD'], cwd=ROOT, check=True)
     immutable = ['.github/workflows/android-release.yml', 'gradle.properties', 'release/certificate.sha256',
                  'scripts/release.py', 'TMessagesProj/src/main/java/app/nimarkogram/messenger/updater/VeloraRelease.java',
                  'TMessagesProj/src/main/java/app/nimarkogram/messenger/updater/GitHubReleaseClient.java']
     subprocess.run(['git', 'diff', '--exit-code', SOURCE, 'HEAD', '--', *immutable], cwd=ROOT, check=True)
     previous = api('/releases/latest')
-    require(previous['tag_name'] == 'v0.1.0' and previous['draft'] is False and previous['prerelease'] is False,
-            'Expected previous stable v0.1.0')
-    protocol.check_previous(100001, '0.1.1')
+    require(previous['tag_name'] == 'v0.1.1' and previous['draft'] is False and previous['prerelease'] is False,
+            'Expected previous stable v0.1.1')
+    protocol.check_previous(100002, '0.1.2')
     check_provenance(api(f'/actions/runs/{RUN}'), api(f'/actions/artifacts/{ARTIFACT}'))
-    directory = Path(os.environ['RUNNER_TEMP']) / 'velora-v0.1.1-promotion'
+    check_build_jobs(api(f'/actions/runs/{RUN}/jobs?filter=latest&per_page=100'))
+    directory = Path(os.environ['RUNNER_TEMP']) / 'velora-v0.1.2-promotion'
     directory.mkdir(mode=0o700)
     # This is the sole APK download, and the environment guard above requires a hosted runner.
     data = request(API + f'/actions/artifacts/{ARTIFACT}/zip', limit=LIMIT + 1024 * 1024)
@@ -249,25 +256,19 @@ def main():
     candidate_path = directory / 'candidate.json'
     candidate_path.write_text(json.dumps(candidate))
     subprocess.run(updater_check + [str(directory / 'velora-release.json'), str(candidate_path)], check=True)
-    notes = (ROOT / 'release/notes-v0.1.1.md').read_text()
-    # A resumed draft is never edited, re-uploaded, deleted or recreated.
-    if existing is not None:
-        draft = api(f'/releases/{RESUMABLE_DRAFT}')
-        require(draft['draft'] is True and draft['body'] == notes, 'Known draft changed; publication refused')
-    else:
-        require(find_version() is None and optional('/git/ref/tags/' + TAG) is None,
-                'Version appeared during verification; publication refused')
-        draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': SOURCE, 'name': 'Velora 0.1.1',
-                                        'body': notes, 'draft': True, 'prerelease': False})
+    notes = (ROOT / 'release/notes-v0.1.2.md').read_text()
+    require(find_version() is None and optional('/git/ref/tags/' + TAG) is None,
+            'Version appeared during verification; publication refused')
+    draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': SOURCE, 'name': 'Velora 0.1.2',
+                                    'body': notes, 'draft': True, 'prerelease': False})
     release_id = draft['id']
     print(f'Verifying private draft {release_id}; failures leave it unpublished.', flush=True)
     files = {name: (directory / name).read_bytes() for name in (APK_NAME, 'velora-release.json')}
-    if existing is None:
-        upload_base = draft['upload_url'].split('{', 1)[0]
-        require(upload_base == f'https://uploads.github.com/repos/{REPO}/releases/{release_id}/assets', 'Unexpected upload URL')
-        for name, content in files.items():
-            request(upload_base + '?name=' + urllib.parse.quote(name), 'POST', content,
-                    content_type='application/octet-stream')
+    upload_base = draft['upload_url'].split('{', 1)[0]
+    require(upload_base == f'https://uploads.github.com/repos/{REPO}/releases/{release_id}/assets', 'Unexpected upload URL')
+    for name, content in files.items():
+        request(upload_base + '?name=' + urllib.parse.quote(name), 'POST', content,
+                content_type='application/octet-stream')
     complete = api(f'/releases/{release_id}')
     require(complete['draft'] is True, 'Release ceased to be a draft during staging')
     check_assets(complete, files)
@@ -276,7 +277,8 @@ def main():
                    for asset in complete['assets']]}))
     subprocess.run(updater_check + [str(directory / 'velora-release.json'), str(candidate_path)], check=True)
     published = api(f'/releases/{release_id}', 'PATCH', {'draft': False, 'prerelease': False, 'make_latest': 'true'})
-    require(published['draft'] is False, 'Release publication failed')
+    require(published['draft'] is False and published.get('immutable') is True,
+            'Release publication/immutability verification failed')
     check_assets(published, files)
     ref = api('/git/ref/tags/' + TAG)['object']
     require(ref['type'] == 'commit' and ref['sha'] == SOURCE, 'Published tag source mismatch')
@@ -295,7 +297,7 @@ def main():
     url = f'https://github.com/{REPO}/releases/download/{TAG}/{APK_NAME}'
     print('PUBLISHED AND DISCOVERED: ' + url)
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
-        summary.write(f'## Velora 0.1.1 published\n\n[APK]({url})\n\n'
+        summary.write(f'## Velora 0.1.2 published\n\n[APK]({url})\n\n'
                       f'- Source: `{SOURCE}`\n- APK SHA-256: `{APK_SHA}`\n'
                       '- Existing CI receipt and archive verified; no Android build or SDK used.\n'
                       '- Both assets verified before leaving draft. Public production updater discovery: PASS.\n')

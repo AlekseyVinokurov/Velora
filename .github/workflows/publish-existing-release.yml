@@ -1,5 +1,5 @@
-name: Publish verified Velora 0.1.1
-run-name: Publish existing Velora 0.1.1 (100001) by @${{ github.actor }}
+name: Publish verified Velora 0.1.2
+run-name: Publish existing Velora 0.1.2 (100002) by @${{ github.actor }}
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: velora-publish-v0.1.1
+  group: velora-publish-v0.1.2
   cancel-in-progress: false
 
 jobs:

@@ -17,13 +17,13 @@ public final class UpdaterDiscoveryCheck {
             if (result == null) throw new AssertionError("Updater found no stable release");
             metadata = result.metadata;
         }
-        if (!"v0.1.1".equals(metadata.tag) || metadata.versionCode != 100001
-                || !"1c73e72079023fd7ed14fbdb7f0ee83ac13752a3".equals(metadata.sourceCommit)
-                || !"58650c102147abc3f9d594c246b121911e9a140fc03b79a40f4428ff09b291f1".equals(metadata.sha256)
-                || !metadata.isNewerThan(100000, 37) || metadata.isNewerThan(100001, 37)
-                || !metadata.acceptsApk(VeloraRelease.PACKAGE_NAME, 100001, "0.1.1", 24, 100000, 37)) {
-            throw new AssertionError("Production updater did not accept the authorized successor to 0.1.0");
+        if (!"v0.1.2".equals(metadata.tag) || metadata.versionCode != 100002
+                || !"b2bc4a5781ccbe117c8ba083a06ff9ac9d748898".equals(metadata.sourceCommit)
+                || !"c63ae85cf165168d062cafbf7365c4958357179e56e1d8d3481aa5d6e893f389".equals(metadata.sha256)
+                || !metadata.isNewerThan(100001, 37) || metadata.isNewerThan(100002, 37)
+                || !metadata.acceptsApk(VeloraRelease.PACKAGE_NAME, 100002, "0.1.2", 24, 100001, 37)) {
+            throw new AssertionError("Production updater did not accept the authorized successor to 0.1.1");
         }
-        System.out.println("PASS: production updater discovers v0.1.1 as an update from 100000, and rejects equal-code offers.");
+        System.out.println("PASS: production updater discovers v0.1.2 as an update from 100001, and rejects equal-code offers.");
     }
 }

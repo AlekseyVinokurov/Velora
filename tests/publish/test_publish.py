@@ -17,7 +17,7 @@ spec.loader.exec_module(p)
 
 
 def receipt():
-    return {'applicationId': p.protocol.PACKAGE, 'versionCode': 100001, 'versionName': '0.1.1',
+    return {'applicationId': p.protocol.PACKAGE, 'versionCode': 100002, 'versionName': '0.1.2',
             'minSdk': 24, 'sha256': p.APK_SHA, 'certificateSha256': p.PIN, 'sourceCommit': p.SOURCE, 'size': 64}
 
 
@@ -25,11 +25,11 @@ class PromotionTest(unittest.TestCase):
     def test_metadata_protocol_and_identity(self):
         record = receipt()
         metadata = p.validate_receipt(record, p.APK_SHA, 64)
-        self.assertEqual(metadata['tag'], 'v0.1.1')
+        self.assertEqual(metadata['tag'], 'v0.1.2')
         self.assertEqual(metadata['apk']['name'], p.APK_NAME)
         self.assertEqual(p.protocol.validate_metadata(metadata, p.PIN), metadata)
-        for key, value in [('applicationId', 'foreign.package'), ('versionName', '0.1.2'),
-                           ('versionCode', 100002), ('versionCode', True), ('minSdk', 25),
+        for key, value in [('applicationId', 'foreign.package'), ('versionName', '0.1.3'),
+                           ('versionCode', 100003), ('versionCode', True), ('minSdk', 25),
                            ('sha256', '0'*64), ('certificateSha256', '0'*64),
                            ('sourceCommit', '0'*40), ('size', 65)]:
             with self.subTest(key=key, value=value), self.assertRaises(ValueError):
@@ -43,7 +43,7 @@ class PromotionTest(unittest.TestCase):
         run = {'id': p.RUN, 'status': 'completed', 'conclusion': 'success', 'event': 'workflow_dispatch',
                'path': '.github/workflows/android-release.yml', 'head_sha': p.SOURCE, 'head_branch': 'main',
                'run_attempt': 1, 'head_repository': {'full_name': p.REPO}}
-        artifact = {'id': p.ARTIFACT, 'expired': False, 'name': 'Velora-release-arm64-42773454999-1',
+        artifact = {'id': p.ARTIFACT, 'expired': False, 'name': 'Velora-release-arm64-42797176789-1',
                     'digest': 'sha256:' + p.ARCHIVE_SHA,
                     'workflow_run': {'id': p.RUN, 'head_sha': p.SOURCE, 'head_branch': 'main'}}
         p.check_provenance(run, artifact)
@@ -77,15 +77,28 @@ class PromotionTest(unittest.TestCase):
                         self.assertEqual(metadata['apk']['size'], len(payload))
                         self.assertEqual((Path(directory)/p.APK_NAME).read_bytes(), payload)
 
+    def test_hosted_build_and_signature_firebase_gates(self):
+        job = {'run_id': p.RUN, 'run_attempt': 1, 'conclusion': 'success',
+               'runner_group_name': 'GitHub Actions', 'steps': [
+                   {'name': name, 'conclusion': 'success'} for name in (
+                       'Build and verify with the existing permanent release key',
+                       'Validate and install Firebase client config from protected environment',
+                       'Verify Firebase configuration in the signed APK')]}
+        p.check_build_jobs({'total_count': 1, 'jobs': [job]})
+        for bad in ({**job, 'runner_group_name': 'self-hosted'}, {**job, 'steps': []},
+                    {**job, 'conclusion': 'failure'}, {**job, 'run_attempt': 2}):
+            with self.assertRaises(ValueError):
+                p.check_build_jobs({'total_count': 1, 'jobs': [bad]})
+
     def test_draft_discovery_does_not_depend_on_tag_endpoint(self):
-        draft = {'id': p.RESUMABLE_DRAFT, 'tag_name': p.TAG, 'draft': True}
+        draft = {'id': 12345, 'tag_name': p.TAG, 'draft': True}
         with patch.object(p, 'api', return_value=[draft]), patch.object(p, 'optional', return_value=None):
             self.assertEqual(p.find_version(), draft)
         with patch.object(p, 'api', return_value=[draft, {**draft, 'id': 2}]), patch.object(p, 'optional', return_value=None):
             with self.assertRaises(ValueError): p.find_version()
 
     def test_duplicate_json_and_host_only_guard(self):
-        with self.assertRaises(ValueError): p.parse('{"versionCode":100001,"versionCode":1}')
+        with self.assertRaises(ValueError): p.parse('{"versionCode":100002,"versionCode":1}')
         with patch.dict(p.os.environ, {}, clear=True), self.assertRaises(ValueError): p.main()
 
     def test_assets_must_be_complete_and_exact(self):
