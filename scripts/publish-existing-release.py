@@ -10,6 +10,7 @@ import io
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import time
@@ -30,6 +31,13 @@ APK_SHA = 'c63ae85cf165168d062cafbf7365c4958357179e56e1d8d3481aa5d6e893f389'
 PIN = 'a32f7e8239e47cc061ebabf226a88ab7dc3cf6224625f98ac6166b2966ea1842'
 API = 'https://api.github.com/repos/' + REPO
 LIMIT = 512 * 1024 * 1024
+PUBLICATION_FILES = frozenset({
+    '.github/workflows/publish-existing-release.yml',
+    'scripts/publish-existing-release.py',
+    'tests/publish/test_publish.py',
+    'tests/publish/UpdaterDiscoveryCheck.java',
+    'release/notes-v0.1.2.md',
+})
 spec = importlib.util.spec_from_file_location('velora_release_protocol', ROOT / 'scripts/release.py')
 protocol = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(protocol)
@@ -70,6 +78,28 @@ class Redirect(urllib.request.HTTPRedirectHandler):
         return redirected
 
 
+class GitHubAPIError(ValueError):
+    def __init__(self, code, method, url, body):
+        self.code = code
+        endpoint = urllib.parse.urlsplit(url).path
+        try:
+            message = json.loads(body).get('message', '')
+        except (ValueError, AttributeError, UnicodeError):
+            message = ''
+        if not isinstance(message, str):
+            message = ''
+        for name, value in os.environ.items():
+            if value and re.search(r'TOKEN|SECRET|PASSWORD|AUTHORIZATION|KEY|API_HASH', name, re.I):
+                message = message.replace(value, '[redacted]')
+        message = re.sub(r'https?://\S+', '[url]', message)
+        message = re.sub(r'(?i)(?:authorization|bearer|token|password|secret)\s*[:= ]+[^\s,;]+',
+                         '[redacted]', message)
+        message = re.sub(r'(?:gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+)', '[redacted]', message)
+        message = ''.join(c if c.isprintable() else ' ' for c in message)[:400]
+        super().__init__(f'GitHub API HTTP {code}: {method} {endpoint}: '
+                         + (message or 'error details unavailable'))
+
+
 def request(url, method='GET', body=None, authenticated=True, limit=2 * 1024 * 1024, content_type=None):
     headers = {'User-Agent': 'Velora-authorized-artifact-promotion', 'Accept': 'application/vnd.github+json',
                'X-GitHub-Api-Version': '2022-11-28'}
@@ -82,8 +112,13 @@ def request(url, method='GET', body=None, authenticated=True, limit=2 * 1024 * 1
     if content_type:
         headers['Content-Type'] = content_type
     req = urllib.request.Request(url, data=body, method=method, headers=headers)
-    with urllib.request.build_opener(Redirect()).open(req, timeout=120) as response:
-        data = response.read(limit + 1)
+    try:
+        with urllib.request.build_opener(Redirect()).open(req, timeout=120) as response:
+            data = response.read(limit + 1)
+    except urllib.error.HTTPError as error:
+        with error:
+            details = error.read(64 * 1024)
+        raise GitHubAPIError(error.code, method, url, details) from None
     require(len(data) <= limit, 'Oversized response')
     return data
 
@@ -95,7 +130,7 @@ def api(path, method='GET', body=None):
 def optional(path):
     try:
         return api(path)
-    except urllib.error.HTTPError as error:
+    except GitHubAPIError as error:
         if error.code == 404:
             return None
         raise
@@ -110,6 +145,30 @@ def find_version():
         matches.append(by_tag)
     require(len(matches) <= 1, 'Multiple matching releases/drafts; no automatic changes allowed')
     return matches[0] if matches else None
+
+
+def check_current_main(target):
+    require(api('')['default_branch'] == 'main', 'Default branch is no longer main')
+    require(api('/branches/main')['commit']['sha'] == target,
+            'Main advanced after dispatch; publication refused')
+
+
+def publication_target():
+    target = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    require(re.fullmatch(r'[0-9a-f]{40}', target) is not None
+            and os.environ.get('GITHUB_SHA') == target, 'Checkout does not match dispatched commit')
+    subprocess.run(['git', 'merge-base', '--is-ancestor', SOURCE, target], cwd=ROOT, check=True)
+    require(not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'],
+                                        cwd=ROOT, text=True), 'Tracked publication files are modified')
+    # Inspect every intervening commit, including changes later reverted and both
+    # sides of renames. A final tree diff alone would miss those changes.
+    paths = subprocess.check_output(['git', 'log', '--format=', '--name-only', '-z', '--no-renames',
+                                     '--diff-merges=first-parent',
+                                     SOURCE + '..' + target], cwd=ROOT, text=True)
+    changed = {path for path in paths.split('\0') if path}
+    require(changed <= PUBLICATION_FILES, 'Non-publication changes after APK source; publication refused')
+    check_current_main(target)
+    return target
 
 
 def check_provenance(run, artifact):
@@ -197,8 +256,8 @@ def prepare_updater_check(directory):
     return ['java', '-cp', str(directory) + os.pathsep + classpath, 'UpdaterDiscoveryCheck', PIN]
 
 
-def check_assets(release, files):
-    require(release['tag_name'] == TAG and release['target_commitish'] == SOURCE
+def check_assets(release, files, target):
+    require(release['tag_name'] == TAG and release['target_commitish'] == target
             and release['prerelease'] is False, 'Release identity mismatch')
     assets = release['assets']
     require(len(assets) == len(files), 'Incomplete or unexpected release assets')
@@ -225,13 +284,9 @@ def main():
             and os.environ.get('GITHUB_REPOSITORY') == REPO and os.environ.get('GITHUB_REF') == 'refs/heads/main'
             and os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch', 'GitHub-hosted manual main run required')
     require(protocol.fingerprint() == PIN, 'Repository certificate pin changed')
+    target = publication_target()
     require(find_version() is None, 'v0.1.2 release/draft already exists; no overwrite or recreation permitted')
     require(optional('/git/ref/tags/' + TAG) is None, 'v0.1.2 tag already exists; manual inspection required')
-    subprocess.run(['git', 'merge-base', '--is-ancestor', SOURCE, 'HEAD'], cwd=ROOT, check=True)
-    immutable = ['.github/workflows/android-release.yml', 'gradle.properties', 'release/certificate.sha256',
-                 'scripts/release.py', 'TMessagesProj/src/main/java/app/nimarkogram/messenger/updater/VeloraRelease.java',
-                 'TMessagesProj/src/main/java/app/nimarkogram/messenger/updater/GitHubReleaseClient.java']
-    subprocess.run(['git', 'diff', '--exit-code', SOURCE, 'HEAD', '--', *immutable], cwd=ROOT, check=True)
     previous = api('/releases/latest')
     require(previous['tag_name'] == 'v0.1.1' and previous['draft'] is False and previous['prerelease'] is False,
             'Expected previous stable v0.1.1')
@@ -246,7 +301,7 @@ def main():
     del data
     updater_check = prepare_updater_check(directory)
     # Prove compatibility with the *installed client's production parser* before creating a draft.
-    candidate = {'tag_name': TAG, 'target_commitish': SOURCE, 'draft': False, 'prerelease': False,
+    candidate = {'tag_name': TAG, 'target_commitish': target, 'draft': False, 'prerelease': False,
                  'assets': [{'name': name, 'size': path.stat().st_size, 'state': 'uploaded',
                              'digest': 'sha256:' + protocol.digest(path),
                              'browser_download_url': f'https://github.com/{REPO}/releases/download/{TAG}/{name}'}
@@ -258,7 +313,8 @@ def main():
     notes = (ROOT / 'release/notes-v0.1.2.md').read_text()
     require(find_version() is None and optional('/git/ref/tags/' + TAG) is None,
             'Version appeared during verification; publication refused')
-    draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': SOURCE, 'name': 'Velora 0.1.2',
+    check_current_main(target)
+    draft = api('/releases', 'POST', {'tag_name': TAG, 'target_commitish': target, 'name': 'Velora 0.1.2',
                                     'body': notes, 'draft': True, 'prerelease': False})
     release_id = draft['id']
     print(f'Verifying private draft {release_id}; failures leave it unpublished.', flush=True)
@@ -270,7 +326,7 @@ def main():
                 content_type='application/octet-stream')
     complete = api(f'/releases/{release_id}')
     require(complete['draft'] is True, 'Release ceased to be a draft during staging')
-    check_assets(complete, files)
+    check_assets(complete, files, target)
     candidate_path.write_text(json.dumps({**complete, 'draft': False,
         'assets': [{**asset, 'browser_download_url': f'https://github.com/{REPO}/releases/download/{TAG}/{asset["name"]}'}
                    for asset in complete['assets']]}))
@@ -278,15 +334,15 @@ def main():
     published = api(f'/releases/{release_id}', 'PATCH', {'draft': False, 'prerelease': False, 'make_latest': 'true'})
     require(published['draft'] is False and published.get('immutable') is True,
             'Release publication/immutability verification failed')
-    check_assets(published, files)
+    check_assets(published, files, target)
     ref = api('/git/ref/tags/' + TAG)['object']
-    require(ref['type'] == 'commit' and ref['sha'] == SOURCE, 'Published tag source mismatch')
+    require(ref['type'] == 'commit' and ref['sha'] == target, 'Published tag target mismatch')
     # Public API and actual production discovery (no token), allowing bounded CDN propagation.
     for attempt in range(5):
         try:
             public = parse(request(API + '/releases/latest', authenticated=False))
             require(public['draft'] is False and public['tag_name'] == TAG, 'Public latest endpoint has not propagated')
-            check_assets(public, files)
+            check_assets(public, files, target)
             subprocess.run(updater_check, check=True)
             break
         except (ValueError, urllib.error.URLError, subprocess.CalledProcessError):
@@ -297,7 +353,7 @@ def main():
     print('PUBLISHED AND DISCOVERED: ' + url)
     with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as summary:
         summary.write(f'## Velora 0.1.2 published\n\n[APK]({url})\n\n'
-                      f'- Source: `{SOURCE}`\n- APK SHA-256: `{APK_SHA}`\n'
+                      f'- APK source: `{SOURCE}`\n- Release/tag target: `{target}`\n- APK SHA-256: `{APK_SHA}`\n'
                       '- Existing CI receipt and archive verified; no Android build or SDK used.\n'
                       '- Both assets verified before leaving draft. Public production updater discovery: PASS.\n')
 

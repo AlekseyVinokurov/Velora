@@ -4,11 +4,13 @@ import copy
 import importlib.util
 import io
 import json
+import subprocess
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
 import zipfile
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location('promotion', ROOT / 'scripts/publish-existing-release.py')
@@ -103,25 +105,94 @@ class PromotionTest(unittest.TestCase):
 
     def test_assets_must_be_complete_and_exact(self):
         files = {p.APK_NAME: b'fixture', 'velora-release.json': b'{}'}
-        release = {'tag_name': p.TAG, 'target_commitish': p.SOURCE, 'prerelease': False,
+        target = 'a' * 40
+        release = {'tag_name': p.TAG, 'target_commitish': target, 'prerelease': False,
                    'assets': [{'name': name, 'state': 'uploaded', 'size': len(data),
                                'digest': 'sha256:'+p.sha(data),
                                'browser_download_url': f'https://github.com/{p.REPO}/releases/download/{p.TAG}/{name}'}
                               for name, data in files.items()]}
-        p.check_assets(release, files)
+        p.check_assets(release, files, target)
+        with self.assertRaises(ValueError):
+            p.check_assets({**release, 'target_commitish': p.SOURCE}, files, target)
+        self.assertEqual(p.validate_receipt(receipt(), p.APK_SHA, 64)['sourceCommit'], p.SOURCE)
         draft = copy.deepcopy(release)
         draft['draft'] = True
         for asset in draft['assets']:
             asset['browser_download_url'] = asset['browser_download_url'].replace(p.TAG, 'untagged-bbe0420cf8a4f0abfe64')
-        p.check_assets(draft, files)
+        p.check_assets(draft, files, target)
         draft['draft'] = False
-        with self.assertRaises(ValueError): p.check_assets(draft, files)
+        with self.assertRaises(ValueError): p.check_assets(draft, files, target)
         missing = copy.deepcopy(release)
         missing['assets'].pop()
-        with self.assertRaises(ValueError): p.check_assets(missing, files)
+        with self.assertRaises(ValueError): p.check_assets(missing, files, target)
         wrong = copy.deepcopy(release)
         wrong['assets'][0]['digest'] = 'sha256:'+'0'*64
-        with self.assertRaises(ValueError): p.check_assets(wrong, files)
+        with self.assertRaises(ValueError): p.check_assets(wrong, files, target)
+
+    def test_publication_target_only_accepts_publication_history(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+
+            def git(*args):
+                return subprocess.check_output(['git', *args], cwd=root, text=True).strip()
+
+            def commit(path, contents):
+                file = root / path
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_text(contents)
+                git('add', '--', path)
+                git('commit', '-qm', 'test fixture')
+                return git('rev-parse', 'HEAD')
+
+            git('init', '-q')
+            git('config', 'user.name', 'Test')
+            git('config', 'user.email', 'test@example.invalid')
+            source = commit('gradle.properties', 'original\n')
+            target = commit('release/notes-v0.1.2.md', 'notes\n')
+            with patch.object(p, 'ROOT', root), patch.object(p, 'SOURCE', source):
+                with patch.dict(p.os.environ, {'GITHUB_SHA': target}), patch.object(p, 'api', side_effect=[
+                        {'default_branch': 'main'}, {'commit': {'sha': target}}]):
+                    self.assertEqual(p.publication_target(), target)
+                with patch.dict(p.os.environ, {'GITHUB_SHA': source}), self.assertRaises(ValueError):
+                    p.publication_target()
+                commit('gradle.properties', 'forbidden change\n')
+                target = commit('gradle.properties', 'original\n')
+                # Even a forbidden change later reverted must stop publication.
+                with patch.dict(p.os.environ, {'GITHUB_SHA': target}), patch.object(p, 'api') as api:
+                    with self.assertRaises(ValueError): p.publication_target()
+                    api.assert_not_called()
+
+    def test_main_must_still_be_the_verified_default_head(self):
+        target = 'a' * 40
+        for responses in ([{'default_branch': 'other'}],
+                          [{'default_branch': 'main'}, {'commit': {'sha': 'b' * 40}}]):
+            with patch.object(p, 'api', side_effect=responses), self.assertRaises(ValueError):
+                p.check_current_main(target)
+
+    def test_safe_http_diagnostics_and_optional_404(self):
+        url = p.API + '/releases?credential=hidden-query'
+        token = 'test-private-token-do-not-print'
+        body = json.dumps({'message': 'Resource not accessible. Authorization: Bearer ' + token
+                           + ' token=other-private-value https://example.invalid/?key=private-query '
+                           + '\n' + 'x' * 1000}).encode()
+        error = urllib.error.HTTPError(url, 403, 'Forbidden', {'Authorization': token}, io.BytesIO(body))
+        with patch.dict(p.os.environ, {'GH_TOKEN': token}), patch.object(p.urllib.request, 'build_opener') as opener:
+            opener.return_value.open.side_effect = error
+            with self.assertRaises(p.GitHubAPIError) as raised:
+                p.request(url, 'POST', {'tag_name': p.TAG})
+        message = str(raised.exception)
+        self.assertIn('HTTP 403: POST /repos/' + p.REPO + '/releases:', message)
+        self.assertIn('Resource not accessible', message)
+        for private in (token, 'other-private-value', 'private-query', 'hidden-query', 'Authorization', '\n'):
+            self.assertNotIn(private, message)
+        self.assertLess(len(message), 550)
+        for code in (404, 403):
+            safe_error = p.GitHubAPIError(code, 'GET', url, b'not JSON')
+            with patch.object(p, 'api', side_effect=safe_error):
+                if code == 404:
+                    self.assertIsNone(p.optional('/missing'))
+                else:
+                    with self.assertRaises(p.GitHubAPIError): p.optional('/missing')
 
 
 if __name__ == '__main__':
