@@ -193,7 +193,16 @@ android {
     }
 }
 
-// Firebase is optional and must use the final stable / DEV package and certificate.
+// DEV builds may omit Firebase. Signed variants must never silently omit FCM.
+tasks.configureEach { task ->
+    if (task.name ==~ /pre.*(Standalone|Release)Build/) {
+        task.doFirst {
+            if (!file('google-services.json').isFile()) {
+                throw new GradleException('Signed Velora requires google-services.json for its stable applicationId.')
+            }
+        }
+    }
+}
 if (file('google-services.json').isFile()) {
     apply plugin: 'com.google.gms.google-services'
 }

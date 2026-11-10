@@ -16449,10 +16449,18 @@ public class MessagesController extends BaseController implements NotificationCe
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("account " + currentAccount + " registered for push, push type: " + pushType);
                 }
+                PushListenerController.recordPushState("registration_" + currentAccount, "registered");
                 getUserConfig().registeredForPush = true;
                 SharedConfig.pushString = regid;
                 SharedConfig.pushType = pushType;
                 getUserConfig().saveConfig(false);
+            }
+            if (!(response instanceof TLRPC.TL_boolTrue)) {
+                String state = error == null ? "unexpected_response" : "rpc_error_" + error.code;
+                PushListenerController.recordPushState("registration_" + currentAccount, state);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Push registration failed: " + state);
+                }
             }
             AndroidUtilities.runOnUIThread(() -> registeringForPush = false);
         });

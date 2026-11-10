@@ -565,6 +565,7 @@ public class ApplicationLoader extends Application {
                     FileLog.d("No valid " + getPushProvider().getLogTitle() + " APK found.");
                 }
                 SharedConfig.pushStringStatus = "__NO_GOOGLE_PLAY_SERVICES__";
+                PushListenerController.recordPushState("firebase", "play_services_missing");
                 PushListenerController.sendRegistrationToServer(getPushProvider().getPushType(), null);
             }
         }, 1000);

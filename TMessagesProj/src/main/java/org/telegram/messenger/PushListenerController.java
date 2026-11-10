@@ -46,6 +46,18 @@ public class PushListenerController {
     public static final int NOTIFICATION_ID = 1;
     private static CountDownLatch countDownLatch = new CountDownLatch(1);
 
+    // Only fixed states and numeric RPC codes belong here. Never pass payloads,
+    // tokens, exception messages, account identifiers or cryptographic material.
+    public static void recordPushState(String stage, String state) {
+        android.content.SharedPreferences preferences = ApplicationLoader.applicationContext
+                .getSharedPreferences("push_diagnostics", android.content.Context.MODE_PRIVATE);
+        if (BuildVars.LOGS_ENABLED && !state.equals(preferences.getString(stage, null))) {
+            FileLog.d("Push state " + stage + ": " + state);
+        }
+        preferences.edit().putString(stage, state)
+                .putLong(stage + "_at", System.currentTimeMillis()).apply();
+    }
+
     public static void sendRegistrationToServer(@PushType int pushType, String token) {
         Utilities.stageQueue.postRunnable(() -> {
             ConnectionsManager.setRegId(token, pushType, SharedConfig.pushStringStatus);
@@ -130,8 +142,9 @@ public class PushListenerController {
                     if (!Arrays.equals(SharedConfig.pushAuthKeyId, inAuthKeyId)) {
                         onDecryptError();
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d(String.format(Locale.US, tag + " DECRYPT ERROR 2 k1=%s k2=%s, key=%s", Utilities.bytesToHex(SharedConfig.pushAuthKeyId), Utilities.bytesToHex(inAuthKeyId), Utilities.bytesToHex(SharedConfig.pushAuthKey)));
+                            FileLog.d(tag + " push key ID mismatch");
                         }
+                        recordPushState("processing", "key_id_mismatch");
                         return;
                     }
 
@@ -145,8 +158,9 @@ public class PushListenerController {
                     if (!Utilities.arraysEquals(messageKey, 0, messageKeyFull, 8)) {
                         onDecryptError();
                         if (BuildVars.LOGS_ENABLED) {
-                            FileLog.d(String.format(tag + " DECRYPT ERROR 3, key = %s", Utilities.bytesToHex(SharedConfig.pushAuthKey)));
+                            FileLog.d(tag + " push integrity check failed");
                         }
+                        recordPushState("processing", "integrity_failed");
                         return;
                     }
 
@@ -1502,7 +1516,7 @@ public class PushListenerController {
                                     ArrayList<MessageObject> arrayList = new ArrayList<>();
                                     arrayList.add(messageObject);
                                     canRelease = false;
-                                    FileLog.d("PushListenerController push notification to NotificationsController of " + messageOwner.dialog_id);
+                                    recordPushState("processing", "notification_dispatched");
                                     if (!messageObject.isStoryReactionPush && !messageObject.isReactionPush && !messageObject.isStoryMentionPush && !messageObject.isStoryPush && !messageObject.isStoryPushHidden && !mention && !pinned && msg_id > 0) {
                                         final long did = dialogId;
                                         final int mid = msg_id;
@@ -1531,9 +1545,9 @@ public class PushListenerController {
                         onDecryptError();
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("error in loc_key = " + loc_key + " json " + jsonString);
+                        FileLog.e(tag + " push processing failed");
                     }
-                    FileLog.e(e);
+                    recordPushState("processing", "failed");
                 }
             });
         });
@@ -1801,40 +1815,44 @@ public class PushListenerController {
 
         @Override
         public void onRequestPushToken() {
-            String currentPushString = SharedConfig.pushString;
-            if (!TextUtils.isEmpty(currentPushString)) {
-                if (BuildVars.DEBUG_PRIVATE_VERSION && BuildVars.LOGS_ENABLED) {
-                    FileLog.d("FCM regId = " + currentPushString);
-                }
-            } else {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("FCM Registration not found.");
-                }
-            }
             Utilities.globalQueue.postRunnable(() -> {
                 try {
                     SharedConfig.pushStringGetTimeStart = SystemClock.elapsedRealtime();
-                    FirebaseApp.initializeApp(ApplicationLoader.applicationContext);
+                    if (FirebaseApp.initializeApp(ApplicationLoader.applicationContext) == null) {
+                        tokenFailed("__FIREBASE_CONFIG_MISSING__", "config_missing");
+                        return;
+                    }
+                    recordPushState("firebase", "initialized");
                     FirebaseMessaging.getInstance().getToken()
                             .addOnCompleteListener(task -> {
                                 SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
                                 if (!task.isSuccessful()) {
-                                    if (BuildVars.LOGS_ENABLED) {
-                                        FileLog.d("Failed to get regid");
-                                    }
-                                    SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-                                    PushListenerController.sendRegistrationToServer(getPushType(), null);
+                                    tokenFailed("__FIREBASE_FAILED__", "request_failed");
                                     return;
                                 }
                                 String token = task.getResult();
                                 if (!TextUtils.isEmpty(token)) {
+                                    SharedConfig.pushStringStatus = "__FIREBASE_TOKEN_READY__";
+                                    recordPushState("token", "ready");
                                     PushListenerController.sendRegistrationToServer(getPushType(), token);
+                                } else {
+                                    tokenFailed("__FIREBASE_TOKEN_EMPTY__", "empty");
                                 }
                             });
                 } catch (Throwable e) {
-                    FileLog.e(e);
+                    tokenFailed("__FIREBASE_INIT_FAILED__", "init_failed");
                 }
             });
+        }
+
+        private void tokenFailed(String status, String state) {
+            SharedConfig.pushStringGetTimeEnd = SystemClock.elapsedRealtime();
+            SharedConfig.pushStringStatus = status;
+            recordPushState("token", state);
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("FCM token state: " + state);
+            }
+            PushListenerController.sendRegistrationToServer(getPushType(), null);
         }
 
         @Override
