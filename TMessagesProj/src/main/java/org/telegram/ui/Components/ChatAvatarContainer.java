@@ -1542,7 +1542,6 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
     private boolean rightDrawableIsScam = false;
     private String rightDrawableContentDescription = null;
     private String rightDrawable2ContentDescription = null;
-    private Drawable soundGramDrawable;
 
     public void setTitleIcons(Drawable leftIcon, Drawable mutedIcon) {
         titleTextView.setLeftDrawable(leftIcon);
@@ -1648,33 +1647,6 @@ public class ChatAvatarContainer extends FrameLayout implements FactorAnimator.T
 
         titleTextView.setRightDrawableOnClick(null);
         titleTextView.setRightDrawable2OnClick(null);
-
-        TLRPC.User user = parentFragment != null ? parentFragment.getCurrentUser() : null;
-        TLRPC.Chat chat = parentFragment != null ? parentFragment.getCurrentChat() : null;
-        boolean isSoundGram = (user != null && soundgram.music.SoundGramConfig.hasBadgeForUser(user) && !org.telegram.messenger.UserObject.isUserSelf(user))
-                || (chat != null && soundgram.music.SoundGramConfig.hasBadgeForChat(chat));
-        if (isSoundGram) {
-            if (soundGramDrawable == null) {
-                Drawable raw = getResources().getDrawable(R.drawable.ic_soundgram_badge).mutate();
-                soundGramDrawable = new soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable(raw);
-            }
-            View.OnClickListener badgeClickListener = v -> {
-                if (parentFragment != null && parentFragment.getParentActivity() != null) {
-                    soundgram.ui.SoundGramBadgeBottomSheet bottomSheet = new soundgram.ui.SoundGramBadgeBottomSheet(parentFragment.getParentActivity(), resourcesProvider);
-                    bottomSheet.show();
-                }
-            };
-            boolean hasPremiumStatus = (premium || emojiStatusPresent) && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses;
-            if (hasPremiumStatus) {
-                titleTextView.setRightDrawable2(soundGramDrawable);
-                titleTextView.setRightDrawable2OnClick(badgeClickListener);
-            } else {
-                titleTextView.setRightDrawable(soundGramDrawable);
-                titleTextView.setRightDrawableOnClick(badgeClickListener);
-                titleTextView.setRightDrawable2(null);
-                titleTextView.setRightDrawable2OnClick(null);
-            }
-        }
 
         requestLayout();
         checkActionBar(animated);

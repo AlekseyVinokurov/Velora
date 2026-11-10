@@ -645,12 +645,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
     private boolean drawVerified;
     private boolean drawBotVerified;
     private boolean drawPremium;
-    private boolean drawSoundGram;
-    private Drawable soundGramDrawable;
-    private android.graphics.RectF soundGramBadgeRect = new android.graphics.RectF();
-    private boolean soundGramBadgePressed = false;
-    private android.animation.ValueAnimator soundGramGlowAnimator;
-    private float soundGramGlowAlpha = 1f;
     private final View emojiStatusView;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
 
@@ -1318,7 +1312,6 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
         drawVerified = false;
         drawBotVerified = false;
         drawPremium = false;
-        drawSoundGram = false;
         drawForwardIcon = false;
         drawGiftIcon = false;
         drawScam = 0;
@@ -1569,10 +1562,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                         botVerification.set(dialogBotVerificationIcon, false);
                     }
 
-                    drawSoundGram = soundgram.music.SoundGramConfig.hasBadgeForDialog(currentDialogId, user, chat);
-                    if (drawSoundGram) {
-                        nameLayoutEllipsizeByGradient = true;
-                    }
+
                 }
             }
 
@@ -2432,10 +2422,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 nameLeft += w;
             }
         }
-        if (drawSoundGram) {
-            nameWidth -= dp(22);
-            nameAdditionalsForChannelSubscriber += dp(22);
-        }
+
         if (drawBotVerified) {
             nameWidth -= dp(21);
         }
@@ -2988,7 +2975,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 if (drawBotVerified) {
                     nameLeft += dp(21);
                 }
-                if ((dialogMuted || true) || drawUnmute || drawVerified || drawPremium || drawScam != 0 || drawSoundGram) {
+                if ((dialogMuted || true) || drawUnmute || drawVerified || drawPremium || drawScam != 0) {
                     nameMuteLeft = (int) (nameLeft + left + dp(6));
                     if (drawPremium) {
                         nameMutedIconLeft = nameMuteLeft + dp(24 + 6);
@@ -4570,9 +4557,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                     }
                 }
                 int muteAnchor = drawPremium ? nameMutedIconLeft : nameMuteLeft;
-                if (drawSoundGram) {
-                    muteAnchor += dp(20);
-                }
+
                 float muteX = muteAnchor - dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 0 : 1);
                 float muteY = dp(SharedConfig.useThreeLinesLayout ? 13.5f : 17.5f);
                 if ((!(useForceThreeLines || SharedConfig.useThreeLinesLayout) || isForumCell()) && hasTags()) {
@@ -4654,18 +4639,7 @@ public class DialogCell extends BaseCell implements StoriesListPlaceProvider.Ava
                 setDrawableBounds((drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable), nameMuteLeft, y);
                 (drawScam == 1 ? Theme.dialogs_scamDrawable : Theme.dialogs_fakeDrawable).draw(canvas);
             }
-            if (drawSoundGram) {
-                if (soundGramDrawable == null) {
-                    soundGramDrawable = getContext().getResources().getDrawable(R.drawable.ic_soundgram_badge).mutate();
-                }
-                int y = dp(useForceThreeLines || SharedConfig.useThreeLinesLayout ? 12.5f : 15.5f);
-                if ((!(useForceThreeLines || SharedConfig.useThreeLinesLayout) || isForumCell()) && hasTags()) {
-                    y -= dp(9);
-                }
-                int badgeX = nameMuteLeft - dp(1) + (drawPremium || drawVerified ? dp(20) : 0);
-                setDrawableBounds(soundGramDrawable, badgeX, y, dp(18), dp(18));
-                soundGramDrawable.draw(canvas);
-            }
+
 
             if (drawReorder || reorderIconProgress != 0) {
                 if (!LocaleController.isRTL) {

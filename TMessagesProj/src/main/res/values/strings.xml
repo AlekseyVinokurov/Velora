@@ -12894,4 +12894,9 @@
     <string name="VeloraClassicIcon">Classic</string>
     <string name="VeloraNotificationIcon">Notification icon</string>
     <string name="VeloraNotificationBrand">Velora</string>
+    <string name="VeloraUpdateTitle">Velora update</string>
+    <string name="VeloraWhatsNew">What’s new</string>
+    <string name="VeloraNoUpdateNotes">A short description is not available for this version.</string>
+    <string name="VeloraUpdateAction">Update</string>
+    <string name="VeloraUpdateLater">Later</string>
 </resources>

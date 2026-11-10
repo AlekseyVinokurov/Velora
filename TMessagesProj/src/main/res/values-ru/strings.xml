@@ -1335,4 +1335,9 @@
     <string name="VeloraClassicIcon">Классическая</string>
     <string name="VeloraNotificationIcon">Иконка уведомлений</string>
     <string name="VeloraNotificationBrand">Velora</string>
+    <string name="VeloraUpdateTitle">Обновление Velora</string>
+    <string name="VeloraWhatsNew">Что нового</string>
+    <string name="VeloraNoUpdateNotes">Для этой версии нет краткого описания изменений.</string>
+    <string name="VeloraUpdateAction">Обновить</string>
+    <string name="VeloraUpdateLater">Позже</string>
 </resources>

@@ -75,7 +75,6 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
     private TextView adminTextView;
     public TextView addButton;
     private Drawable premiumDrawable;
-    private Drawable soundGramDrawable;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable botVerification;
     private final AnimatedEmojiDrawable.SwapAnimatedEmojiDrawable emojiStatus;
 
@@ -674,9 +673,6 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             nameTextView.setLeftDrawable(botVerification);
         }
         boolean isPremium = currentUser != null && MessagesController.getInstance(currentAccount).isPremiumUser(currentUser) && !MessagesController.getInstance(currentAccount).premiumFeaturesBlocked() && !app.nimarkogram.messenger.NimarkoConfig.disablePremiumStatuses;
-        boolean isSoundGram = (currentUser != null && soundgram.music.SoundGramConfig.hasBadgeForUser(currentUser))
-                || (currentChat != null && soundgram.music.SoundGramConfig.hasBadgeForChat(currentChat));
-
         if (isPremium) {
             if (DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status) != 0) {
                 emojiStatus.set(DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status), false);
@@ -700,42 +696,13 @@ public class UserCell extends FrameLayout implements NotificationCenter.Notifica
             }
             nameTextView.setRightDrawableTopPadding(-dp(0.5f));
         } else {
-            if (!isSoundGram) {
-                nameTextView.setRightDrawable(null);
-                nameTextView.setRightDrawableTopPadding(0);
-            }
+            nameTextView.setRightDrawable(null);
+            nameTextView.setRightDrawableTopPadding(0);
         }
 
-        if (isSoundGram) {
-            if (soundGramDrawable == null) {
-                soundGramDrawable = getContext().getResources().getDrawable(R.drawable.ic_soundgram_badge).mutate();
-                soundGramDrawable = new AnimatedEmojiDrawable.WrapSizeDrawable(soundGramDrawable, dp(22), dp(22)) {
-                    @Override
-                    public void draw(@NonNull Canvas canvas) {
-                        canvas.save();
-                        canvas.translate(0, dp(1));
-                        super.draw(canvas);
-                        canvas.restore();
-                    }
-                };
-            }
-            if (isPremium) {
-                nameTextView.setRightDrawable2(soundGramDrawable);
-                nameTextView.setRightDrawable2OnClick(null);
-            } else {
-                nameTextView.setRightDrawable(soundGramDrawable);
-                nameTextView.setRightDrawableOnClick(null);
-                nameTextView.setRightDrawableTopPadding(-dp(0.5f));
-                nameTextView.setRightDrawable2(null);
-                nameTextView.setRightDrawable2OnClick(null);
-            }
-        } else {
-            nameTextView.setRightDrawable2(null);
-            nameTextView.setRightDrawable2OnClick(null);
-            if (!isPremium) {
-                nameTextView.setRightDrawableOnClick(null);
-            }
-        }
+        nameTextView.setRightDrawable2(null);
+        nameTextView.setRightDrawable2OnClick(null);
+        if (!isPremium) nameTextView.setRightDrawableOnClick(null);
 
         if (currentStatus != null) {
             statusTextView.setTextColor(statusColor);

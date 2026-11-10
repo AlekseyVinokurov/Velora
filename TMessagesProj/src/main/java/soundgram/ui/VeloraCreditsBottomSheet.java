@@ -13,14 +13,10 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
-/**
- * Project and upstream credits, also opened from the inherited supporter badges.
- * The class name stays compatible with existing callers. Velora has no configured
- * donation service and does not offer paid badges or early releases.
- */
-public class SoundGramBadgeBottomSheet extends BottomSheet {
+/** Project, upstream authors and GPL links, opened from About Velora. */
+public class VeloraCreditsBottomSheet extends BottomSheet {
 
-    public SoundGramBadgeBottomSheet(Context context, Theme.ResourcesProvider resourcesProvider) {
+    public VeloraCreditsBottomSheet(Context context, Theme.ResourcesProvider resourcesProvider) {
         super(context, false, resourcesProvider);
         LinearLayout root = new LinearLayout(context);
         root.setOrientation(LinearLayout.VERTICAL);

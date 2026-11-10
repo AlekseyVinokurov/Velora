@@ -76,14 +76,16 @@ def main():
             assert adaptive.find('background').get(A + 'drawable') == '@drawable/velora_icon_background'
             if folder.endswith('33'):
                 assert adaptive.find('monochrome').get(A + 'drawable') == '@drawable/velora_icon_monochrome'
-    notification = ET.parse(RES / 'drawable/velora_notification.xml').getroot()
-    assert notification.tag == 'vector'
-    assert notification.get(A + 'width') == notification.get(A + 'height') == '24dp'
-    for element in notification.iter():
-        assert element.tag in ['vector', 'path']
-        if element.tag == 'path':
-            assert set(element.attrib) == {A + 'fillColor', A + 'pathData'}
-            assert element.get(A + 'fillColor') == '#FFFFFFFF', 'Notification must be opaque white on transparent'
+    for name in ['velora_notification', 'notification']:
+        notification = ET.parse(RES / ('drawable/' + name + '.xml')).getroot()
+        assert notification.tag == 'vector'
+        assert notification.get(A + 'width') == notification.get(A + 'height') == '24dp'
+        for element in notification.iter():
+            assert element.tag in ['vector', 'path']
+            if element.tag == 'path':
+                assert set(element.attrib) == {A + 'fillColor', A + 'pathData'}
+                assert element.get(A + 'fillColor') == '#FFFFFFFF', 'Notification must be opaque white on transparent'
+    assert not list(RES.glob('drawable-*/notification.*')), 'Density resources must not override the plane'
     for density, size in [('mdpi', 48), ('hdpi', 72), ('xhdpi', 96), ('xxhdpi', 144), ('xxxhdpi', 192)]:
         for suffix in ['', '_round']:
             data = (RES / ('mipmap-' + density) / ('velora_launcher' + suffix + '.png')).read_bytes()

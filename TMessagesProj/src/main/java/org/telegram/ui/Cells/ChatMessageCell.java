@@ -1329,10 +1329,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private Drawable nameStatusSelector;
     private boolean nameStatusPressed;
 
-    private boolean isSoundGramUser;
-    private android.graphics.Rect soundGramBadgeRect = new android.graphics.Rect();
-    private boolean soundGramBadgePressed;
-    private Drawable soundGramBadgeDrawable;
 
     private RoundVideoPlayingDrawable roundVideoPlayingDrawable;
 
@@ -2378,26 +2374,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             nameStatusPressed = false;
         }
         return nameStatusPressed;
-    }
-
-    private boolean checkSoundGramBadgeMotionEvent(MotionEvent event) {
-        if (!drawNameLayout || nameLayout == null || !isSoundGramUser || soundGramBadgeRect.isEmpty()) {
-            soundGramBadgePressed = false;
-            return false;
-        }
-        final boolean pressed = soundGramBadgeRect.contains((int) getEventX(event), (int) getEventY(event));
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            soundGramBadgePressed = pressed;
-        } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-            if (event.getAction() == MotionEvent.ACTION_UP && soundGramBadgePressed && pressed) {
-                if (delegate == null || delegate.canPerformActions()) {
-                    soundgram.ui.SoundGramBadgeBottomSheet bottomSheet = new soundgram.ui.SoundGramBadgeBottomSheet(getContext(), resourcesProvider);
-                    bottomSheet.show();
-                }
-            }
-            soundGramBadgePressed = false;
-        }
-        return soundGramBadgePressed;
     }
 
     private final Runnable scheduleUpdateRelativeDatesRunnable = this::scheduleUpdateRelativeDates;
@@ -5126,9 +5102,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         }
         if (!result) {
             result = checkNameStatusMotionEvent(event);
-        }
-        if (!result) {
-            result = checkSoundGramBadgeMotionEvent(event);
         }
         if (!result) {
             result = checkPinchToZoom(event);
@@ -19698,7 +19671,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             }
 
             currentNameStatus = null;
-            isSoundGramUser = false;
             nameStatusSlug = null;
             currentNameBotVerificationId = 0;
             if (messageObject.customName != null) {
@@ -19707,8 +19679,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 currentNameString = getAuthorName();
                 currentNameStatus = getAuthorStatus();
                 currentNameBotVerificationId = getAuthorBotVerificationId();
-                isSoundGramUser = ((currentUser != null && soundgram.music.SoundGramConfig.hasBadgeForUser(currentUser))
-                        || (currentChat != null && soundgram.music.SoundGramConfig.hasBadgeForChat(currentChat))) && !isSavedChat;
             } else {
                 currentNameString = "";
             }
@@ -19771,10 +19741,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                         viaNameWidth += dp(4 + 20 + 4);
                         stringBuilder.setSpan(new DialogCell.FixedWidthSpan(dp(4 + 20 + 4)), nameStringFinal.length(), nameStringFinal.length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
-                    if (isSoundGramUser) {
-                        viaNameWidth += dp(4 + 20 + 4);
-                        stringBuilder.setSpan(new DialogCell.FixedWidthSpan(dp(4 + 20 + 4)), nameStringFinal.length(), nameStringFinal.length() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    }
+
                     stringBuilder.setSpan(viaSpan2 = new TypefaceSpan(AndroidUtilities.bold(), 0, color), nameStringFinal.length() + 2 + viaBotString.length(), stringBuilder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     nameStringFinal = stringBuilder;
                 } else {
@@ -19808,9 +19775,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 if (currentNameStatus != null && !viaBot) {
                     nameWidth += dp(4 + 12 + 4);
                 }
-                if (isSoundGramUser) {
-                    nameWidth += dp(4 + 20 + 4);
-                }
+
                 if (currentNameBotVerificationId != 0) {
                     nameWidth += dp(4 + 12 + 4);
                 }
@@ -21948,7 +21913,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return false;
         }
         return (
-            isSoundGramUser ||
             reactionsLayoutInBubble.hasOverlay() ||
             (!transitionParams.transitionBotButtons.isEmpty() && transitionParams.animateBotButtonsChanged) ||
             !botButtons.isEmpty() ||
@@ -22145,7 +22109,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             Choreographer60FpsContent.getInstance().removeFrameCallback(invalidateOutboundsRunnable);
         }
 
-        if ((currentNameStatusDrawable != null || currentNameEmojiStatusDrawable != null || isSoundGramUser || topicButton != null && (drawTopic || transitionParams.animateDrawTopic)) && drawNameLayout && nameLayout != null && (currentPosition == null || currentPosition.minX == 0 && currentPosition.minY == 0) && !(currentMessageObject.deleted && !drawingToBitmap && currentMessagesGroup != null && currentMessagesGroup.messages.size() >= 1)) {
+        if ((currentNameStatusDrawable != null || currentNameEmojiStatusDrawable != null || topicButton != null && (drawTopic || transitionParams.animateDrawTopic)) && drawNameLayout && nameLayout != null && (currentPosition == null || currentPosition.minX == 0 && currentPosition.minY == 0) && !(currentMessageObject.deleted && !drawingToBitmap && currentMessagesGroup != null && currentMessagesGroup.messages.size() >= 1)) {
             int color;
             float nameX, nameY;
             if (currentMessageObject.shouldDrawWithoutBackground()) {
@@ -22254,29 +22218,6 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 );
                 currentNameStatusDrawable.setColor(ColorUtils.setAlphaComponent(color, 115));
                 currentNameStatusDrawable.draw(canvas);
-            }
-            if (isSoundGramUser) {
-                int offset = (currentNameStatusDrawable != null && !currentNameStatusDrawable.isEmpty()) ? dp(24) : 0;
-                if (soundGramBadgeDrawable == null) {
-                    soundGramBadgeDrawable = androidx.core.content.ContextCompat.getDrawable(getContext(), org.telegram.messenger.R.drawable.ic_soundgram_badge);
-                    if (soundGramBadgeDrawable != null) {
-                        soundGramBadgeDrawable = soundGramBadgeDrawable.mutate();
-                    }
-                }
-                int badgeLeft = (int) (Math.abs(nx) + (viaNameWidth > 0 ? viaNameWidth - dp(4 + 28) : nameLayoutWidth) + dp(2)) + offset;
-                int badgeTop = (int) (ny + nameLayout.getHeight() / 2 - dp(12));
-                soundGramBadgeRect.set(badgeLeft, badgeTop, badgeLeft + dp(24), badgeTop + dp(24));
-                if (soundGramBadgeDrawable != null) {
-                    soundGramBadgeDrawable.setBounds(
-                        badgeLeft,
-                        badgeTop,
-                        badgeLeft + dp(24),
-                        badgeTop + dp(24)
-                    );
-                    soundGramBadgeDrawable.draw(canvas);
-                }
-            } else {
-                soundGramBadgeRect.setEmpty();
             }
 
             float end;

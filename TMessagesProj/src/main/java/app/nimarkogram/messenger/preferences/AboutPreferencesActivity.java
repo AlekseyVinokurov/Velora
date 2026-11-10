@@ -33,6 +33,6 @@ public final class AboutPreferencesActivity extends BasePreferencesActivity {
 
     @Override public void onClick(UItem item, View view, int position, float x, float y) {
         if (item.id == 1) Browser.openUrl(getContext(), "https://github.com/AlekseyVinokurov/Velora");
-        else if (item.id == 2) showDialog(new soundgram.ui.SoundGramBadgeBottomSheet(getContext(), getResourceProvider()));
+        else if (item.id == 2) showDialog(new soundgram.ui.VeloraCreditsBottomSheet(getContext(), getResourceProvider()));
     }
 }

@@ -13343,41 +13343,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setRightDrawableOutside(true);
                 }
 
-                boolean isSoundGram = user != null && soundgram.music.SoundGramConfig.hasBadgeForUser(user);
-                if (isSoundGram) {
-                    Drawable d1 = nameTextView[a].getRightDrawable();
-                    Drawable d2 = nameTextView[a].getRightDrawable2();
-                    if (!(d1 instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable) && !(d2 instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable)) {
-                        Drawable raw = androidx.core.content.ContextCompat.getDrawable(getParentActivity(), R.drawable.ic_soundgram_badge);
-                        if (raw != null) {
-                            soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable soundGramDrawable = new soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable(raw.mutate());
-                            if (d1 == null) {
-                                nameTextView[a].setRightDrawable(soundGramDrawable);
-                            } else if (d2 == null) {
-                                nameTextView[a].setRightDrawable2(soundGramDrawable);
-                            }
-                            nameTextView[a].requestLayout();
-
-                            android.view.View.OnClickListener badgeClickListener = v -> {
-                                soundgram.ui.SoundGramBadgeBottomSheet bottomSheet = new soundgram.ui.SoundGramBadgeBottomSheet(ProfileActivity.this.getParentActivity(), resourcesProvider);
-                                showDialog(bottomSheet);
-                            };
-
-                            if (nameTextView[a].getRightDrawable() == soundGramDrawable) {
-                                nameTextView[a].setRightDrawableOnClick(badgeClickListener);
-                            } else if (nameTextView[a].getRightDrawable2() == soundGramDrawable) {
-                                nameTextView[a].setRightDrawable2OnClick(badgeClickListener);
-                            }
-                        }
-                    }
-                } else {
-                    if (nameTextView[a].getRightDrawable() instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable) {
-                        nameTextView[a].setRightDrawable(null);
-                    }
-                    if (nameTextView[a].getRightDrawable2() instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable) {
-                        nameTextView[a].setRightDrawable2(null);
-                    }
-                }
                 if (user.self && getMessagesController().isPremiumUser(user)) {
                     nameTextView[a].setRightDrawableOnClick(v -> {
                         showStatusSelect();
@@ -13692,45 +13657,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     nameTextView[a].setLeftDrawable(getBotVerificationDrawable(chat.bot_verification_icon, false, a));
                 } else {
                     nameTextView[a].setLeftDrawable(null);
-                }
-
-                boolean isSoundGram = soundgram.music.SoundGramConfig.hasBadgeForChat(chat);
-                if (isSoundGram) {
-                    Drawable d1 = nameTextView[a].getRightDrawable();
-                    Drawable d2 = nameTextView[a].getRightDrawable2();
-                    if (!(d1 instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable) && !(d2 instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable)) {
-                        Drawable raw = androidx.core.content.ContextCompat.getDrawable(getParentActivity(), R.drawable.ic_soundgram_badge);
-                        if (raw != null) {
-                            soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable soundGramDrawable = new soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable(raw.mutate());
-                            if (d1 == null) {
-                                nameTextView[a].setRightDrawable(soundGramDrawable);
-                            } else if (d2 == null) {
-                                nameTextView[a].setRightDrawable2(soundGramDrawable);
-                            }
-                            nameTextView[a].requestLayout();
-
-                            android.view.View.OnClickListener badgeClickListener = v -> {
-                                soundgram.ui.SoundGramBadgeBottomSheet bottomSheet = new soundgram.ui.SoundGramBadgeBottomSheet(ProfileActivity.this.getParentActivity(), resourcesProvider);
-                                showDialog(bottomSheet);
-                            };
-
-                            if (nameTextView[a].getRightDrawable() == soundGramDrawable) {
-                                nameTextView[a].setRightDrawableOnClick(badgeClickListener);
-                            } else if (nameTextView[a].getRightDrawable2() == soundGramDrawable) {
-                                nameTextView[a].setRightDrawable2OnClick(badgeClickListener);
-                            }
-                        }
-                    } else {
-                        android.view.View.OnClickListener badgeClickListener = v -> {
-                            soundgram.ui.SoundGramBadgeBottomSheet bottomSheet = new soundgram.ui.SoundGramBadgeBottomSheet(ProfileActivity.this.getParentActivity(), resourcesProvider);
-                            showDialog(bottomSheet);
-                        };
-                        if (d1 instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable) {
-                            nameTextView[a].setRightDrawableOnClick(badgeClickListener);
-                        } else if (d2 instanceof soundgram.music.SoundGramConfig.SoundGramBadgeWrapDrawable) {
-                            nameTextView[a].setRightDrawable2OnClick(badgeClickListener);
-                        }
-                    }
                 }
 
                 if (a == 0 && onlineTextOverride != null) {

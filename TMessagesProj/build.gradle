@@ -273,7 +273,6 @@ android {
         buildConfigField "String", "TELEGRAM_API_HASH", rootProject.ext.buildConfigString(apiHash)
         buildConfigField "String", "VELORA_UPDATE_CHANNEL", rootProject.ext.buildConfigString("")
         buildConfigField "String", "VELORA_RELEASE_CERT_SHA256", rootProject.ext.buildConfigString(rootProject.ext.veloraReleaseCertificateSha256)
-        buildConfigField "String", "VELORA_BADGES_URL", rootProject.ext.buildConfigString(getProps("VELORA_BADGES_URL"))
         buildConfigField "String", "GOOGLE_SAFETYNET_KEY", "\"" + getProps("GOOGLE_SAFETYNET_KEY") + "\""
         buildConfigField "String", "GOOGLE_AUTH_CLIENT_ID", "\"" + getProps("GOOGLE_AUTH_CLIENT_ID") + "\""
         buildConfigField "String", "HUAWEI_APP_ID", "\"" + getProps("HUAWEI_APP_ID") + "\""
