@@ -95,7 +95,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
         arrayList.add(category(ID_DEBUG, IconBackgroundColors.GRAY,
                 R.drawable.msg_info_solar, R.string.NM_HUB_Debug, "nimarko_debug"));
         arrayList.add(category(ID_SUPPORT_DEVELOPMENT, IconBackgroundColors.ORANGE_DEEP,
-                R.drawable.msg_gift_premium_solar, R.string.VeloraProject, "nimarko_support_development"));
+                R.drawable.msg_info_solar, R.string.VeloraAbout, "nimarko_support_development"));
         arrayList.add(UItem.asShadow(null));
 
         arrayList.add(UItem.asHeader(LocaleController.getString(R.string.NM_HUB_Header_Other)));
@@ -109,14 +109,6 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
                 R.drawable.msg_info_solar, R.string.UP_CheckForUpdates, "nimarko_updates"));
         arrayList.add(UItem.asShadow(null));
 
-        SpannableString forkedSub;
-        String forkedSubRaw = LocaleController.getString(R.string.VeloraCredits);
-        if (Build.VERSION.SDK_INT >= 24) {
-            forkedSub = new SpannableString(Html.fromHtml(forkedSubRaw, Html.FROM_HTML_MODE_LEGACY));
-        } else {
-            forkedSub = new SpannableString(Html.fromHtml(forkedSubRaw));
-        }
-        arrayList.add(UItem.asShadow(LocaleUtils.formatWithHtmlURLs(forkedSub)));
 
     }
 
@@ -171,9 +163,7 @@ public class MainPreferencesActivity extends BasePreferencesActivity {
                 AppRestartHelper.triggerRebirth(getParentActivity() != null ? getParentActivity() : getContext());
                 break;
             case ID_SUPPORT_DEVELOPMENT:
-                showDialog(new soundgram.ui.SoundGramBadgeBottomSheet(
-                        getParentActivity() != null ? getParentActivity() : getContext(),
-                        getResourceProvider()));
+                presentFragment(new AboutPreferencesActivity());
                 break;
             case ID_CHERRYGRAM_FORK:
                 org.telegram.messenger.browser.Browser.openUrl(getParentActivity(),

@@ -678,7 +678,7 @@ public class DialogStoriesCell extends FrameLayout implements NotificationCenter
 
     private boolean shouldDrawSelfInMini() {
         long dialogId = UserConfig.getInstance(currentAccount).clientUserId;
-        return storiesController.hasUnreadStories(dialogId) || (storiesController.hasSelfStories() && storiesController.getDialogListStories().size() <= 3);
+        return storiesController.getDialogListStories().isEmpty() || storiesController.hasUnreadStories(dialogId) || (storiesController.hasSelfStories() && storiesController.getDialogListStories().size() <= 3);
     }
 
     Comparator<StoryCell> comparator = (o1, o2) -> o2.position - o1.position;

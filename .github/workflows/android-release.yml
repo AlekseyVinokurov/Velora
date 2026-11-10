@@ -86,6 +86,7 @@ jobs:
         run: |
           python3 tests/icons/check_resources.py
           python3 tests/icons/run.py
+          python3 tests/security/run.py
 
       - name: Install the pinned Android toolchain on GitHub
         run: |
@@ -106,6 +107,11 @@ jobs:
             echo '::error::Less than 25 GiB free after toolchain setup. Use a larger GitHub-hosted runner.'
             exit 1
           fi
+
+      - name: Rebuild WS engine from reviewed source with verified TLS
+        run: |
+          GO111MODULE=off go test -count=1 -v TMessagesProj/src/main/java/soundgram/wsproxy/tg-ws-proxy.go TMessagesProj/src/main/java/soundgram/wsproxy/proxy_test.go
+          bash scripts/build-ws-proxy-ci.sh
 
       - name: Check required secrets without printing values
         env:

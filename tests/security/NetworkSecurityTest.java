@@ -80,8 +80,21 @@ public class NetworkSecurityTest {
         check(main.getBoolean("proxy_enabled", false) && main.getBoolean("vpn_test_marker", false), "other preferences unchanged");
         ws.edit().putBoolean("auto_start", true).putBoolean("enabled", true).apply();
         new BootReceiver().onReceive(context, new android.content.Intent().setAction(android.content.Intent.ACTION_BOOT_COMPLETED));
-        check(!ws.getBoolean("auto_start", true) && !ws.getBoolean("enabled", true), "boot clears restored legacy opt-ins without detector/service");
-        check(!WsProxyPolicy.isAvailable(), "release gate closed");
+        check(context.starts == 0, "boot must not start a service even with restored flags");
+        check(WsProxyPolicy.isAvailable(), "manual feature available");
+        WsProxyPolicy.disableLegacyPreferences(context);
+        MusicNetworkHelper.ensureBypassServiceRunning();
+        check(context.starts == 0 && WsProxyPolicy.session() == 0, "music and cold start cannot authorize proxy");
+        ws.edit().putString("secret", "saved-secret").apply();
+        WsProxyPolicy.startManually(context);
+        check(context.starts == 1 && WsProxyPolicy.session() != 0 && ws.getBoolean("enabled", false), "explicit manual start authorized");
+        check(!ws.getBoolean("auto_start", true) && ws.getString("secret", "").equals("saved-secret"), "manual start retains parameters, forbids auto start");
+        WsProxyPolicy.stopManually(context);
+        check(WsProxyPolicy.session() == 0 && !ws.getBoolean("enabled", true) && context.stops == 1, "manual stop revokes pending starts and stops service");
+        check(main.getBoolean("proxy_enabled", false), "manual session never edits saved Telegram proxy");
+        soundgram.wsproxy.ProxyAutoDetector.vpn = true;
+        WsProxyPolicy.startManually(context);
+        check(context.starts == 1 && WsProxyPolicy.session() == 0, "active VPN is preserved");
         System.out.println("PASS: " + assertions + " TLS/legacy WS policy assertions on production classes (host stubs, no device).");
     }
 }

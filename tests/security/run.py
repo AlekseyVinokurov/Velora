@@ -23,8 +23,9 @@ STUBS = {
         public static final int MODE_PRIVATE=0;
         private final java.util.Map<String,SharedPreferences> prefs = new java.util.HashMap<>();
         public SharedPreferences getSharedPreferences(String name, int mode) { return prefs.computeIfAbsent(name, n -> new SharedPreferences()); }
-        public void startService(Intent i) { throw new AssertionError("Service must not start"); }
-        public void startForegroundService(Intent i) { throw new AssertionError("Foreground service must not start"); }}''',
+        public int starts, stops; public void startService(Intent i) { starts++; }
+        public void stopService(Intent i) { stops++; }
+        public void startForegroundService(Intent i) { starts++; }}''',
     'android/content/Intent.java': '''package android.content; public class Intent {
         public static final String ACTION_BOOT_COMPLETED="android.intent.action.BOOT_COMPLETED";
         private String action; public Intent() {} public Intent(Context c, Class<?> k) {}
@@ -43,7 +44,7 @@ STUBS = {
     'org/telegram/messenger/ApplicationLoader.java': '''package org.telegram.messenger; public class ApplicationLoader {
         public static android.content.Context applicationContext; }''',
     'soundgram/wsproxy/ProxyAutoDetector.java': '''package soundgram.wsproxy; public class ProxyAutoDetector {
-        public static boolean isVpnActive(android.content.Context c) { throw new AssertionError("No VPN detection on boot"); }
+        public static boolean vpn; public static boolean isVpnActive(android.content.Context c) { return vpn; }
         public static void checkAndAutoEnable(android.content.Context c) { throw new AssertionError("No detector on boot"); }}''',
 }
 
@@ -63,10 +64,10 @@ def main():
             path.write_text(source)
         helper = ROOT / 'TMessagesProj/src/main/java/soundgram/music/MusicNetworkHelper.java'
         import re
-        extras = sorted(set(re.findall(r'TgWsProxyService\.(EXTRA_[A-Z_]+|ACTION_START)', helper.read_text())))
+        extras = sorted({'ACTION_START'} | set(re.findall(r'TgWsProxyService\.(EXTRA_[A-Z_]+|ACTION_START)', helper.read_text())))
         stub = temporary / 'soundgram/wsproxy/TgWsProxyService.java'
         stub.write_text('package soundgram.wsproxy; public class TgWsProxyService { public static boolean isRunning=false; '
-                        'public static int currentPort=0; ' + ''.join('public static final String '+name+'="'+name+'";' for name in extras)+'}')
+                        'public static int currentPort=0; public static boolean isStopInProgress() { return false; } ' + ''.join('public static final String '+name+'="'+name+'";' for name in extras)+'}')
         source = ROOT / 'TMessagesProj/src/main/java/soundgram/wsproxy'
         classes = temporary / 'classes'
         run(['javac', '--release', '17', '-d', classes, *temporary.rglob('*.java'), helper,
@@ -83,10 +84,10 @@ def main():
         run(['java', '-cp', classes, 'NetworkSecurityTest', *keys], env=env)
     manifest = ET.parse(ROOT / 'TMessagesProj/src/main/AndroidManifest.xml')
     ns = '{http://schemas.android.com/apk/res/android}'
-    for name in ['soundgram.wsproxy.TgWsProxyService', 'soundgram.wsproxy.BootReceiver']:
+    for name, enabled in [('soundgram.wsproxy.TgWsProxyService', 'true'), ('soundgram.wsproxy.BootReceiver', 'false')]:
         matches = [node for node in manifest.iter() if node.get(ns+'name') == name]
-        assert len(matches) == 1 and matches[0].get(ns+'enabled') == 'false', name
-    print('PASS: WS service and boot receiver disabled in the product manifest. Temporary fixtures deleted.')
+        assert len(matches) == 1 and matches[0].get(ns+'enabled') == enabled, name
+    print('PASS: WS manual service enabled and boot receiver disabled in the product manifest. Temporary fixtures deleted.')
 
 
 if __name__ == '__main__':

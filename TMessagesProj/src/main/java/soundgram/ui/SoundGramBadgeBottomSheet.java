@@ -28,7 +28,7 @@ public class SoundGramBadgeBottomSheet extends BottomSheet {
                 AndroidUtilities.dp(24), AndroidUtilities.dp(24));
 
         TextView title = new TextView(context);
-        title.setText(LocaleController.getString(R.string.VeloraProject));
+        title.setText(LocaleController.getString(R.string.VeloraAuthorsLicenses));
         title.setTextSize(20);
         title.setTypeface(AndroidUtilities.bold());
         title.setTextColor(getThemedColor(Theme.key_dialogTextBlack));
@@ -43,6 +43,9 @@ public class SoundGramBadgeBottomSheet extends BottomSheet {
 
         addLink(root, R.string.VeloraProject, "https://github.com/AlekseyVinokurov/Velora");
         addLink(root, R.string.VeloraUpstreamSource, "https://github.com/soundgram-project/SoundGram");
+        addLink(root, R.string.VeloraTelegramSource, "https://github.com/DrKLO/Telegram");
+        addLink(root, R.string.VeloraAuthorsLicenses, "https://github.com/AlekseyVinokurov/Velora/blob/main/README.md#license-and-credits");
+        addLink(root, R.string.VeloraLicense, "https://github.com/AlekseyVinokurov/Velora/blob/main/LICENSE");
         setCustomView(root);
     }
 

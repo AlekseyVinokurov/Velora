@@ -13,4 +13,9 @@
     <string name="VeloraUpdateRejected">The APK could not be verified. It was not installed. Check for updates again.</string>
     <string name="VeloraInstallerUnavailable">Android could not open a system APK installer. The app was not removed or reset.</string>
     <string name="VeloraWsProxyDisabled">WS Proxy is disabled in this version of Velora.</string>
+    <string name="VeloraAbout">About Velora</string>
+    <string name="VeloraAuthorsLicenses">Authors and licenses</string>
+    <string name="VeloraBaseVersion">Source base inherited through SoundGram:</string>
+    <string name="VeloraTelegramSource">Telegram Android source</string>
+    <string name="VeloraLicense">GNU GPL license</string>
 </resources>

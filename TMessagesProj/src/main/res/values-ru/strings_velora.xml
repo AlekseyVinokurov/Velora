@@ -8,4 +8,9 @@
     <string name="VeloraUpdateRejected">Не удалось подтвердить подлинность APK. Установка не запускалась. Повторите проверку обновлений.</string>
     <string name="VeloraInstallerUnavailable">Не удалось открыть системный установщик APK Android. Приложение не удалялось, данные не сбрасывались.</string>
     <string name="VeloraWsProxyDisabled">WS Proxy отключён в этой версии Velora.</string>
+    <string name="VeloraAbout">О Velora</string>
+    <string name="VeloraAuthorsLicenses">Авторы и лицензии</string>
+    <string name="VeloraBaseVersion">Исходная база через SoundGram:</string>
+    <string name="VeloraTelegramSource">Исходный код Telegram Android</string>
+    <string name="VeloraLicense">Лицензия GNU GPL</string>
 </resources>

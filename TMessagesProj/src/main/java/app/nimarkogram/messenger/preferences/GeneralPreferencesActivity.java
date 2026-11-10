@@ -270,8 +270,12 @@ public class GeneralPreferencesActivity extends NimarkoUniversalPreferencesActiv
         } else if (item.id == hideStoriesRow) {
             NimarkoConfig.toggleHideStories();
             SettingsHelper.updateCheckState(view, NimarkoConfig.hideStories);
-
-            showRestartBulletin();
+            for (int account = 0; account < org.telegram.messenger.UserConfig.MAX_ACCOUNT_COUNT; account++) {
+                org.telegram.messenger.NotificationCenter.getInstance(account).postNotificationName(
+                        org.telegram.messenger.NotificationCenter.storiesUpdated);
+                org.telegram.messenger.NotificationCenter.getInstance(account).postNotificationName(
+                        org.telegram.messenger.NotificationCenter.storiesEnabledUpdate);
+            }
         } else if (item.id == archiveStoriesRow) {
             showStoriesArchiveConfigurator();
         } else if (item.id == useSystemEmojiRow) {

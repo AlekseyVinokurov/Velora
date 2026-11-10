@@ -3055,8 +3055,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             LinearLayout mockList = new LinearLayout(context);
             mockList.setOrientation(LinearLayout.VERTICAL);
 
-            mockList.addView(createMockItem(context, "Velora", "Velora project", 1L));
-            mockList.addView(createMockItem(context, "SoundGram", "Upstream project", 2L));
+            mockList.addView(createMockItem(context, LocaleController.getString(R.string.SavedMessages), LocaleController.getString(R.string.Message), 1L));
+            mockList.addView(createMockItem(context, LocaleController.getString(R.string.Music), LocaleController.getString(R.string.AttachMusic), 2L));
 
             previewCard.addView(mockList, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER_VERTICAL));
 

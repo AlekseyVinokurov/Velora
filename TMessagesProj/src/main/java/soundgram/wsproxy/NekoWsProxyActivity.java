@@ -194,68 +194,10 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
             notifyPingChanged();
             return;
         }
-        final int    port   = getPrefs().getInt("port", DEFAULT_PORT);
-        final String secret = getPrefs().getString("secret", "");
-        if (secret.isEmpty()) {
-            lastPingMs = -1;
-            notifyPingChanged();
-            return;
-        }
-
-        // Find or create the proxy entry in SharedConfig so checkProxy can use it
-        SharedConfig.ProxyInfo target = null;
-        for (SharedConfig.ProxyInfo info : SharedConfig.proxyList) {
-            if ("127.0.0.1".equals(info.address) && info.port == port) {
-                target = info;
-                break;
-            }
-        }
-        if (target == null) {
-            // Proxy not yet registered — nothing to check
-            lastPingMs = -1;
-            notifyPingChanged();
-            return;
-        }
-
-        // If already checking, reflect that in UI without launching a second check
-        if (target.checking) {
-            lastPingMs = -2;
-            notifyPingChanged();
-            return;
-        }
-
-        // Throttle: re-check only if last result is older than 5 s
-        if (android.os.SystemClock.elapsedRealtime() - target.availableCheckTime < 5000) {
-            lastPingMs = target.available ? (int) target.ping : -1;
-            notifyPingChanged();
-            return;
-        }
-
-        // Launch async check via Telegram (same as Telegram's own proxy ping)
-        final SharedConfig.ProxyInfo proxyInfo = target;
-        proxyInfo.checking = true;
-        lastPingMs = -2;
-        notifyPingChanged();
-
-        proxyInfo.proxyCheckPingId = ConnectionsManager
-                .getInstance(currentAccount)
-                .checkProxy(
-                        proxyInfo.address, proxyInfo.port,
-                        proxyInfo.username, proxyInfo.password, proxyInfo.secret,
-                        time -> AndroidUtilities.runOnUIThread(() -> {
-                            proxyInfo.availableCheckTime = android.os.SystemClock.elapsedRealtime();
-                            proxyInfo.checking = false;
-                            if (time == -1) {
-                                proxyInfo.available = false;
-                                proxyInfo.ping      = 0;
-                                lastPingMs          = -1;
-                            } else {
-                                proxyInfo.ping      = time;
-                                proxyInfo.available = true;
-                                lastPingMs          = (int) time;
-                            }
-                            notifyPingChanged();
-                        }));
+        new Thread(() -> {
+            lastPingMs = TgWsProxyService.getPingMs(TgWsProxyService.currentPort);
+            AndroidUtilities.runOnUIThread(this::notifyPingChanged);
+        }, "velora-proxy-local-ping").start();
     }
 
     private void notifyPingChanged() {
@@ -276,7 +218,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
         statusRow           = row++;
         enableRow           = row++;
         pingRow             = row++;
-        autoStartRow        = row++;
+        autoStartRow        = -1;
         shadow1Row          = row++;
 
         connectionHeaderRow = row++;
@@ -320,28 +262,6 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
 
         if (position == enableRow) {
             toggleProxy();
-
-        } else if (position == autoStartRow) {
-            boolean on = !getPrefs().getBoolean("auto_start", DEFAULT_AUTO_START);
-            getPrefs().edit().putBoolean("auto_start", on).commit();
-            if (!on) {
-                if (!getPrefs().getBoolean("manual_enabled", false) && (TgWsProxyService.isRunning || getPrefs().getBoolean("enabled", false))) {
-                    getPrefs().edit().putBoolean("enabled", false).commit();
-                    Context ctx = getParentActivity();
-                    if (ctx != null) {
-                        ctx.startService(new Intent(ctx, TgWsProxyService.class).setAction(TgWsProxyService.ACTION_STOP));
-                    }
-                    disableTelegramProxy();
-                }
-            } else {
-                Context ctx = getParentActivity();
-                if (ctx != null) {
-                    new Thread(() -> {
-                        ProxyAutoDetector.checkAndAutoEnable(ctx);
-                    }, "proxy-auto-start-toggle").start();
-                }
-            }
-            updateRows();
 
         } else if (position == portRow) {
             showInputDialog("Local port",
@@ -468,187 +388,42 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     // ── Enable / disable proxy ───────────────────────────────────────────────
 
     private void toggleProxy() {
-        boolean on = !getPrefs().getBoolean("enabled", false);
-        getPrefs().edit()
-                .putBoolean("enabled", on)
-                .putBoolean("manual_enabled", on)
-                .commit();
-
         Context ctx = getParentActivity();
         if (ctx == null) return;
-
-        if (on) {
-            // Ensure a secret exists
-            if (getPrefs().getString("secret", "").isEmpty()) {
-                getPrefs().edit().putString("secret", generateSecret()).commit();
-            }
-            startProxyService();
-            // Auto-apply proxy settings after service has time to start
-            AndroidUtilities.runOnUIThread(this::autoApplyProxy, 3500);
-            // Watchdog: verify startup after 8s to prevent hanging on "Starting…"
-            AndroidUtilities.runOnUIThread(() -> {
-                if (getParentActivity() == null) return;
-                int port = getPrefs().getInt("port", DEFAULT_PORT);
-                if (getPrefs().getBoolean("enabled", false) && !TgWsProxyService.isRunning) {
-                    new Thread(() -> {
-                        boolean open = ProxyAutoDetector.tcpPing("127.0.0.1", port, 500);
-                        AndroidUtilities.runOnUIThread(() -> {
-                            if (open) {
-                                TgWsProxyService.isRunning = true;
-                                autoApplyProxy();
-                            } else if (getPrefs().getBoolean("enabled", false) && !TgWsProxyService.isRunning) {
-                                getPrefs().edit().putBoolean("enabled", false).commit();
-                                Context c = getParentActivity();
-                                if (c != null) {
-                                    c.startService(new Intent(c, TgWsProxyService.class).setAction(TgWsProxyService.ACTION_STOP));
-                                }
-                                disableTelegramProxy();
-                            }
-                            updateRows();
-                            if (listAdapter != null) listAdapter.notifyDataSetChanged();
-                        });
-                    }).start();
-                }
-            }, 8000);
+        if (getPrefs().getBoolean("enabled", false)) {
+            WsProxyPolicy.stopManually(ctx);
         } else {
-            ctx.startService(new Intent(ctx, TgWsProxyService.class)
-                    .setAction(TgWsProxyService.ACTION_STOP));
-            disableTelegramProxy();
+            WsProxyPolicy.startManually(ctx);
         }
-
         updateRows();
+        if (listAdapter != null) listAdapter.notifyDataSetChanged();
     }
 
     private void startProxyService() {
         Context ctx = getParentActivity();
-        if (ctx == null) return;
-        SharedPreferences p = getPrefs();
-
-        Intent intent = new Intent(ctx, TgWsProxyService.class);
-        intent.setAction(TgWsProxyService.ACTION_START);
-        intent.putExtra(TgWsProxyService.EXTRA_PORT,        p.getInt("port",          DEFAULT_PORT));
-        intent.putExtra(TgWsProxyService.EXTRA_SECRET,      p.getString("secret",     ""));
-        intent.putExtra(TgWsProxyService.EXTRA_POOL_SIZE,   p.getInt("pool_size",     DEFAULT_POOL_SIZE));
-        intent.putExtra(TgWsProxyService.EXTRA_RECV_BUF,    p.getInt("buffer",        DEFAULT_BUFFER));
-        intent.putExtra(TgWsProxyService.EXTRA_SEND_BUF,    p.getInt("buffer",        DEFAULT_BUFFER));
-        intent.putExtra(TgWsProxyService.EXTRA_CF_ENABLED,  p.getBoolean("cf_enabled", DEFAULT_CF_ENABLED));
-        intent.putExtra(TgWsProxyService.EXTRA_CF_DOMAIN,   p.getString("cf_domain",  DEFAULT_CF_DOMAIN));
-        intent.putExtra(TgWsProxyService.EXTRA_FAKE_TLS,    p.getBoolean("fake_tls",   DEFAULT_FAKE_TLS));
-        intent.putExtra(TgWsProxyService.EXTRA_FAKE_DOMAIN, p.getString("fake_domain", DEFAULT_FAKE_DOMAIN));
-        intent.putExtra(TgWsProxyService.EXTRA_VERBOSE,     0);
-        intent.putExtra(TgWsProxyService.EXTRA_DC_IPS,      p.getString("dc_ips",     DEFAULT_DC_IPS));
-
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                ctx.startForegroundService(intent);
-            } else {
-                ctx.startService(intent);
-            }
-        } catch (Throwable e) {
-            org.telegram.messenger.FileLog.e("NekoWsProxyActivity: startForegroundService failed", e);
-            try {
-                ctx.startService(intent);
-            } catch (Throwable ignored) {}
-        }
+        if (ctx != null) WsProxyPolicy.startManually(ctx);
     }
 
     private void restartProxy() {
-        Context ctx = getParentActivity();
-        if (ctx == null) return;
-        ctx.startService(new Intent(ctx, TgWsProxyService.class)
-                .setAction(TgWsProxyService.ACTION_STOP));
-        AndroidUtilities.runOnUIThread(() -> {
-            if (getPrefs().getBoolean("enabled", false)) {
-                startProxyService();
-                AndroidUtilities.runOnUIThread(this::autoApplyProxy, 3500);
-            }
-        }, 1500);
+        if (getPrefs().getBoolean("enabled", false)) startProxyService();
     }
 
     // ── Telegram proxy settings helpers ─────────────────────────────────────
 
     @SuppressLint("ApplySharedPref")
     private void autoApplyProxy() {
-        int port = getPrefs().getInt("port", DEFAULT_PORT);
-        String secret = getPrefs().getString("secret", "");
-        if (secret.isEmpty()) return;
-
-        String proxySecret = NativeProxy.getSecretWithPrefix();
-        if (proxySecret == null) proxySecret = "dd" + secret;
-
-        SharedConfig.ProxyInfo existing = null;
-        for (SharedConfig.ProxyInfo info : SharedConfig.proxyList) {
-            if ("127.0.0.1".equals(info.address) && info.port == port) {
-                existing = info;
-                break;
-            }
-        }
-
-        SharedConfig.ProxyInfo proxyInfo;
-        if (existing != null) {
-            existing.secret = proxySecret;
-            proxyInfo = existing;
-        } else {
-            proxyInfo = new SharedConfig.ProxyInfo("127.0.0.1", port, "", "", proxySecret);
-            SharedConfig.addProxy(proxyInfo);
-        }
-
-        SharedConfig.currentProxy = proxyInfo;
-        SharedConfig.saveProxyList();
-
-        org.telegram.messenger.MessagesController.getGlobalMainSettings()
-                .edit()
-                .putBoolean("proxy_enabled", true)
-                .putString("proxy_ip",       "127.0.0.1")
-                .putString("proxy_pass",     "")
-                .putString("proxy_user",     "")
-                .putInt("proxy_port",        port)
-                .putString("proxy_secret",   proxySecret)
-                .commit();
-
-        ConnectionsManager.setProxySettings(true, "127.0.0.1", port, "", "", proxySecret);
-        org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                .postNotificationName(
-                        org.telegram.messenger.NotificationCenter.proxySettingsChanged);
+        // Only the service applies the route after native startup succeeds.
     }
 
     @SuppressLint("ApplySharedPref")
     private void disableTelegramProxy() {
-        org.telegram.messenger.MessagesController.getGlobalMainSettings()
-                .edit()
-                .putBoolean("proxy_enabled", false)
-                .commit();
-        ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
-        org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                .postNotificationName(
-                        org.telegram.messenger.NotificationCenter.proxySettingsChanged);
+        // The service restores the current saved Telegram route without editing it.
     }
 
     // ── Preferences ─────────────────────────────────────────────────────────
 
     private SharedPreferences getPrefs() {
-        SharedPreferences p = ApplicationLoader.applicationContext
-                .getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-        boolean hasTls = p.contains("fake_tls");
-        if (!p.contains("defaults_applied") || !hasTls) {
-            SharedPreferences.Editor editor = p.edit();
-            if (!p.contains("defaults_applied")) {
-                editor.putInt    ("port",             DEFAULT_PORT)
-                      .putInt    ("pool_size",         DEFAULT_POOL_SIZE)
-                      .putInt    ("buffer",            DEFAULT_BUFFER)
-                      .putBoolean("cf_enabled",        DEFAULT_CF_ENABLED)
-                      .putString ("cf_domain",         DEFAULT_CF_DOMAIN)
-                      .putBoolean("auto_start",        DEFAULT_AUTO_START)
-                      .putString ("dc_ips",            DEFAULT_DC_IPS)
-                      .putBoolean("defaults_applied",  true);
-            }
-            if (!hasTls) {
-                editor.putBoolean("fake_tls",          DEFAULT_FAKE_TLS)
-                      .putString ("fake_domain",       DEFAULT_FAKE_DOMAIN);
-            }
-            editor.apply();
-        }
-        return p;
+        return ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
     }
 
     // ── Utilities ────────────────────────────────────────────────────────────
@@ -771,11 +546,15 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                     boolean running = TgWsProxyService.isRunning;
                     String value;
                     if (enabled && running) {
-                        value = "Running on 127.0.0.1:" + prefs.getInt("port", DEFAULT_PORT);
+                        int state = ConnectionsManager.getInstance(currentAccount).getConnectionState();
+                        value = state == ConnectionsManager.ConnectionStateConnected || state == ConnectionsManager.ConnectionStateUpdating
+                                ? "Telegram подключён · 127.0.0.1:" + prefs.getInt("port", DEFAULT_PORT)
+                                : "Локальный прокси запущен; Telegram подключается…";
                     } else if (enabled) {
                         value = "Starting…";
                     } else {
-                        value = "Stopped";
+                        value = prefs.getString("last_error", "");
+                        if (value.isEmpty()) value = "Stopped";
                     }
                     cell.setTextAndValue("Status", value, true);
 
@@ -794,7 +573,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                         value    = "Checking…";
                         colorKey = Theme.key_windowBackgroundWhiteGrayText2;
                     }
-                    cell.setTextAndValue("Ping", value, true);
+                    cell.setTextAndValue("Local TCP (not Telegram latency)", value, true);
                     // Colour the value text
                     if (cell.getChildCount() > 1) {
                         android.view.View child = cell.getChildAt(1);
@@ -841,10 +620,10 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 TextInfoPrivacyCell cell = (TextInfoPrivacyCell) holder.itemView;
                 if (position == infoRow) {
                     cell.setText(
-                            "TG WS Proxy tunnels Telegram traffic through a WebSocket "
-                            + "connection (optionally via Cloudflare CDN) to bypass "
-                            + "throttling. The proxy is applied to Telegram automatically "
-                            + "and paused when a VPN is active.");
+                            "Velora Bypass включается только вручную и действует до остановки процесса. "
+                            + "Использует WebSocket/TLS для Telegram и локальный SOCKS5 для музыки. "
+                            + "При отключении восстанавливает сохранённый прокси Telegram. "
+                            + "При включении VPN останавливается; автоматически не возобновляется.");
                 }
             }
         }

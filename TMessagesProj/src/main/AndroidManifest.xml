@@ -607,7 +607,7 @@
 
         <service
             android:name="soundgram.wsproxy.TgWsProxyService"
-            android:enabled="false"
+            android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property

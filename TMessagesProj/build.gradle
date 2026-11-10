@@ -226,8 +226,13 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
+            // Never package the inherited opaque WS binaries: CI rebuilds the reviewed Go source.
+            jniLibs.srcDirs = [rootProject.file('.local-build/native-libs')]
         }
+    }
+
+    if (!rootProject.file('.local-build/native-libs/arm64-v8a/libtgwsproxy.so').isFile()) {
+        throw new GradleException('Rebuilt WS library missing. Build through the Android release GitHub Actions workflow.')
     }
 
     defaultConfig {
@@ -257,6 +262,13 @@ android {
                 || !(apiHash ==~ /[0-9a-fA-F]{32}/)) {
             throw new GradleException("Configure your own TELEGRAM_API_ID and TELEGRAM_API_HASH in private.properties or environment variables (see docs/BUILDING.md).")
         }
+        def telegramBase = new Properties()
+        rootProject.file('telegram-base.properties').withInputStream { telegramBase.load(it) }
+        ['versionName', 'versionCode', 'commit'].each { key ->
+            if (!telegramBase.getProperty(key)) throw new GradleException("Missing Telegram base metadata: " + key)
+        }
+        buildConfigField "String", "TELEGRAM_BASE_VERSION", rootProject.ext.buildConfigString(telegramBase.getProperty('versionName'))
+        buildConfigField "String", "TELEGRAM_BASE_COMMIT", rootProject.ext.buildConfigString(telegramBase.getProperty('commit'))
         buildConfigField "int", "TELEGRAM_API_ID", apiId
         buildConfigField "String", "TELEGRAM_API_HASH", rootProject.ext.buildConfigString(apiHash)
         buildConfigField "String", "VELORA_UPDATE_CHANNEL", rootProject.ext.buildConfigString("")

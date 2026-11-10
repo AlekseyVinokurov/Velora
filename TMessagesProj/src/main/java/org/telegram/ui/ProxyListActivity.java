@@ -797,127 +797,23 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
 
     @SuppressLint("ApplySharedPref")
     private void toggleTgWsProxy() {
-        if (!soundgram.wsproxy.WsProxyPolicy.isAvailable()) {
-            presentFragment(new NekoWsProxyActivity());
-            return;
-        }
-        SharedPreferences wsPrefs = ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-        boolean on = !wsPrefs.getBoolean("enabled", false);
-        wsPrefs.edit().putBoolean("enabled", on).commit();
-        useTgvsProxy = on;
-
         Context ctx = getParentActivity();
         if (ctx == null) return;
-
-        if (on) {
-            // Generate secret if empty
-            String secret = wsPrefs.getString("secret", "");
-            if (secret.isEmpty()) {
-                byte[] b = new byte[16];
-                new java.security.SecureRandom().nextBytes(b);
-                StringBuilder sb = new StringBuilder();
-                for (byte v : b) sb.append(String.format("%02x", v));
-                secret = sb.toString();
-                wsPrefs.edit().putString("secret", secret).commit();
-            }
-
-            Intent intent = new Intent(ctx, TgWsProxyService.class);
-            intent.setAction(TgWsProxyService.ACTION_START);
-            intent.putExtra(TgWsProxyService.EXTRA_PORT, wsPrefs.getInt("port", 1443));
-            intent.putExtra(TgWsProxyService.EXTRA_SECRET, secret);
-            intent.putExtra(TgWsProxyService.EXTRA_POOL_SIZE, wsPrefs.getInt("pool_size", 4));
-            intent.putExtra(TgWsProxyService.EXTRA_RECV_BUF, wsPrefs.getInt("buffer", 256));
-            intent.putExtra(TgWsProxyService.EXTRA_SEND_BUF, wsPrefs.getInt("buffer", 256));
-            intent.putExtra(TgWsProxyService.EXTRA_CF_ENABLED, wsPrefs.getBoolean("cf_enabled", true));
-            intent.putExtra(TgWsProxyService.EXTRA_CF_DOMAIN, wsPrefs.getString("cf_domain", ""));
-
-            intent.putExtra(TgWsProxyService.EXTRA_VERBOSE, wsPrefs.getInt("verbose", 0));
-            intent.putExtra(TgWsProxyService.EXTRA_DC_IPS, wsPrefs.getString("dc_ips", ""));
-
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    ctx.startForegroundService(intent);
-                } else {
-                    ctx.startService(intent);
-                }
-            } catch (Throwable e) {
-                org.telegram.messenger.FileLog.e("ProxyListActivity: startForegroundService failed", e);
-                try {
-                    ctx.startService(intent);
-                } catch (Throwable ignored) {}
-            }
-
-            AndroidUtilities.runOnUIThread(() -> autoApplyWsProxy(), 3000);
-        } else {
-            ctx.startService(new Intent(ctx, TgWsProxyService.class)
-                .setAction(TgWsProxyService.ACTION_STOP));
-            disableWsProxy();
-        }
-
-        if (listAdapter != null) {
-            listAdapter.notifyItemChanged(tgvsProxyRow, ListAdapter.PAYLOAD_CHECKED_CHANGED);
-        }
+        SharedPreferences prefs = ctx.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
+        if (prefs.getBoolean("enabled", false)) soundgram.wsproxy.WsProxyPolicy.stopManually(ctx);
+        else soundgram.wsproxy.WsProxyPolicy.startManually(ctx);
+        useTgvsProxy = prefs.getBoolean("enabled", false);
+        if (listAdapter != null) listAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("ApplySharedPref")
     private void autoApplyWsProxy() {
-        SharedPreferences wsPrefs = ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE);
-        int port = wsPrefs.getInt("port", 1443);
-        String secret = wsPrefs.getString("secret", "");
-        if (secret.isEmpty()) return;
-
-        String proxySecret = soundgram.wsproxy.NativeProxy.getSecretWithPrefix();
-        if (proxySecret == null) proxySecret = "dd" + secret;
-
-        String address = "127.0.0.1";
-
-        SharedConfig.ProxyInfo existingProxy = null;
-        for (SharedConfig.ProxyInfo info : SharedConfig.proxyList) {
-            if ("127.0.0.1".equals(info.address) && info.port == port) {
-                existingProxy = info;
-                break;
-            }
-        }
-
-        SharedConfig.ProxyInfo proxyInfo;
-        if (existingProxy != null) {
-            existingProxy.secret = proxySecret;
-            proxyInfo = existingProxy;
-        } else {
-            proxyInfo = new SharedConfig.ProxyInfo(address, port, "", "", proxySecret);
-            SharedConfig.addProxy(proxyInfo);
-        }
-
-        SharedConfig.currentProxy = proxyInfo;
-        SharedConfig.saveProxyList();
-
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("proxy_enabled", true);
-        editor.putString("proxy_ip", address);
-        editor.putString("proxy_pass", "");
-        editor.putString("proxy_user", "");
-        editor.putInt("proxy_port", port);
-        editor.putString("proxy_secret", proxySecret);
-        editor.commit();
-
-        ConnectionsManager.setProxySettings(true, address, port, "", "", proxySecret);
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+        // Applied by TgWsProxyService after successful startup.
     }
 
     @SuppressLint("ApplySharedPref")
     private void disableWsProxy() {
-        try {
-            ApplicationLoader.applicationContext.getSharedPreferences("tgwsproxy", Context.MODE_PRIVATE)
-                    .edit().putBoolean("enabled", false).putBoolean("manual_enabled", false).commit();
-        } catch (Throwable ignore) {}
-        SharedPreferences preferences = MessagesController.getGlobalMainSettings();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("proxy_enabled", false);
-        editor.commit();
-
-        ConnectionsManager.setProxySettings(false, "", 0, "", "", "");
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged);
+        soundgram.wsproxy.WsProxyPolicy.stopManually(ApplicationLoader.applicationContext);
     }
 
     @Override

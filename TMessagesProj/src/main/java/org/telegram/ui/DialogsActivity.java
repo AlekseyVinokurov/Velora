@@ -13934,15 +13934,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         // we must still run the flip-to-hidden path so a previously-visible cell
         // collapses when the toggle is flipped on at runtime.
         final boolean hideStories = app.nimarkogram.messenger.NimarkoConfig.hideStories;
-        boolean onlySelfStories = !hideStories && !isArchive() && getStoriesController().hasOnlySelfStories();
+        boolean onlySelfStories = false;
         boolean newVisibility;
         if (hideStories || communityId != 0) {
             newVisibility = false;
         } else if (isArchive()) {
             newVisibility = !getStoriesController().getHiddenList().isEmpty();
         } else {
-            newVisibility = !onlySelfStories && getStoriesController().hasStories();
-            onlySelfStories = getStoriesController().hasOnlySelfStories();
+            // The real self item also opens the recorder when there are no active stories.
+            newVisibility = getUserConfig().isClientActivated();
         }
 
         hasOnlySlefStories = onlySelfStories;
@@ -14067,7 +14067,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 setScrollY(0);
             } else {
                 scrollAdditionalOffset = -dp(DialogStoriesCell.HEIGHT_IN_DP);
-                setScrollY(-getMaxScrollYOffset());
+                setScrollY(isArchive() ? -getMaxScrollYOffset() : 0);
             }
             for (int i = 0; i < viewPages.length; i++) {
                 if (viewPages[i] != null) {

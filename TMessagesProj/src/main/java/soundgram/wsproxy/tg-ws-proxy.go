@@ -64,11 +64,11 @@ const (
 
 	wsPoolMaxAge = 180.0 // 3 min: keep alive long-lived CF connections
 
-	dcFailCooldown = 4.0 // cut to 4s: fail fast → switch to CF sooner
+	dcFailCooldown = 15.0 // avoid aggressive retries on a failing DC
 
 	wsFailTimeout = 1.2 // 1.2s: blacklisted DC gets a very short probe
 
-	poolMaintainInterval = 2 // every 2s: keep pool full at all times
+	poolMaintainInterval = 15 // bounded background refill cadence
 
 	// Bridge read deadlines
 	bridgeReadTimeout  = 90 * time.Second
@@ -86,10 +86,10 @@ const (
 	cfproxyActiveFileName   = "cfproxy-active-domain.txt"
 	cfproxyRefreshInterval  = 6 * time.Hour   // refresh more often: CF domains change
 	cfproxyDialPhaseTimeout = 3 * time.Second // fail faster on bad CF domains
-	cfproxyFallbackParallel = 8               // try 8 CF domains in parallel
-	cfproxy429Cooldown      = 8 * time.Second  // quick recovery from CF rate limits
-	cfproxy429MaxCooldown   = 45 * time.Second // was 90s — cut in half
-	cfproxyGlobalParallel   = 14              // more concurrent CF attempts during burst
+	cfproxyFallbackParallel = 3               // bounded parallel fallback
+	cfproxy429Cooldown      = 15 * time.Second  // quick recovery from CF rate limits
+	cfproxy429MaxCooldown   = 120 * time.Second // bounded exponential rate-limit backoff
+	cfproxyGlobalParallel   = 4              // more concurrent CF attempts during burst
 )
 
 var (
@@ -1381,6 +1381,14 @@ func logCfConnError(format string, err error, args ...any) {
 	logError.Printf(format, args...)
 }
 
+// The same verified configuration is exercised by the host TLS regression tests.
+func verifiedWsTLSConfig(domain string) *tls.Config {
+    config := tlsConfigPool.Clone()
+    config.ServerName = domain
+    config.InsecureSkipVerify = false
+    return config
+}
+
 func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout time.Duration) (*RawWebSocket, error) {
 	if dialAddr == "" {
 		return nil, fmt.Errorf("empty dial address")
@@ -1390,9 +1398,7 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 		Timeout: timeout,
 	}
 
-	tlsCfg := tlsConfigPool.Clone()
-	tlsCfg.ServerName = domain
-	tlsCfg.InsecureSkipVerify = true
+	tlsCfg := verifiedWsTLSConfig(domain)
 
 	targetAddr := net.JoinHostPort(dialAddr, "443")
 	rawConn, err := dialer.DialContext(ctx, "tcp", targetAddr)
@@ -1400,6 +1406,9 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 		return nil, err
 	}
 
+    connection := rawConn
+    stopDial := context.AfterFunc(ctx, func() { connection.Close() })
+    defer stopDial()
 	setSockOpts(rawConn)
 
 	// Wrap in splitWriteConn so the TLS ClientHello is sent across two TCP
@@ -2143,6 +2152,7 @@ type poolEntry struct {
 }
 
 type WsPool struct {
+    enqueueMu sync.Mutex
 	queues sync.Map
 	status sync.Map
 }
@@ -2226,6 +2236,9 @@ func (p *WsPool) refill(ctx context.Context, slot dcSlot, q chan *poolEntry, s *
 				}
 			}
 			if ws := connectOneWS(ctx, targetIP, domains); ws != nil {
+				p.enqueueMu.Lock()
+                defer p.enqueueMu.Unlock()
+                if ctx.Err() != nil { SafeClose(ws.conn); return }
 				now := time.Now().Unix()
 				select {
 				case q <- &poolEntry{ws: ws, created: now}:
@@ -2271,6 +2284,8 @@ func (p *WsPool) IdleCount() int {
 }
 
 func (p *WsPool) CloseAll() {
+    p.enqueueMu.Lock()
+    defer p.enqueueMu.Unlock()
 	p.queues.Range(func(_, val interface{}) bool {
 		q := val.(chan *poolEntry)
 		for {
@@ -2392,7 +2407,7 @@ func tunnelToTarget(ctx context.Context, conn net.Conn, host, port, target strin
 		if dohIP := resolveDoH(ctx, host); dohIP != "" {
 			candidateIPs = append(candidateIPs, dohIP)
 		}
-		if ips, err := net.LookupHost(host); err == nil {
+		if ips, err := net.DefaultResolver.LookupHost(ctx, host); err == nil {
 			for _, ip := range ips {
 				if net.ParseIP(ip) != nil && !containsStr(candidateIPs, ip) {
 					candidateIPs = append(candidateIPs, ip)
@@ -2434,6 +2449,8 @@ func tunnelToTarget(ctx context.Context, conn net.Conn, host, port, target strin
 		return
 	}
 	defer remoteConn.Close()
+	stopRemote := context.AfterFunc(ctx, func() { remoteConn.Close() })
+	defer stopRemote()
 	setSockOpts(remoteConn)
 
 	wrappedRemote := &splitWriteConn{Conn: remoteConn}
@@ -2550,6 +2567,8 @@ func handlePlainHTTP(ctx context.Context, conn net.Conn, reader *bufio.Reader, m
 		return
 	}
 	defer remoteConn.Close()
+	stopRemote := context.AfterFunc(ctx, func() { remoteConn.Close() })
+	defer stopRemote()
 	setSockOpts(remoteConn)
 
 	proto := "HTTP/1.1"
@@ -3277,6 +3296,8 @@ func handleClient(ctx context.Context, conn net.Conn) {
 	setSockOpts(conn)
 
 	defer conn.Close()
+	stopClose := context.AfterFunc(ctx, func() { conn.Close() })
+	defer stopClose()
 
 	proxySecretMu.RLock()
 	currentSecret := proxySecret
@@ -3601,7 +3622,7 @@ func runProxy(ctx context.Context, host string, port int, dcOptMap map[int]strin
 	srvCtx, srvCancel := context.WithCancel(ctx)
 	defer srvCancel()
 
-	startCfproxyRefresh(srvCtx)
+	if cfproxyEnabled { startCfproxyRefresh(srvCtx) }
 	startPoolMaintainer(srvCtx)
 
 	logInfo.Println("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
@@ -3656,11 +3677,13 @@ func runProxy(ctx context.Context, host string, port int, dcOptMap map[int]strin
 
 	select {
 	case <-done:
-	case <-time.After(60 * time.Second):
+	case <-time.After(3 * time.Second):
 		logWarn.Println("Some connections did not finish in time, forcing shutdown")
 	}
 
 	wsPool.CloseAll()
+    dohClient.CloseIdleConnections()
+    githubClient.CloseIdleConnections()
 	return nil
 }
 
@@ -3703,6 +3726,7 @@ var (
 	globalCtx    context.Context
 	globalCancel context.CancelFunc
 	globalMu     sync.Mutex
+	globalDone   chan struct{}
 )
 
 //export StartProxy
@@ -3741,8 +3765,12 @@ func StartProxy(cHost *C.char, port C.int, cDcIps *C.char, cSecret *C.char, verb
 	globalCtx, globalCancel = context.WithCancel(context.Background())
 	started := make(chan error, 1)
 
+	globalDone = make(chan struct{})
+	ctx := globalCtx
+	done := globalDone
 	go func() {
-		_ = runProxy(globalCtx, host, goPort, dcOptMap, started)
+		defer close(done)
+		_ = runProxy(ctx, host, goPort, dcOptMap, started)
 	}()
 
 	if err := <-started; err != nil {
@@ -3765,6 +3793,7 @@ func StopProxy() C.int {
 	}
 
 	globalCancel()
+	if globalDone != nil { <-globalDone; globalDone = nil }
 	globalCancel = nil
 	globalCtx = nil
 
@@ -3786,7 +3815,6 @@ func StopProxy() C.int {
 
 	clearCfproxy429Cooldowns()
 
-	time.Sleep(300 * time.Millisecond)
 
 	return 0
 }
