@@ -53,9 +53,21 @@ permissions/deep links/icons; истории при пустом/self-only/ко�
 внешнего прокси; поиск/плеер/фон/очередь/кэш; ghost/status/history. Метрики RAM/CPU/
 батареи/трафика WS требуют измерений на устройстве.
 
-Промежуточный CI #42771589754 отменён: обнаружено отсутствие обновления строки
-состояния Telegram в UI Bypass при периодическом ping. Исправление включено
-в итоговый исходник. Итоговый CI и ссылка на APK будут записаны после завершения.
+Промежуточный CI #42771589754 отменён для исправления обновления строки состояния
+Telegram в UI Bypass при периодическом ping. Итоговый
+[GitHub Actions #42773454999](https://github.com/AlekseyVinokurov/Velora/actions/runs/42773454999)
+— **success**, GitHub-hosted Ubuntu, source commit
+`1c73e72079023fd7ed14fbdb7f0ee83ac13752a3`. Все host-проверки, три Go-теста
+(TLS trusted/wrong-host/untrusted, отмена listener/half-open client, повторный
+native start/stop), пересборка Go-библиотек и Android build прошли. Job — 26m57s,
+Gradle — 23m32s. Проверены фактические applicationId, **0.1.1 / 100001** и прежний
+SHA-256 сертификата `a32f7e8239e47cc061ebabf226a88ab7dc3cf6224625f98ac6166b2966ea1842`.
+
+[Подписанный тестовый APK arm64 и публичная квитанция](https://github.com/AlekseyVinokurov/Velora/actions/runs/42773454999/artifacts/13743927737)
+— `Velora-0.1.1-100001.apk`, хранение до 17 ноября 2026. SHA-256 самого APK из
+квитанции CI: `58650c102147abc3f9d594c246b121911e9a140fc03b79a40f4428ff09b291f1`.
+Артефакт не скачивался на ноутбук. GitHub Release не создавался. Это подтверждение
+компиляции/упаковки/подписи, **не тест приложения на Pixel 8**.
 
 
 ## Velora V Fusion — 2026-11-09
