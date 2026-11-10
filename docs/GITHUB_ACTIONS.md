@@ -143,3 +143,10 @@ draft `440073389`, без изменения его notes или assets. Неи�
 для draft временные URLs `untagged-*`. Проверка теперь различает эти URLs и
 обязательные канонические URLs публичного релиза. SHA-256 обоих загруженных
 assets уже совпали; продолжение проверяет их повторно, не загружая поверх них.
+
+Публикация завершена: [run #42778395972](https://github.com/AlekseyVinokurov/Velora/actions/runs/42778395972)
+— success; [v0.1.1](https://github.com/AlekseyVinokurov/Velora/releases/tag/v0.1.1)
+— stable/latest. Шесть host-тестов promotion прошли; production Java updater
+проверен на публичном API. Тег совпадает с исходным commit APK. Последующий запуск
+не изменяет опубликованную версию. Промежуточный run #42778304951 отменён до
+мутаций: поиск draft исправлен на список releases (по тегу draft возвращает 404).
