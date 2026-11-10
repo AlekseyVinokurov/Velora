@@ -1,0 +1,41 @@
+name: Publish verified Velora 0.1.1
+run-name: Publish existing Velora 0.1.1 (100001) by @${{ github.actor }}
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: velora-publish-v0.1.1
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' && github.repository == 'AlekseyVinokurov/Velora' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: velora-release
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Checkout publication tools without submodules
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Set up host JDK for the existing updater discovery client
+        uses: actions/setup-java@77dd5b2ce225ea11469928ac317850245a74ae78 # v6.2.0
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Test promotion validation without Android tools or APK downloads
+        run: python3 tests/publish/test_publish.py
+      - name: Verify the existing artifact, stage both assets, publish and check updater discovery
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/publish-existing-release.py

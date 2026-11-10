@@ -108,3 +108,31 @@ Choose `arm64` if an ARM64-only acceptance APK is appropriate. For full ABI
 coverage requiring more resources, use a GitHub-hosted larger Ubuntu runner
 with more RAM/disk, subject to account availability and billing, and retain the
 same manual-main/environment protections. Never register the laptop as a runner.
+
+## Публикация уже проверенного APK 0.1.1
+
+Отдельный ручной workflow **Publish verified Velora 0.1.1**
+(`publish-existing-release.yml`) публикует только разрешённый `v0.1.1 (100001)`
+из run `42773454999`, artifact `13743927737`, source
+`1c73e72079023fd7ed14fbdb7f0ee83ac13752a3`. Параметров для других версий нет.
+Запуск — Actions → Publish verified Velora 0.1.1 → Run workflow → main.
+Нужны `actions: read`, `contents: write`; используется штатный `GITHUB_TOKEN`,
+без ключа подписи и Telegram Secrets.
+
+APK/ZIP скачиваются только на GitHub-hosted Ubuntu. Проверяются успешный run,
+неизменный SHA-256 архива GitHub, SHA-256 и размер APK, строгая квитанция CI,
+applicationId, обе версии, source commit, minSdk и закреплённый signer pin.
+Подпись APK криптографически проверена исходным build workflow; точное совпадение
+байтов APK и неизменной квитанции связывает публикацию с этой проверкой.
+Android SDK/NDK/Gradle и повторная сборка не используются.
+
+Метаданные проходят существующий `scripts/release.py validate_metadata` и
+production Java parser updater. Оба файла сначала загружаются в draft, размеры,
+SHA-256 и URLs проверяются через API; только затем снимается draft и выставляется
+stable/latest. Затем публичный Releases API и production `GitHubReleaseClient.latest`
+на host JVM должны обнаружить обновление с 100000 до 100001. Это проверка
+обнаружения, а не фактической установки на телефоне.
+
+Существующие tag/release, включая draft, не перезаписываются и не пересоздаются.
+При ошибке до публикации draft остаётся непубличным; автоматического удаления или
+повторной загрузки поверх существующих assets нет. Результат — в summary workflow.
