@@ -204,6 +204,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
         AndroidUtilities.runOnUIThread(() -> {
             if (listAdapter != null && pingRow >= 0) {
                 listAdapter.notifyItemChanged(pingRow);
+                if (statusRow >= 0) listAdapter.notifyItemChanged(statusRow);
             }
         });
     }
