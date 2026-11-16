@@ -32,6 +32,14 @@ import java.util.regex.Pattern;
 public class MusicWebSearcher {
 
     private static final ExecutorService SEARCH_EXECUTOR = Executors.newFixedThreadPool(8);
+    // Independent bounded workers; retain only the latest pending query while typing.
+    private static final java.util.concurrent.ThreadPoolExecutor AUDIUS_EXECUTOR =
+            new java.util.concurrent.ThreadPoolExecutor(2, 2, 0L, java.util.concurrent.TimeUnit.MILLISECONDS,
+                    new java.util.concurrent.ArrayBlockingQueue<>(1), r -> {
+                        Thread thread = new Thread(r, "audius-search");
+                        thread.setDaemon(true);
+                        return thread;
+                    }, new java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy());
 
     private static final Pattern PATTERN_BRACKETS  = Pattern.compile("(?i)\\[.*?\\]|\\(.*?\\)");
     private static final Pattern PATTERN_HTML_TAGS = Pattern.compile("<[^>]*>");
@@ -578,11 +586,20 @@ public class MusicWebSearcher {
     }
 
     public static void search(String query, int page, SearchCallback callback) {
+        search(query, page, callback, null);
+    }
+
+    /** Optional incremental results: never delay existing sources for Audius. */
+    public static void search(String query, int page, SearchCallback callback,
+                              java.util.function.Consumer<ArrayList<WebTrack>> additionalTracks) {
         new Thread(() -> {
             ArrayList<WebTrack> tracks = new ArrayList<>();
             ArrayList<WebArtist> artists = new ArrayList<>();
             ArrayList<WebAlbum> albums = new ArrayList<>();
             HashSet<String> seenIds = new HashSet<>();
+            Object deliveryLock = new Object();
+            ArrayList<WebTrack> audiusTracks = new ArrayList<>();
+            boolean[] initialDelivered = {false};
 
             try {
                 String cleanQuery = query != null ? query.replaceAll("\\s+$", "") : "";
@@ -591,10 +608,25 @@ public class MusicWebSearcher {
                     return;
                 }
 
-                // Parallel search across Hitmos and Deezer (tracks, artists, albums)
+                // Existing sources keep their original completion timing and 4.5s budget.
                 ArrayList<WebTrack> hitmosTracks = new ArrayList<>();
                 ArrayList<WebTrack> deezerTracks = new ArrayList<>();
                 CountDownLatch latch = new CountDownLatch(page == 1 ? 4 : 2);
+                try {
+                    AUDIUS_EXECUTOR.execute(() -> {
+                        ArrayList<WebTrack> found = new ArrayList<>();
+                        for (AudiusClient.Track track : AudiusClient.search(cleanQuery, page)) {
+                            found.add(MusicSourceResolver.toWebTrack(track));
+                        }
+                        synchronized (deliveryLock) {
+                            if (!initialDelivered[0]) {
+                                audiusTracks.addAll(found);
+                            } else if (additionalTracks != null && !found.isEmpty()) {
+                                AndroidUtilities.runOnUIThread(() -> additionalTracks.accept(found));
+                            }
+                        }
+                    });
+                } catch (java.util.concurrent.RejectedExecutionException ignored) {}
 
                 // 1. Поиск на Hitmos
                 SEARCH_EXECUTOR.execute(() -> {
@@ -760,7 +792,12 @@ public class MusicWebSearcher {
                 });
 
             } catch (Exception e) { FileLog.e(e); }
-            AndroidUtilities.runOnUIThread(() -> callback.onResult(tracks, artists, albums));
+            synchronized (deliveryLock) {
+                // Keep uploads separate; provider identity lives in the stable API URL.
+                tracks.addAll(audiusTracks);
+                initialDelivered[0] = true;
+                AndroidUtilities.runOnUIThread(() -> callback.onResult(tracks, artists, albums));
+            }
         }).start();
     }
 
@@ -1399,6 +1436,8 @@ public class MusicWebSearcher {
 
     public static boolean downloadTrackToExactFileSync(String fileUrl, File destFile) {
         if (fileUrl == null || fileUrl.isEmpty() || destFile == null) return false;
+        // Streaming permission is not download permission. No Audius offline caching in M1.
+        if (AudiusClient.isStreamUrl(fileUrl)) return false;
         if (destFile.exists() && destFile.length() > 1024 && !isHtmlOrInvalidAudio(destFile)) return true;
 
         String safeUrl = forceHttps(fileUrl);

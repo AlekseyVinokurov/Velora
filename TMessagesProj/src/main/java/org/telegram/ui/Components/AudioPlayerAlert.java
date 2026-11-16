@@ -2836,10 +2836,20 @@ public class AudioPlayerAlert extends BottomSheet
         playerLayout.setBackground(base);
     }
 
+    private boolean blockAudiusFileAction(MessageObject message) {
+        if (message == null || message.messageOwner == null
+                || !soundgram.music.AudiusClient.isStreamUrl(message.messageOwner.attachPath)) return false;
+        // Audius M1 is stream-only. Avoid downloads and same-name Hitmos substitutions.
+        Toast.makeText(getContext(), getString(R.string.sg_download_error), Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
     private void onSubItemClick(int id) {
         final MessageObject messageObject = MediaController.getInstance().getPlayingMessageObject();
         if (messageObject == null || parentActivity == null)
             return;
+
+        if (blockAudiusFileAction(messageObject)) return;
 
         if (id == 1) { // Поделиться -> Сразу выбор чатов Telegram
             ArrayList<MessageObject> arrayList = new ArrayList<>();
@@ -5336,6 +5346,7 @@ public class AudioPlayerAlert extends BottomSheet
     }
 
     private void saveToProfile(MessageObject messageObject, boolean save, Runnable done, boolean triedFileRef) {
+        if (blockAudiusFileAction(messageObject)) return;
         final TLRPC.Document document = messageObject.getDocument();
         if (document == null) {
             return;
@@ -5673,6 +5684,7 @@ public class AudioPlayerAlert extends BottomSheet
     }
 
     private void saveToMusic(MessageObject messageObject) {
+        if (blockAudiusFileAction(messageObject)) return;
         if (Build.VERSION.SDK_INT >= 23 && (Build.VERSION.SDK_INT <= 28 || BuildVars.NO_SCOPED_STORAGE)
                 && parentActivity.checkSelfPermission(
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -5734,6 +5746,7 @@ public class AudioPlayerAlert extends BottomSheet
     }
 
     private void share(MessageObject messageObject) {
+        if (blockAudiusFileAction(messageObject)) return;
         try {
             File f = null;
             boolean isVideo = false;

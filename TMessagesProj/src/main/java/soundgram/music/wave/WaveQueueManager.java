@@ -605,6 +605,11 @@ public final class WaveQueueManager {
             wt = MusicWebSearcher.resolveHitmosSync(cleanTitle, cleanArtist);
         }
         if (wt == null || wt.downloadUrl == null || wt.downloadUrl.isEmpty()) {
+            // Cross-catalog matching retains version and featured-artist qualifiers.
+            wt = soundgram.music.MusicSourceResolver.resolveAudius(
+                    candidate.artist, candidate.title, candidate.durationSec);
+        }
+        if (wt == null || wt.downloadUrl == null || wt.downloadUrl.isEmpty()) {
             return null;
         }
 

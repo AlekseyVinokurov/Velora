@@ -1677,7 +1677,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
                     if (TextUtils.isEmpty(clickedTrack.downloadUrl)) {
                         safeToast(getParentActivity(), getString(R.string.sg_track_loading), Toast.LENGTH_SHORT);
                         new Thread(() -> {
-                            MusicWebSearcher.WebTrack fresh = MusicWebSearcher.resolveHitmosSync(clickedTrack.title, clickedTrack.artist);
+                            MusicWebSearcher.WebTrack fresh = MusicSourceResolver.resolve(clickedTrack.artist, clickedTrack.title, parseDuration(clickedTrack.duration));
                             if (fresh != null && !TextUtils.isEmpty(fresh.downloadUrl)) {
                                 clickedTrack.downloadUrl = fresh.downloadUrl;
                             }
@@ -2450,6 +2450,11 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
 
         MessageObject msgObj = new MessageObject(currentAccount, webMsg, false, false);
 
+        if (AudiusClient.isStreamUrl(url)) {
+            msgObj.messageOwner.attachPath = url;
+            return msgObj;
+        }
+
         // 1. Новый формат: Исполнитель - Название.mp3
         File fileByName = getLocalTrackFile(artist, title);
         if (fileByName.exists() && fileByName.length() > 1024) {
@@ -2519,6 +2524,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
                 String trackTitle = parts.length > 1 ? parts[1] : "Unknown";
                 String trackArtist = parts.length > 2 ? parts[2] : "Unknown";
                 String downloadUrl = parts[3];
+                if (AudiusClient.isStreamUrl(downloadUrl)) continue;
 
                 // Целевой файл — новый формат имени
                 File targetFile = getLocalTrackFile(trackArtist, trackTitle);
@@ -2571,6 +2577,11 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
     public static void saveWebTrackToLibrary(BaseFragment fragment, MusicWebSearcher.WebTrack track) {
         if (track == null) return;
         Context ctx = fragment != null && fragment.getParentActivity() != null ? fragment.getParentActivity() : ApplicationLoader.applicationContext;
+        // M1 supports Audius streaming only; do not silently substitute/download a Hitmos upload.
+        if (AudiusClient.isStreamUrl(track.downloadUrl)) {
+            safeToast(ctx, LocaleController.getString(R.string.sg_download_error), Toast.LENGTH_SHORT);
+            return;
+        }
         safeToast(ctx, LocaleController.getString("sg_downloading_in_background", R.string.sg_downloading_in_background), Toast.LENGTH_SHORT);
         if (TextUtils.isEmpty(track.title) || track.title.equals("Unknown")) {
             safeToast(ctx, LocaleController.getString(R.string.sg_track_title_unknown), Toast.LENGTH_SHORT);
@@ -5219,8 +5230,11 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
             return;
         }
 
+        // Independently selected Audius uploads must not be replaced by a same-name local file.
+        boolean audiusStream = track.messageOwner != null
+                && AudiusClient.isStreamUrl(track.messageOwner.attachPath);
         // Для SG_STREAM — проверяем наличие локального файла
-        if (track.messageOwner != null && track.messageOwner.message != null
+        if (!audiusStream && track.messageOwner != null && track.messageOwner.message != null
                 && track.messageOwner.message.startsWith("SG_STREAM|||")) {
 
             String[] parts = track.messageOwner.message.split("\\|\\|\\|");
@@ -7183,6 +7197,11 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
 
     // Обновлённая шторка для веб-треков
     private void showWebTrackOptionsBottomSheet(BaseFragment fragment, MusicWebSearcher.WebTrack track) {
+        // These actions save/export audio or look up local records by name. M1 is stream-only.
+        if (track != null && AudiusClient.isStreamUrl(track.downloadUrl)) {
+            safeToast(fragment.getParentActivity(), LocaleController.getString(R.string.sg_download_error), Toast.LENGTH_SHORT);
+            return;
+        }
         Context context = fragment.getParentActivity();
         if (context == null) return;
         final BottomSheet[] dialogRef = {null};
@@ -7791,6 +7810,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
         isSearchLoadingMore = true;
         final int nextPage = currentSearchPage + 1;
         final String searchForQuery = currentSearchQuery;
+        final int requestId = lastSearchRequestId;
 
         MusicWebSearcher.search(searchForQuery, nextPage, (tracks, artists, albums) -> {
             if (!searchForQuery.equals(currentSearchQuery) || !isSearching) {
@@ -7805,7 +7825,8 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
                     boolean exists = false;
                     for (MusicWebSearcher.WebTrack existing : webResultTracks) {
                         if (existing.downloadUrl.equals(t.downloadUrl) ||
-                            (existing.title.equalsIgnoreCase(t.title) && existing.artist.equalsIgnoreCase(t.artist))) {
+                            (!AudiusClient.isStreamUrl(existing.downloadUrl) && !AudiusClient.isStreamUrl(t.downloadUrl)
+                                    && existing.title.equalsIgnoreCase(t.title) && existing.artist.equalsIgnoreCase(t.artist))) {
                             exists = true;
                             break;
                         }
@@ -7827,7 +7848,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
                 hasMoreSearchResults = false;
             }
             isSearchLoadingMore = false;
-        });
+        }, additional -> appendAudiusSearchResults(searchForQuery, requestId, nextPage, additional));
     }
 
     private int searchChatsReqId = -1;
@@ -8033,6 +8054,23 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
         AndroidUtilities.runOnUIThread(pendingWebSearchRunnable, 220);
     }
 
+    private void appendAudiusSearchResults(String query, int requestId, int page,
+                                          ArrayList<MusicWebSearcher.WebTrack> tracks) {
+        if (requestId != lastSearchRequestId || !query.equals(currentSearchQuery) || !isSearching) return;
+        for (MusicWebSearcher.WebTrack track : tracks) {
+            boolean duplicate = false;
+            for (MusicWebSearcher.WebTrack existing : webResultTracks) {
+                if (track.downloadUrl.equals(existing.downloadUrl)) { duplicate = true; break; }
+            }
+            if (!duplicate) webResultTracks.add(track);
+        }
+        currentSearchPage = Math.max(currentSearchPage, page);
+        // A full Audius page can continue even when the primary source returned nothing.
+        if (tracks.size() == 20) hasMoreSearchResults = true;
+        updateSearchFilterVisibility();
+        safeNotifyAdapter(adapter, listView);
+    }
+
     private void executeWebSearch(String query, int reqId) {
         if (reqId != lastSearchRequestId || !query.equals(currentSearchQuery)) {
             return;
@@ -8087,7 +8125,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
 
             updateSearchFilterVisibility();
             safeNotifyAdapter(adapter, listView);
-        });
+        }, additional -> appendAudiusSearchResults(query, reqId, 1, additional));
     }
     private void filterOfflineTracks() {
         ArrayList<MessageObject> offlineList = new ArrayList<>();
@@ -10531,7 +10569,7 @@ public class ChannelMusicFragment extends BaseFragment implements NotificationCe
                     continue;
                 }
 
-                if (downloadUrl == null) continue;
+                if (downloadUrl == null || AudiusClient.isStreamUrl(downloadUrl)) continue;
 
                 // Сохраняем в /Music/<albumTitle>/Исполнитель - Название.mp3
                 File destFile = getLocalAlbumTrackFile(albumTitle, trackArtist, trackTitle);
