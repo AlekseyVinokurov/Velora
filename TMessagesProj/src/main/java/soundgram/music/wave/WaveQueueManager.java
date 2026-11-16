@@ -600,7 +600,10 @@ public final class WaveQueueManager {
         }
 
         // Поиск MP3 потока для воспроизведения
-        MusicWebSearcher.WebTrack wt = MusicWebSearcher.searchTrackStrict(cleanArtist, cleanTitle, candidate.durationSec);
+        MusicWebSearcher.WebTrack wt = soundgram.music.MusicSourceResolver.resolveYouTubeCandidate(candidate);
+        if (wt == null || wt.downloadUrl == null || wt.downloadUrl.isEmpty()) {
+            wt = MusicWebSearcher.searchTrackStrict(cleanArtist, cleanTitle, candidate.durationSec);
+        }
         if (wt == null || wt.downloadUrl == null || wt.downloadUrl.isEmpty()) {
             wt = MusicWebSearcher.resolveHitmosSync(cleanTitle, cleanArtist);
         }

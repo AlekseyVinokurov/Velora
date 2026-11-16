@@ -19,7 +19,30 @@ public final class MusicSourceResolver {
                 track = MusicWebSearcher.resolveHitmosSync(title, artist);
             }
             return track;
-        }, () -> resolveAudius(artist, title, duration));
+        }, () -> choose(() -> resolveAudius(artist, title, duration),
+                () -> resolveYouTubeMatch(artist, title, duration)));
+    }
+
+    /** For an existing InnerTube candidate the video ID identifies the recording; no fuzzy substitution. */
+    public static MusicWebSearcher.WebTrack resolveYouTubeCandidate(soundgram.music.wave.InnerTubeClient.RawTrack candidate) {
+        return YouTubeMusicClient.candidate(candidate);
+    }
+
+    private static MusicWebSearcher.WebTrack resolveYouTubeMatch(String artist, String title, int duration) {
+        if (duration <= 0 || normalize(artist).isEmpty() || normalize(title).isEmpty()) return null;
+        MusicWebSearcher.WebTrack match = null;
+        for (MusicWebSearcher.WebTrack track : YouTubeMusicClient.search(artist + " " + title)) {
+            int actualDuration = ChannelMusicFragment.parseDuration(track.duration);
+            if (!matches(artist, title, duration, track.artist, track.title, actualDuration)) continue;
+            if (match != null) return null;
+            match = track;
+        }
+        return match;
+    }
+
+    /** M1/M2 stream-only sources must never enter legacy offline/export or name-based matching paths. */
+    public static boolean isStreamingOnlyUrl(String value) {
+        return AudiusClient.isStreamUrl(value) || YouTubeMusicClient.isReference(value);
     }
 
     /** Match original metadata, never stripped version/featured-artist qualifiers. */

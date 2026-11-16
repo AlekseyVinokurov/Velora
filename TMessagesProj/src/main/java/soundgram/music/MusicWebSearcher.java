@@ -41,6 +41,14 @@ public class MusicWebSearcher {
                         return thread;
                     }, new java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy());
 
+    private static final java.util.concurrent.ThreadPoolExecutor YOUTUBE_EXECUTOR =
+            new java.util.concurrent.ThreadPoolExecutor(1, 1, 0L, java.util.concurrent.TimeUnit.MILLISECONDS,
+                    new java.util.concurrent.ArrayBlockingQueue<>(1), r -> {
+                        Thread thread = new Thread(r, "youtube-music-search");
+                        thread.setDaemon(true);
+                        return thread;
+                    }, new java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy());
+
     private static final Pattern PATTERN_BRACKETS  = Pattern.compile("(?i)\\[.*?\\]|\\(.*?\\)");
     private static final Pattern PATTERN_HTML_TAGS = Pattern.compile("<[^>]*>");
     private static final Pattern PATTERN_DATA_SRC  = Pattern.compile("data-src=[\"']([^\"']+)[\"']");
@@ -627,6 +635,21 @@ public class MusicWebSearcher {
                         }
                     });
                 } catch (java.util.concurrent.RejectedExecutionException ignored) {}
+
+                // Reuse the M1 incremental delivery contract; YouTube never delays primary results.
+                if (page == 1) {
+                    try {
+                        YOUTUBE_EXECUTOR.execute(() -> {
+                            ArrayList<WebTrack> found = new ArrayList<>(YouTubeMusicClient.search(cleanQuery));
+                            synchronized (deliveryLock) {
+                                if (!initialDelivered[0]) audiusTracks.addAll(found);
+                                else if (additionalTracks != null && !found.isEmpty()) {
+                                    AndroidUtilities.runOnUIThread(() -> additionalTracks.accept(found));
+                                }
+                            }
+                        });
+                    } catch (java.util.concurrent.RejectedExecutionException ignored) {}
+                }
 
                 // 1. Поиск на Hitmos
                 SEARCH_EXECUTOR.execute(() -> {
@@ -1436,8 +1459,8 @@ public class MusicWebSearcher {
 
     public static boolean downloadTrackToExactFileSync(String fileUrl, File destFile) {
         if (fileUrl == null || fileUrl.isEmpty() || destFile == null) return false;
-        // Streaming permission is not download permission. No Audius offline caching in M1.
-        if (AudiusClient.isStreamUrl(fileUrl)) return false;
+        // Streaming permission is not download permission. No offline caching for M1/M2 streaming-only sources.
+        if (MusicSourceResolver.isStreamingOnlyUrl(fileUrl)) return false;
         if (destFile.exists() && destFile.length() > 1024 && !isHtmlOrInvalidAudio(destFile)) return true;
 
         String safeUrl = forceHttps(fileUrl);

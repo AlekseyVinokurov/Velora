@@ -2838,8 +2838,8 @@ public class AudioPlayerAlert extends BottomSheet
 
     private boolean blockAudiusFileAction(MessageObject message) {
         if (message == null || message.messageOwner == null
-                || !soundgram.music.AudiusClient.isStreamUrl(message.messageOwner.attachPath)) return false;
-        // Audius M1 is stream-only. Avoid downloads and same-name Hitmos substitutions.
+                || !soundgram.music.MusicSourceResolver.isStreamingOnlyUrl(message.messageOwner.attachPath)) return false;
+        // M1/M2 sources are stream-only. Avoid downloads and same-name Hitmos substitutions.
         Toast.makeText(getContext(), getString(R.string.sg_download_error), Toast.LENGTH_SHORT).show();
         return true;
     }

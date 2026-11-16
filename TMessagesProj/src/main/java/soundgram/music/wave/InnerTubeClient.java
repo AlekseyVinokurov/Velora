@@ -128,6 +128,73 @@ public final class InnerTubeClient {
         }
     }
 
+    // Direct-only playback subset. Profile parameters were checked against InnerTubeX
+    // e4fb0003ce092beb71f3de464c661bf9f3f54c7f (YouTubeClient.ANDROID_VR_NO_AUTH).
+    // No extractor/cipher implementation is copied; no cookies or attestation are requested.
+    public static final String AUDIO_USER_AGENT = "com.google.android.apps.youtube.vr.oculus/1.61.48 "
+            + "(Linux; U; Android 12; en_US; Oculus Quest 3; Build/SQ3A.220605.009.A1; Cronet/132.0.6808.3)";
+
+    public static String requestAudioPlayer(String videoId) {
+        if (videoId == null || !videoId.matches("[A-Za-z0-9_-]{11}")) return "";
+        try {
+            JSONObject client = new JSONObject().put("clientName", "ANDROID_VR")
+                    .put("clientVersion", "1.61.48").put("userAgent", AUDIO_USER_AGENT)
+                    .put("hl", "en").put("gl", "US");
+            JSONObject body = new JSONObject().put("context", new JSONObject().put("client", client))
+                    .put("videoId", videoId);
+            return postPlaybackRequest("player", body, "28", "1.61.48", AUDIO_USER_AGENT);
+        } catch (Exception ignored) { return ""; }
+    }
+
+    /** Bounded single catalog request for normal search; the existing radio requests are unchanged. */
+    public static List<RawTrack> searchSongsForPlayback(String query, int limit) {
+        List<RawTrack> results = new ArrayList<>();
+        if (query == null || query.trim().isEmpty()) return results;
+        try {
+            JSONObject body = new JSONObject().put("context", buildContext()).put("query", query.trim())
+                    .put("params", "EgWKAQIIAWoSEAUQAxAJEAQQChAQEBUQDhAR");
+            String response = postPlaybackRequest("search", body, "67", CLIENT_VERSION,
+                    "Mozilla/5.0 (Android 12; Mobile) AppleWebKit/537.36 Chrome/122.0.0.0 Safari/537.36");
+            if (!response.isEmpty()) collectSearchSongs(new JSONObject(response), results, Math.min(5, limit));
+        } catch (Exception ignored) {}
+        return results;
+    }
+
+    private static String postPlaybackRequest(String endpoint, JSONObject body, String clientId,
+                                               String clientVersion, String userAgent) {
+        HttpURLConnection connection = null;
+        try {
+            connection = MusicNetworkHelper.openConnection(new URL(BASE_URL + endpoint));
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setInstanceFollowRedirects(false);
+            connection.setConnectTimeout(1200);
+            connection.setReadTimeout(1500);
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            connection.setRequestProperty("User-Agent", userAgent);
+            connection.setRequestProperty("X-YouTube-Client-Name", clientId);
+            connection.setRequestProperty("X-YouTube-Client-Version", clientVersion);
+            connection.setRequestProperty("Origin", "https://music.youtube.com");
+            connection.setRequestProperty("Referer", "https://music.youtube.com/");
+            byte[] bytes = body.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            connection.setFixedLengthStreamingMode(bytes.length);
+            long deadline = System.nanoTime() + 3_000_000_000L;
+            try (OutputStream output = connection.getOutputStream()) { output.write(bytes); }
+            if (connection.getResponseCode() != 200) return "";
+            try (InputStream input = connection.getInputStream();
+                 ByteArrayOutputStream output = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[4096];
+                int count;
+                while ((count = input.read(buffer)) != -1) {
+                    if (System.nanoTime() > deadline || output.size() + count > 1024 * 1024) return "";
+                    output.write(buffer, 0, count);
+                }
+                return new String(output.toByteArray(), java.nio.charset.StandardCharsets.UTF_8);
+            }
+        } catch (Exception ignored) { return ""; }
+        finally { if (connection != null) connection.disconnect(); }
+    }
+
     private static String getFromRelay(String path, AtomicBoolean cancelFlag) {
         if (cancelFlag != null && cancelFlag.get()) return "";
         for (String base : RELAY_BASES) {

@@ -472,7 +472,9 @@ public class VideoPlayer implements Player.Listener, VideoListener, AnalyticsLis
         // VPN FIX: для HTTP/HTTPS стриминга используем SSL-tolerant фабрику
         boolean isHttp = uri != null && (uri.getScheme() != null) &&
                 (uri.getScheme().startsWith("http"));
-        DataSource.Factory factory = isHttp
+        DataSource.Factory factory = uri != null && soundgram.music.YouTubeMusicClient.isReference(uri.toString())
+                ? soundgram.music.YouTubeMusicDataSource.factory()
+                : isHttp
                 ? createVpnAwareDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", uri)
                 : mediaDataSourceFactory;
         if (videoByteOffset != 0) {
