@@ -4,7 +4,7 @@
 
 **Music and Telegram in one app.**
 
-Velora is an independent Telegram client for Android with a focus on music. It combines a full-featured messenger with a music library, player and additional ways to customize the experience.
+Velora is an actively developed independent Telegram client for Android with a focus on music. It combines a full-featured messenger with a music library, player and additional ways to customize the experience.
 
 ## About the project
 
@@ -23,6 +23,8 @@ Beyond the familiar Telegram experience, Velora includes additional tools, exten
 - **Personalization:** themes, colors, icons and interface settings.
 - **More to explore:** additional controls and experimental features.
 
+Hitmos remains the main source, with experimental Audius and YouTube Music integrations added. Music availability depends on the service, region and network. Playback from the new sources inside Velora on Android has not yet been confirmed.
+
 See the [feature catalog](docs/FEATURES.md) for a closer look at what's available.
 
 ## Download
@@ -31,7 +33,7 @@ Download available Android builds from [GitHub Releases](https://github.com/Alek
 
 ## Development
 
-Music is the main direction for Velora: more music sources, better discovery and recommendations, and ongoing improvements to the player and library. New capabilities are documented as they become available.
+Music is the main direction for Velora: more music sources, better discovery and recommendations, and ongoing improvements to My Wave, the player and library. New capabilities are documented as they become available.
 
 You can share ideas and report problems in [GitHub Issues](https://github.com/AlekseyVinokurov/Velora/issues). Changes in each published version are listed in [Releases](https://github.com/AlekseyVinokurov/Velora/releases).
 
