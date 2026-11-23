@@ -1,6 +1,8 @@
 package soundgram.wsproxy;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.net.Uri;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +38,8 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 import java.security.SecureRandom;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import android.view.Gravity;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -49,6 +53,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     private RecyclerListView listView;
     private ListAdapter listAdapter;
     private int rowCount;
+    private static final int EXPORT_DIAGNOSTICS_REQUEST = 42012;
 
     @Override
     public View createView(Context context) {
@@ -124,6 +129,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 fakeTlsHeaderRow, fakeTlsEnabledRow, fakeTlsDomainRow,
                 shadowFakeTlsRow,
                 advancedHeaderRow, dcIpsRow,
+                diagHeaderRow, diagToggleRow, diagSaveRow, diagClearRow,
                 shadow5Row,
                 infoRow;
 
@@ -246,6 +252,11 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
         dcIpsRow            = row++;
         shadow5Row          = row++;
 
+        diagHeaderRow       = row++;
+        diagToggleRow       = row++;
+        diagSaveRow         = row++;
+        diagClearRow        = row++;
+
         infoRow             = row++;
         rowCount            = row;
 
@@ -261,7 +272,16 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
     @SuppressLint("ApplySharedPref")
     protected void onItemClick(View view, int position, float x, float y) {
 
-        if (position == enableRow) {
+        if (position == diagToggleRow) {
+            boolean next = !WsProxyDiagnostics.enabled(getParentActivity());
+            WsProxyDiagnostics.setEnabled(getParentActivity(), next);
+            updateRows();
+        } else if (position == diagSaveRow) {
+            exportDiagnostics();
+        } else if (position == diagClearRow) {
+            WsProxyDiagnostics.clear(getParentActivity());
+            showToast("Журнал очищен");
+        } else if (position == enableRow) {
             toggleProxy();
 
         } else if (position == portRow) {
@@ -383,6 +403,38 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                         updateRows();
                         if (getPrefs().getBoolean("enabled", false)) restartProxy();
                     });
+        }
+    }
+
+    // ── Diagnostic export ───────────────────────────────────────────────────
+
+    private void exportDiagnostics() {
+        if (getParentActivity() == null) return;
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, "velora-ws-proxy-diagnostics.txt");
+        try {
+            startActivityForResult(intent, EXPORT_DIAGNOSTICS_REQUEST);
+        } catch (RuntimeException e) {
+            showToast("Не удалось открыть сохранение отчёта");
+        }
+    }
+
+    @Override
+    public void onActivityResultFragment(int requestCode, int resultCode, Intent data) {
+        super.onActivityResultFragment(requestCode, resultCode, data);
+        if (requestCode != EXPORT_DIAGNOSTICS_REQUEST || resultCode != Activity.RESULT_OK
+                || data == null || data.getData() == null || getParentActivity() == null) return;
+        Uri destination = data.getData();
+        try (OutputStream stream = getParentActivity().getContentResolver()
+                .openOutputStream(destination, "w")) {
+            if (stream == null) throw new java.io.IOException("No output stream");
+            String report = WsProxyDiagnostics.report(getParentActivity(), TgWsProxyService.isRunning);
+            stream.write(report.getBytes(StandardCharsets.UTF_8));
+            showToast("Отчёт сохранён");
+        } catch (Exception e) {
+            showToast("Не удалось сохранить отчёт");
         }
     }
 
