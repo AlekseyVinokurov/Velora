@@ -17,6 +17,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import java.net.Socket;
 import java.net.InetSocketAddress;
@@ -121,7 +122,7 @@ public class TgWsProxyService extends Service {
                 currentPort = port;
                 isRunning = true;
                 WsProxyDiagnostics.event(this, "listener_open");
-                showNotification(true);
+                try { showNotification(true); } catch (RuntimeException ignored) {}
                 String prefixed = NativeProxy.getSecretWithPrefix();
                 if (prefixed == null || prefixed.isEmpty()) {
                     WsProxyDiagnostics.event(this, "route_secret_missing");
@@ -191,6 +192,7 @@ public class TgWsProxyService extends Service {
         monitor = new Thread(() -> {
             int failures = 0;
             String lastSnapshot = "";
+            Boolean lastTelegramObserved = null;
             while (active(requested) && isRunning) {
                 try { Thread.sleep(10000); } catch (InterruptedException e) { return; }
                 if (!active(requested) || !isRunning) return;
@@ -199,6 +201,21 @@ public class TgWsProxyService extends Service {
                     if (!snapshot.equals(lastSnapshot)) {
                         WsProxyDiagnostics.sample(this, snapshot);
                         lastSnapshot = snapshot;
+                    }
+                }
+                if (WsProxyDiagnostics.enabled(this)) {
+                    try {
+                        int state = ConnectionsManager.getInstance(UserConfig.selectedAccount)
+                                .getConnectionState();
+                        boolean observed = state == ConnectionsManager.ConnectionStateConnected
+                                || state == ConnectionsManager.ConnectionStateUpdating;
+                        if (lastTelegramObserved == null || lastTelegramObserved != observed) {
+                            WsProxyDiagnostics.event(this, observed
+                                    ? "telegram_state_connected" : "telegram_state_waiting");
+                            lastTelegramObserved = observed;
+                        }
+                    } catch (RuntimeException ignored) {
+                        // The report must not interfere with Telegram.
                     }
                 }
                 if (isPortOpen("127.0.0.1", port, 500)) failures = 0;
