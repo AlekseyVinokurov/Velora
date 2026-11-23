@@ -540,7 +540,8 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
         @Override
         public boolean isEnabled(RecyclerView.ViewHolder holder) {
             int position = holder.getAdapterPosition();
-            return position == enableRow || position == autoStartRow
+            return position == diagToggleRow || position == diagSaveRow || position == diagClearRow
+                    || position == enableRow || position == autoStartRow
                     || position == portRow || position == poolRow || position == bufferRow
                     || position == secretRow || position == cfEnabledRow || position == cfDomainRow
                     || position == fakeTlsEnabledRow || position == fakeTlsDomainRow || position == dcIpsRow;
@@ -569,7 +570,8 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 else if (position == securityHeaderRow)   cell.setText("Security");
                 else if (position == cfHeaderRow)         cell.setText("Cloudflare");
                 else if (position == fakeTlsHeaderRow)    cell.setText("FakeTLS");
-                else if (position == advancedHeaderRow)   cell.setText("Advanced");
+                else if (position == advancedHeaderRow) cell.setText("Advanced");
+                else if (position == diagHeaderRow) cell.setText("Диагностика");
 
             } else if (vt == TYPE_SHADOW) {
                 holder.itemView.setBackground(Theme.getThemedDrawable(
@@ -578,7 +580,9 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
 
             } else if (vt == TYPE_TEXT_CHECK) {
                 TextCheckCell cell = (TextCheckCell) holder.itemView;
-                if (position == enableRow) {
+                if (position == diagToggleRow) {
+                    cell.setTextAndCheck("Записывать диагностику", WsProxyDiagnostics.enabled(mContext), true);
+                } else if (position == enableRow) {
                     cell.setTextAndCheck("Enable TG WS Proxy",
                             prefs.getBoolean("enabled", false), true);
                 } else if (position == autoStartRow) {
@@ -646,7 +650,11 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
 
             } else if (vt == TYPE_TEXT) {
                 TextCell cell = (TextCell) holder.itemView;
-                if (position == portRow) {
+                if (position == diagSaveRow) {
+                    cell.setTextAndValue("Сохранить отчёт", "TXT", true);
+                } else if (position == diagClearRow) {
+                    cell.setTextAndValue("Очистить журнал", "", true);
+                } else if (position == portRow) {
                     cell.setTextAndValue("Local port",
                             String.valueOf(prefs.getInt("port", DEFAULT_PORT)), true);
                 } else if (position == poolRow) {
@@ -676,7 +684,8 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                             "Velora Bypass включается только вручную и действует до остановки процесса. "
                             + "Использует WebSocket/TLS для Telegram и локальный SOCKS5 для музыки. "
                             + "При отключении восстанавливает сохранённый прокси Telegram. "
-                            + "При включении VPN останавливается; автоматически не возобновляется.");
+                            + "При включении VPN останавливается; автоматически не возобновляется. "
+                            + "Диагностика выключена по умолчанию. В отчёт входят только категории ошибок и счётчики, без адресов и секретов.");
                 }
             }
         }
@@ -687,7 +696,8 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 return TYPE_HERO;
 
             if (position == connectionHeaderRow || position == securityHeaderRow
-                    || position == cfHeaderRow   || position == fakeTlsHeaderRow || position == advancedHeaderRow)
+                    || position == cfHeaderRow || position == fakeTlsHeaderRow || position == advancedHeaderRow
+                    || position == diagHeaderRow)
                 return TYPE_HEADER;
 
             if (position == shadow1Row  || position == shadow2Row
@@ -695,7 +705,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                     || position == shadowFakeTlsRow || position == shadow5Row)
                 return TYPE_SHADOW;
 
-            if (position == enableRow   || position == autoStartRow
+            if (position == diagToggleRow || position == enableRow || position == autoStartRow
                     || position == cfEnabledRow || position == fakeTlsEnabledRow)
                 return TYPE_TEXT_CHECK;
 
