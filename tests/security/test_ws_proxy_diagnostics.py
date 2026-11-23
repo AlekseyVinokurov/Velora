@@ -52,7 +52,7 @@ class WsProxyDiagnosticContractTest(unittest.TestCase):
         self.assertIn("private static final int MAX_BYTES = 32 * 1024", self.diag)
         self.assertIn("clear(context);", self.diag)
         self.assertIn('append(context, "native " + checked)', self.diag)
-        self.assertIn('if (wsDiagnosticsEnabled.Load())', self.go)
+        self.assertIn('if wsDiagnosticsEnabled.Load() {', self.go)
         self.assertNotIn('getSecretWithPrefix()', self.diag)
         self.assertNotIn('getString("secret"', self.diag)
 
