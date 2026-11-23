@@ -313,6 +313,46 @@ var (
 	logDebug *log.Logger
 )
 
+
+/*
+ * Privacy-restricted diagnostics: counters only, never addresses, domains,
+ * secret material, errors, HTTP headers or payloads. Disabled by default.
+ */
+type wsDiagnosticCounters struct {
+    dnsOk, dnsFail, tcpOk, tcpFail, tlsOk, tlsFail atomic.Int64
+    wsOk, wsFail, http403, http429, cfTry, wsTry atomic.Int64
+}
+var wsDiagnosticsEnabled atomic.Bool
+var wsDiagnostics wsDiagnosticCounters
+
+func diagCount(counter *atomic.Int64) {
+    if wsDiagnosticsEnabled.Load() { counter.Add(1) }
+}
+
+func resetDiagnostics() {
+    wsDiagnostics.dnsOk.Store(0)
+    wsDiagnostics.dnsFail.Store(0)
+    wsDiagnostics.tcpOk.Store(0)
+    wsDiagnostics.tcpFail.Store(0)
+    wsDiagnostics.tlsOk.Store(0)
+    wsDiagnostics.tlsFail.Store(0)
+    wsDiagnostics.wsOk.Store(0)
+    wsDiagnostics.wsFail.Store(0)
+    wsDiagnostics.http403.Store(0)
+    wsDiagnostics.http429.Store(0)
+    wsDiagnostics.cfTry.Store(0)
+    wsDiagnostics.wsTry.Store(0)
+}
+func diagnosticsSnapshot() string {
+    return fmt.Sprintf("dns_ok=%d;dns_fail=%d;tcp_ok=%d;tcp_fail=%d;tls_ok=%d;tls_fail=%d;ws_ok=%d;ws_fail=%d;http_403=%d;http_429=%d;cf_try=%d;ws_try=%d",
+        wsDiagnostics.dnsOk.Load(), wsDiagnostics.dnsFail.Load(),
+        wsDiagnostics.tcpOk.Load(), wsDiagnostics.tcpFail.Load(),
+        wsDiagnostics.tlsOk.Load(), wsDiagnostics.tlsFail.Load(),
+        wsDiagnostics.wsOk.Load(), wsDiagnostics.wsFail.Load(),
+        wsDiagnostics.http403.Load(), wsDiagnostics.http429.Load(),
+        wsDiagnostics.cfTry.Load(), wsDiagnostics.wsTry.Load())
+}
+
 type androidLogWriter struct{}
 
 func (w androidLogWriter) Write(p []byte) (n int, err error) {
@@ -1298,9 +1338,11 @@ func resolveDoH(ctx context.Context, domain string) string {
 
 	select {
 	case ip := <-resCh:
+		diagCount(&wsDiagnostics.dnsOk)
 		dohCache.Store(domain, dohCacheEntry{ip: ip, exp: time.Now().Add(20 * time.Minute)})
 		return ip
 	case <-dnsCtx.Done():
+		diagCount(&wsDiagnostics.dnsFail)
 		return ""
 	}
 }
@@ -1403,8 +1445,10 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 	targetAddr := net.JoinHostPort(dialAddr, "443")
 	rawConn, err := dialer.DialContext(ctx, "tcp", targetAddr)
 	if err != nil {
+		diagCount(&wsDiagnostics.tcpFail)
 		return nil, err
 	}
+	diagCount(&wsDiagnostics.tcpOk)
 
     connection := rawConn
     stopDial := context.AfterFunc(ctx, func() { connection.Close() })
@@ -1423,10 +1467,12 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 
 	_ = tlsConn.SetDeadline(time.Now().Add(handshakeTimeout))
 	if err := tlsConn.HandshakeContext(handshakeCtx); err != nil {
+		diagCount(&wsDiagnostics.tlsFail)
 		rawConn.Close()
 		logDebug.Printf(" ws tls fail %s via %s: %s", domain, dialAddr, compactConnError(err))
 		return nil, err
 	}
+	diagCount(&wsDiagnostics.tlsOk)
 	_ = tlsConn.SetDeadline(time.Time{})
 	rawConn = tlsConn
 
@@ -1453,6 +1499,7 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 
 	_ = rawConn.SetWriteDeadline(time.Now().Add(timeout))
 	if _, err = rawConn.Write([]byte(req)); err != nil {
+		diagCount(&wsDiagnostics.wsFail)
 		rawConn.Close()
 		return nil, err
 	}
@@ -1465,6 +1512,7 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 	for {
 		line, err := bufReader.ReadString('\n')
 		if err != nil {
+			diagCount(&wsDiagnostics.wsFail)
 			rawConn.Close()
 			return nil, err
 		}
@@ -1474,6 +1522,7 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 		}
 		responseLines = append(responseLines, line)
 		if len(responseLines) > 100 {
+			diagCount(&wsDiagnostics.wsFail)
 			rawConn.Close()
 			return nil, fmt.Errorf("too many HTTP headers")
 		}
@@ -1481,6 +1530,7 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 	_ = rawConn.SetReadDeadline(time.Time{})
 
 	if len(responseLines) == 0 {
+		diagCount(&wsDiagnostics.wsFail)
 		rawConn.Close()
 		return nil, &WsHandshakeError{StatusCode: 0, StatusLine: "empty response"}
 	}
@@ -1493,8 +1543,12 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 	}
 
 	if statusCode == 101 {
+		diagCount(&wsDiagnostics.wsOk)
 		return &RawWebSocket{conn: rawConn, bufReader: bufReader}, nil
 	}
+	diagCount(&wsDiagnostics.wsFail)
+	if statusCode == 403 { diagCount(&wsDiagnostics.http403) }
+	if statusCode == 429 { diagCount(&wsDiagnostics.http429) }
 	headers := make(map[string]string)
 	for _, hl := range responseLines[1:] {
 		if idx := strings.IndexByte(hl, ':'); idx >= 0 {
@@ -1511,6 +1565,7 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 }
 
 func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) (*RawWebSocket, string, error) {
+	diagCount(&wsDiagnostics.cfTry)
 	if path == "" {
 		path = "/apiws"
 	}
@@ -1621,6 +1676,7 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 }
 
 func wsConnect(ctx context.Context, ip, domain, path string, timeout float64) (*RawWebSocket, error) {
+	diagCount(&wsDiagnostics.wsTry)
 	if path == "" {
 		path = "/apiws"
 	}
@@ -3890,6 +3946,17 @@ func SetSecret(cSecret *C.char) {
 	proxySecretMu.Lock()
 	proxySecret = s
 	proxySecretMu.Unlock()
+}
+
+//export SetDiagnosticEnabled
+func SetDiagnosticEnabled(enabled C.int) {
+    wsDiagnosticsEnabled.Store(enabled != 0)
+    if enabled != 0 { resetDiagnostics() }
+}
+
+//export GetDiagnosticStats
+func GetDiagnosticStats() *C.char {
+    return C.CString(diagnosticsSnapshot())
 }
 
 //export GetStats
