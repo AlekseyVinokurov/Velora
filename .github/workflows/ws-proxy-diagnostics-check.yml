@@ -1,0 +1,27 @@
+name: WS Proxy diagnostics host checks
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ws-proxy-diagnostics-check.yml'
+      - 'TMessagesProj/src/main/java/soundgram/wsproxy/**'
+      - 'TMessagesProj/jni/jni_bridge.c'
+      - 'tests/security/test_ws_proxy_diagnostics.py'
+      - 'docs/WS_PROXY.md'
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic-contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout (no submodules or secrets)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate diagnostics contract
+        run: python3 -m unittest discover -s tests/security -p 'test_ws_proxy_diagnostics.py' -v
+      - name: Test WS Proxy Go source on host
+        run: GO111MODULE=off go test -count=1 TMessagesProj/src/main/java/soundgram/wsproxy/tg-ws-proxy.go TMessagesProj/src/main/java/soundgram/wsproxy/proxy_test.go
