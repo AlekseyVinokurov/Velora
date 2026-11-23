@@ -71,9 +71,11 @@ public class TgWsProxyService extends Service {
             return START_NOT_STICKY;
         }
         token = requested;
+        WsProxyDiagnostics.event(this, "service_start_requested");
         try {
-            showNotification();
+            showNotification(false);
         } catch (RuntimeException e) {
+            WsProxyDiagnostics.event(this, "foreground_denied");
             fail("Android не разрешил foreground service. Повторите из открытого приложения.");
             return START_NOT_STICKY;
         }
@@ -86,15 +88,21 @@ public class TgWsProxyService extends Service {
                 int port = p.getInt("port", 1443);
                 String secret = ProxyAutoDetector.getOrCreateSecret(p);
                 if (port < 1024 || port > 65535 || !secret.matches("[a-fA-F0-9]{32}")) {
+                    WsProxyDiagnostics.event(this, "invalid_config");
                     fail("Проверьте локальный порт (1024–65535) и секрет (32 hex-символа).");
                     return;
                 }
                 // Do not mistake another process's listener for our own native startup.
                 if (isPortOpen("127.0.0.1", port, 150)) {
+                    WsProxyDiagnostics.event(this, "port_busy");
                     fail("Локальный порт занят. Выберите другой порт.");
                     return;
                 }
-                if (!NativeProxy.isLoaded()) { fail("Не удалось загрузить библиотеку WS Proxy."); return; }
+                if (!NativeProxy.isLoaded()) {
+                    WsProxyDiagnostics.event(this, "native_unavailable");
+                    fail("Не удалось загрузить библиотеку WS Proxy."); return;
+                }
+                NativeProxy.setDiagnosticsEnabled(WsProxyDiagnostics.enabled(this));
                 NativeProxy.setPoolSize(Math.max(2, Math.min(16, p.getInt("pool_size", 4))));
                 int buffer = Math.max(16, Math.min(1024, p.getInt("buffer", 256)));
                 NativeProxy.setRecvBuffer(buffer);
@@ -106,19 +114,26 @@ public class TgWsProxyService extends Service {
                 if (!active(requested)) { NativeProxy.stopProxy(); return; }
                 if (result != 0 || !isPortOpen("127.0.0.1", port, 500)) {
                     NativeProxy.stopProxy();
+                    WsProxyDiagnostics.event(this, "listener_start_failed");
                     fail("Не удалось запустить WS Proxy (код " + result + "). Проверьте настройки и повторите вручную.");
                     return;
                 }
                 currentPort = port;
                 isRunning = true;
+                WsProxyDiagnostics.event(this, "listener_open");
+                showNotification(true);
                 String prefixed = NativeProxy.getSecretWithPrefix();
-                if (prefixed == null || prefixed.isEmpty()) { fail("WS Proxy не вернул секрет подключения."); return; }
+                if (prefixed == null || prefixed.isEmpty()) {
+                    WsProxyDiagnostics.event(this, "route_secret_missing");
+                    fail("WS Proxy не вернул секрет подключения."); return;
+                }
                 final String routeSecret = prefixed;
                 AndroidUtilities.runOnUIThread(() -> {
                     if (!active(requested) || !isRunning) return;
                     // Runtime route only: no mainconfig, proxy list or currentProxy mutation.
                     ConnectionsManager.setProxySettings(true, "127.0.0.1", port, "", "", routeSecret);
                     routeApplied = true;
+                    WsProxyDiagnostics.event(this, "telegram_route_applied");
                     watchSavedProxyChanges();
                     sendState();
                 });
@@ -158,7 +173,9 @@ public class TgWsProxyService extends Service {
 
     private void resetNetwork() {
         if (!isRunning || destroyed) return;
+        WsProxyDiagnostics.event(this, "network_changed");
         if (ProxyAutoDetector.isVpnActive(this)) {
+            WsProxyDiagnostics.event(this, "vpn_detected");
             fail("VPN активен. Velora Bypass остановлен; повторное включение только вручную.");
         } else {
             try {
@@ -173,11 +190,20 @@ public class TgWsProxyService extends Service {
         if (monitor != null) monitor.interrupt();
         monitor = new Thread(() -> {
             int failures = 0;
+            String lastSnapshot = "";
             while (active(requested) && isRunning) {
                 try { Thread.sleep(10000); } catch (InterruptedException e) { return; }
                 if (!active(requested) || !isRunning) return;
+                if (WsProxyDiagnostics.enabled(this)) {
+                    String snapshot = NativeProxy.getDiagnosticStats();
+                    if (!snapshot.equals(lastSnapshot)) {
+                        WsProxyDiagnostics.sample(this, snapshot);
+                        lastSnapshot = snapshot;
+                    }
+                }
                 if (isPortOpen("127.0.0.1", port, 500)) failures = 0;
                 else if (++failures >= 2) {
+                    WsProxyDiagnostics.event(this, "listener_lost");
                     fail("WS Proxy перестал отвечать. Повторите включение вручную.");
                     return;
                 }
@@ -187,12 +213,13 @@ public class TgWsProxyService extends Service {
     }
 
     private void fail(String message) {
+        WsProxyDiagnostics.event(this, "service_failed");
         prefs().edit().putString("last_error", message).apply();
         AndroidUtilities.runOnUIThread(() -> WsProxyPolicy.stopManually(this));
         sendState();
     }
 
-    private void showNotification() {
+    private void showNotification(boolean listenerReady) {
         NotificationManager manager = getSystemService(NotificationManager.class);
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel channel = new NotificationChannel("tgws_proxy", "Velora Bypass", NotificationManager.IMPORTANCE_LOW);
@@ -203,10 +230,13 @@ public class TgWsProxyService extends Service {
         PendingIntent stopIntent = PendingIntent.getService(this, 0, stop, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         android.app.Notification notification = new NotificationCompat.Builder(this, "tgws_proxy")
                 .setContentTitle("Velora Bypass")
-                .setContentText("WS Proxy · " + prefs().getInt("port", 1443))
+                .setContentText(listenerReady
+                        ? "Локальный порт запущен; Telegram не проверен"
+                        : "Запуск локального прокси…")
                 .setSmallIcon(R.drawable.proxy_off_solar).setOngoing(true).setSilent(true)
                 .addAction(0, "Отключить", stopIntent).build();
-        if (Build.VERSION.SDK_INT >= 34) startForeground(101, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        if (listenerReady) manager.notify(101, notification);
+        else if (Build.VERSION.SDK_INT >= 34) startForeground(101, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
         else startForeground(101, notification);
     }
 
@@ -246,6 +276,7 @@ public class TgWsProxyService extends Service {
     @Override public void onTimeout(int startId, int type) { WsProxyPolicy.stopManually(this); }
 
     @Override public void onDestroy() {
+        WsProxyDiagnostics.event(this, "service_stopped");
         destroyed = true;
         stopping = true;
         if (proxySettingsListener != null) MessagesController.getGlobalMainSettings()
