@@ -39,6 +39,8 @@ public class NativeProxy {
     public static native void SetFakeTls(int enabled, String domain);
     public static native String GetSecretWithPrefix();
     public static native String GetStats();
+    public static native String GetDiagnosticStats();
+    public static native void SetDiagnosticEnabled(int enabled);
     public static native void FreeString(String p);
     public static native void ResetForNetworkChange();
     public static native void ResetCooldowns();
@@ -123,6 +125,22 @@ public class NativeProxy {
             return GetSecretWithPrefix();
         } catch (Throwable t) {
             Log.e("NativeProxy", "GetSecretWithPrefix error", t);
+            return "";
+        }
+    }
+
+    public static void setDiagnosticsEnabled(boolean enabled) {
+        if (!isLoaded) return;
+        try { SetDiagnosticEnabled(enabled ? 1 : 0); }
+        catch (Throwable t) { Log.w("NativeProxy", "Diagnostic switch unavailable"); }
+    }
+
+    public static String getDiagnosticStats() {
+        if (!isLoaded) return "";
+        try {
+            String value = GetDiagnosticStats();
+            return value != null ? value : "";
+        } catch (Throwable t) {
             return "";
         }
     }
