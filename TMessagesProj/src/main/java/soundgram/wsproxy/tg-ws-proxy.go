@@ -1481,14 +1481,14 @@ func wsConnectCF(ctx context.Context, dialAddr, host, path string, timeout time.
 // headers that can be filtered independently of the required upgrade fields.
 func plainWsUpgradeRequest(path, host, key string) string {
     return fmt.Sprintf(
-        "GET %s HTTP/1.1\\r\\n"+
-        "Host: %s\\r\\n"+
-        "Upgrade: websocket\\r\\n"+
-        "Connection: Upgrade\\r\\n"+
-        "Sec-WebSocket-Key: %s\\r\\n"+
-        "Sec-WebSocket-Version: 13\\r\\n"+
-        "Sec-WebSocket-Protocol: binary\\r\\n"+
-        "\\r\\n",
+        "GET %s HTTP/1.1\r\n"+
+        "Host: %s\r\n"+
+        "Upgrade: websocket\r\n"+
+        "Connection: Upgrade\r\n"+
+        "Sec-WebSocket-Key: %s\r\n"+
+        "Sec-WebSocket-Version: 13\r\n"+
+        "Sec-WebSocket-Protocol: binary\r\n"+
+        "\r\n",
         path, host, key,
     )
 }
