@@ -8,6 +8,7 @@ import (
     "net/http"
     "net/http/httptest"
     "testing"
+    "strings"
     "time"
 )
 
@@ -118,5 +119,21 @@ func TestCertificateFailureCannotTriggerPlainFallback(t *testing.T) {
     }
     if !isTLSCertificateError(x509.HostnameError{}) {
         t.Fatal("hostname mismatch must prevent downgrade")
+    }
+}
+
+func TestPlainWebSocketUpgradeIsMinimalAndUsesCRLF(t *testing.T) {
+    req := plainWsUpgradeRequest("/apiws", "kws2.cakeisalie.co.uk", "testkey")
+    for _, line := range []string{
+        "GET /apiws HTTP/1.1\r\n",
+        "Host: kws2.cakeisalie.co.uk\r\n",
+        "Upgrade: websocket\r\n",
+        "Sec-WebSocket-Protocol: binary\r\n",
+    } {
+        if !strings.Contains(req, line) { t.Fatalf("missing header %q in %q", line, req) }
+    }
+    if strings.Contains(req, "Origin:") { t.Fatal("plain WS contains HTTPS Origin") }
+    if !strings.HasSuffix(req, "\r\n\r\n") {
+        t.Fatalf("WebSocket upgrade missing CRLF separator: %q", req)
     }
 }
