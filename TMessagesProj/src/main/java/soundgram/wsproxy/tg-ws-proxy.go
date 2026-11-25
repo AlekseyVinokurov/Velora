@@ -329,7 +329,6 @@ var wsDiagnostics wsDiagnosticCounters
 // cannot be established. Telegram's MTProto encryption still applies, but WS/80
 // has no independent TLS authentication or metadata confidentiality.
 var cfPlainFallbackEnabled atomic.Bool
-var cfPlainSuccessful atomic.Bool
 var cfPlainTries atomic.Int64
 var cfPlainOk atomic.Int64
 var cfPlainFailed atomic.Int64
@@ -1618,6 +1617,11 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 	if phaseTimeout > cfproxyDialPhaseTimeout {
 		phaseTimeout = cfproxyDialPhaseTimeout
 	}
+    // Reserve time for the explicitly permitted WS/80 fallback, even if both
+    // the cached-IP and parallel secure attempts time out.
+    if cfPlainFallbackEnabled.Load() && phaseTimeout > 1500*time.Millisecond {
+        phaseTimeout = 1500 * time.Millisecond
+    }
 
 	// 1. Check cache first
 	if val, ok := dohCache.Load(domain); ok {
