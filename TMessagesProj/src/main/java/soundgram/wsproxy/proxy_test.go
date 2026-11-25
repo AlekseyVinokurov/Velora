@@ -109,3 +109,14 @@ func TestWs80RequiresExplicitOptIn(t *testing.T) {
         t.Fatal("Secure transport must keep hostname and certificate verification")
     }
 }
+
+
+func TestCertificateFailureCannotTriggerPlainFallback(t *testing.T) {
+    if isTLSCertificateError(nil) { t.Fatal("nil is not a certificate error") }
+    if !isTLSCertificateError(x509.UnknownAuthorityError{}) {
+        t.Fatal("unknown CA must prevent downgrade")
+    }
+    if !isTLSCertificateError(x509.HostnameError{}) {
+        t.Fatal("hostname mismatch must prevent downgrade")
+    }
+}
