@@ -22,6 +22,8 @@ typedef void (*fn_SetFakeTls)(int, const char*);
 typedef char*(*fn_GetSecretWithPrefix)(void);
 typedef char*(*fn_GetStats)(void);
 typedef char*(*fn_GetDiagnosticStats)(void);
+typedef char*(*fn_GetTransportStats)(void);
+typedef void (*fn_SetCfProxyPlainFallback)(int);
 typedef void (*fn_SetDiagnosticEnabled)(int);
 typedef void (*fn_FreeString)(char*);
 typedef void (*fn_ResetForNetworkChange)(void);
@@ -39,6 +41,8 @@ static fn_SetFakeTls         pSetFakeTls = NULL;
 static fn_GetSecretWithPrefix pGetSecretWithPrefix = NULL;
 static fn_GetStats           pGetStats = NULL;
 static fn_GetDiagnosticStats pGetDiagnosticStats = NULL;
+static fn_GetTransportStats pGetTransportStats = NULL;
+static fn_SetCfProxyPlainFallback pSetCfProxyPlainFallback = NULL;
 static fn_SetDiagnosticEnabled pSetDiagnosticEnabled = NULL;
 static fn_FreeString         pFreeString = NULL;
 static fn_ResetForNetworkChange pResetForNetworkChange = NULL;
@@ -63,6 +67,8 @@ void init_bridge() {
     pGetSecretWithPrefix= (fn_GetSecretWithPrefix)dlsym(go_handle, "GetSecretWithPrefix");
     pGetStats           = (fn_GetStats)          dlsym(go_handle, "GetStats");
     pGetDiagnosticStats = (fn_GetDiagnosticStats)dlsym(go_handle, "GetDiagnosticStats");
+    pGetTransportStats = (fn_GetTransportStats)dlsym(go_handle, "GetTransportStats");
+    pSetCfProxyPlainFallback = (fn_SetCfProxyPlainFallback)dlsym(go_handle, "SetCfProxyPlainFallback");
     pSetDiagnosticEnabled = (fn_SetDiagnosticEnabled)dlsym(go_handle, "SetDiagnosticEnabled");
     pFreeString         = (fn_FreeString)        dlsym(go_handle, "FreeString");
     pResetForNetworkChange = (fn_ResetForNetworkChange)dlsym(go_handle, "ResetForNetworkChange");
@@ -164,6 +170,21 @@ Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_GetStats(JNIEnv* env, jclass cls) 
 }
 
 JNIEXPORT jstring JNICALL
+Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_GetTransportStats(JNIEnv* env, jclass cls) {
+    if (!pGetTransportStats || !pFreeString) return NULL;
+    char* result = pGetTransportStats();
+    if (!result) return NULL;
+    jstring str = (*env)->NewStringUTF(env, result);
+    pFreeString(result);
+    return str;
+}
+
+JNIEXPORT void JNICALL
+Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_SetCfProxyPlainFallback(JNIEnv* env, jclass cls, jint enabled) {
+    if (pSetCfProxyPlainFallback) pSetCfProxyPlainFallback(enabled);
+}
+
+JNIEXPORT jstring JNICALL
 Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_GetDiagnosticStats(JNIEnv* env, jclass cls) {
     if (!pGetDiagnosticStats || !pFreeString) return NULL;
     char* result = pGetDiagnosticStats();
@@ -250,6 +271,16 @@ Java_soundgram_wsproxy_NativeProxy_GetSecretWithPrefix(JNIEnv* env, jclass cls) 
 JNIEXPORT jstring JNICALL
 Java_soundgram_wsproxy_NativeProxy_GetStats(JNIEnv* env, jclass cls) {
     return Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_GetStats(env, cls);
+}
+
+JNIEXPORT jstring JNICALL
+Java_soundgram_wsproxy_NativeProxy_GetTransportStats(JNIEnv* env, jclass cls) {
+    return Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_GetTransportStats(env, cls);
+}
+
+JNIEXPORT void JNICALL
+Java_soundgram_wsproxy_NativeProxy_SetCfProxyPlainFallback(JNIEnv* env, jclass cls, jint enabled) {
+    Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_SetCfProxyPlainFallback(env, cls, enabled);
 }
 
 JNIEXPORT jstring JNICALL
