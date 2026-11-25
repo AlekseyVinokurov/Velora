@@ -26,6 +26,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/tls"
+    "crypto/x509"
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
@@ -1447,6 +1448,18 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 // Cloudflare routes use base domain as verified TLS SNI, but kwsN.<base>
 // remains the HTTP Host. This avoids subdomain-based TLS SNI filtering while
 // preserving certificate and hostname verification.
+// Do not downgrade a certificate verification failure to plaintext WS.
+func isTLSCertificateError(err error) bool {
+    var verifyErr *tls.CertificateVerificationError
+    if errors.As(err, &verifyErr) { return true }
+    var unknownCA x509.UnknownAuthorityError
+    if errors.As(err, &unknownCA) { return true }
+    var hostnameErr x509.HostnameError
+    if errors.As(err, &hostnameErr) { return true }
+    var invalidErr x509.CertificateInvalidError
+    return errors.As(err, &invalidErr)
+}
+
 func cfTLSName(httpHost string) string {
     prefix, base, ok := strings.Cut(httpHost, ".")
     if !ok || len(base) == 0 || !strings.HasPrefix(prefix, "kws") {
@@ -1607,7 +1620,8 @@ func wsConnectOnceTransport(ctx context.Context, dialAddr, domain, path string, 
 }
 
 func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) (*RawWebSocket, string, error) {
-	diagCount(&wsDiagnostics.cfTry)
+    diagCount(&wsDiagnostics.cfTry)
+    certificateErrorSeen := false
 	if path == "" {
 		path = "/apiws"
 	}
@@ -1630,8 +1644,9 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 			resolvedIP := entry.ip
 			ipCtx, cancelIP, ipTimeout := newTimedAttemptContext(ctx, phaseTimeout)
 			ws, err := wsConnectCF(ipCtx, resolvedIP, domain, path, ipTimeout)
-			cancelIP()
-			if err == nil {
+            cancelIP()
+            if isTLSCertificateError(err) { certificateErrorSeen = true }
+            if err == nil {
 				return ws, resolvedIP, nil
 			}
 		}
@@ -1712,6 +1727,7 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 			return res.ws, res.resolvedIP, nil
 		}
 		if res.err != nil {
+            if isTLSCertificateError(res.err) { certificateErrorSeen = true }
 			lastErr = res.err
 			if res.resolvedIP != "" {
 				finalIP = res.resolvedIP
@@ -1721,7 +1737,7 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 
     // Optional and explicit WS/80 fallback. The parent timeout bounds this
     // attempt; avoid spreading plaintext mode to direct Telegram/HTTPS routes.
-    if cfPlainFallbackEnabled.Load() && ctx.Err() == nil {
+    if cfPlainFallbackEnabled.Load() && !certificateErrorSeen && ctx.Err() == nil {
         plainAddr := domain
         if finalIP != "" { plainAddr = finalIP }
         plainCtx, cancelPlain, plainTimeout := newTimedAttemptContext(ctx, 1500*time.Millisecond)
