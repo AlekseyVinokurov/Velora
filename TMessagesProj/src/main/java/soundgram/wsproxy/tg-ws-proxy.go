@@ -26,6 +26,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"crypto/tls"
+    "crypto/x509"
 	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
@@ -324,6 +325,14 @@ type wsDiagnosticCounters struct {
 }
 var wsDiagnosticsEnabled atomic.Bool
 var wsDiagnostics wsDiagnosticCounters
+
+// Explicit opt-in: allow a plaintext Cloudflare WebSocket attempt when secure WSS
+// cannot be established. Telegram's MTProto encryption still applies, but WS/80
+// has no independent TLS authentication or metadata confidentiality.
+var cfPlainFallbackEnabled atomic.Bool
+var cfPlainTries atomic.Int64
+var cfPlainOk atomic.Int64
+var cfPlainFailed atomic.Int64
 
 func diagCount(counter *atomic.Int64) {
     if wsDiagnosticsEnabled.Load() { counter.Add(1) }
@@ -1431,7 +1440,64 @@ func verifiedWsTLSConfig(domain string) *tls.Config {
     return config
 }
 
+// Secure direct Telegram endpoints retain their original TLS hostname.
 func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout time.Duration) (*RawWebSocket, error) {
+    return wsConnectOnceTransport(ctx, dialAddr, domain, path, timeout, domain, true)
+}
+
+// Cloudflare routes use base domain as verified TLS SNI, but kwsN.<base>
+// remains the HTTP Host. This avoids subdomain-based TLS SNI filtering while
+// preserving certificate and hostname verification.
+// Do not downgrade a certificate verification failure to plaintext WS.
+func isTLSCertificateError(err error) bool {
+    var verifyErr *tls.CertificateVerificationError
+    if errors.As(err, &verifyErr) { return true }
+    var unknownCA x509.UnknownAuthorityError
+    if errors.As(err, &unknownCA) { return true }
+    var hostnameErr x509.HostnameError
+    if errors.As(err, &hostnameErr) { return true }
+    var invalidErr x509.CertificateInvalidError
+    return errors.As(err, &invalidErr)
+}
+
+func cfTLSName(httpHost string) string {
+    prefix, base, ok := strings.Cut(httpHost, ".")
+    if !ok || len(base) == 0 || !strings.HasPrefix(prefix, "kws") {
+        return httpHost
+    }
+    dc := strings.TrimPrefix(prefix, "kws")
+    if len(dc) == 0 || len(dc) > 3 {
+        return httpHost
+    }
+    for _, c := range dc { if c < '0' || c > '9' { return httpHost } }
+    return base
+}
+
+func wsConnectCF(ctx context.Context, dialAddr, host, path string, timeout time.Duration) (*RawWebSocket, error) {
+    return wsConnectOnceTransport(ctx, dialAddr, host, path, timeout, cfTLSName(host), true)
+}
+
+// Flowseal-compatible minimal WS/80 upgrade, without HTTPS Origin or browser
+// headers that can be filtered independently of the required upgrade fields.
+func plainWsUpgradeRequest(path, host, key string) string {
+    return fmt.Sprintf(
+        "GET %s HTTP/1.1\r\n"+
+        "Host: %s\r\n"+
+        "Upgrade: websocket\r\n"+
+        "Connection: Upgrade\r\n"+
+        "Sec-WebSocket-Key: %s\r\n"+
+        "Sec-WebSocket-Version: 13\r\n"+
+        "Sec-WebSocket-Protocol: binary\r\n"+
+        "\r\n",
+        path, host, key,
+    )
+}
+
+func wsConnectCFPlain(ctx context.Context, dialAddr, host, path string, timeout time.Duration) (*RawWebSocket, error) {
+    return wsConnectOnceTransport(ctx, dialAddr, host, path, timeout, "", false)
+}
+
+func wsConnectOnceTransport(ctx context.Context, dialAddr, domain, path string, timeout time.Duration, tlsServerName string, secure bool) (*RawWebSocket, error) {
 	if dialAddr == "" {
 		return nil, fmt.Errorf("empty dial address")
 	}
@@ -1440,9 +1506,10 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 		Timeout: timeout,
 	}
 
-	tlsCfg := verifiedWsTLSConfig(domain)
-
-	targetAddr := net.JoinHostPort(dialAddr, "443")
+    port := "443"
+    scheme := "https"
+    if !secure { port = "80"; scheme = "http" }
+	targetAddr := net.JoinHostPort(dialAddr, port)
 	rawConn, err := dialer.DialContext(ctx, "tcp", targetAddr)
 	if err != nil {
 		diagCount(&wsDiagnostics.tcpFail)
@@ -1455,6 +1522,8 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
     defer stopDial()
 	setSockOpts(rawConn)
 
+	if secure {
+        tlsCfg := verifiedWsTLSConfig(tlsServerName)
 	// Wrap in splitWriteConn so the TLS ClientHello is sent across two TCP
 	// segments. Most TSPU/DPI boxes match the complete ClientHello in a single
 	// packet; splitting at byte 3 (after the TLS record header) defeats this.
@@ -1476,6 +1545,8 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 	_ = tlsConn.SetDeadline(time.Time{})
 	rawConn = tlsConn
 
+	}
+
 	wsKeyBytes := make([]byte, 16)
 	_, _ = rand.Read(wsKeyBytes)
 	wsKey := base64.StdEncoding.EncodeToString(wsKeyBytes)
@@ -1488,14 +1559,15 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 			"Sec-WebSocket-Key: %s\r\n"+
 			"Sec-WebSocket-Version: 13\r\n"+
 			"Sec-WebSocket-Protocol: binary\r\n"+
-			"Origin: https://%s\r\n"+
+			"Origin: %s://%s\r\n"+
 			"User-Agent: %s\r\n"+
 			"Accept-Encoding: gzip, deflate, br\r\n"+
 			"Accept-Language: en-US,en;q=0.9\r\n"+
 			"Cache-Control: no-cache\r\n"+
 			"Pragma: no-cache\r\n\r\n",
-		path, domain, wsKey, domain, randomUserAgent(),
+		path, domain, wsKey, scheme, domain, randomUserAgent(),
 	)
+    if !secure { req = plainWsUpgradeRequest(path, domain, wsKey) }
 
 	_ = rawConn.SetWriteDeadline(time.Now().Add(timeout))
 	if _, err = rawConn.Write([]byte(req)); err != nil {
@@ -1565,7 +1637,8 @@ func wsConnectOnce(ctx context.Context, dialAddr, domain, path string, timeout t
 }
 
 func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) (*RawWebSocket, string, error) {
-	diagCount(&wsDiagnostics.cfTry)
+    diagCount(&wsDiagnostics.cfTry)
+    certificateErrorSeen := false
 	if path == "" {
 		path = "/apiws"
 	}
@@ -1575,6 +1648,11 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 	if phaseTimeout > cfproxyDialPhaseTimeout {
 		phaseTimeout = cfproxyDialPhaseTimeout
 	}
+    // Reserve time for the explicitly permitted WS/80 fallback, even if both
+    // the cached-IP and parallel secure attempts time out.
+    if cfPlainFallbackEnabled.Load() && phaseTimeout > 1500*time.Millisecond {
+        phaseTimeout = 1500 * time.Millisecond
+    }
 
 	// 1. Check cache first
 	if val, ok := dohCache.Load(domain); ok {
@@ -1582,9 +1660,10 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 		if time.Now().Before(entry.exp) {
 			resolvedIP := entry.ip
 			ipCtx, cancelIP, ipTimeout := newTimedAttemptContext(ctx, phaseTimeout)
-			ws, err := wsConnectOnce(ipCtx, resolvedIP, domain, path, ipTimeout)
-			cancelIP()
-			if err == nil {
+			ws, err := wsConnectCF(ipCtx, resolvedIP, domain, path, ipTimeout)
+            cancelIP()
+            if isTLSCertificateError(err) { certificateErrorSeen = true }
+            if err == nil {
 				return ws, resolvedIP, nil
 			}
 		}
@@ -1608,7 +1687,7 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 	go func() {
 		defer wg.Done()
 		hostCtx, cancelHost, hostTimeout := newTimedAttemptContext(dialCtx, phaseTimeout)
-		ws, err := wsConnectOnce(hostCtx, domain, domain, path, hostTimeout)
+		ws, err := wsConnectCF(hostCtx, domain, domain, path, hostTimeout)
 		cancelHost()
 		select {
 		case resultCh <- dialResult{ws: ws, resolvedIP: "", err: err}:
@@ -1632,7 +1711,7 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 			return
 		}
 		ipCtx, cancelIP, ipTimeout := newTimedAttemptContext(dialCtx, phaseTimeout)
-		ws, err := wsConnectOnce(ipCtx, resolvedIP, domain, path, ipTimeout)
+		ws, err := wsConnectCF(ipCtx, resolvedIP, domain, path, ipTimeout)
 		cancelIP()
 		select {
 		case resultCh <- dialResult{ws: ws, resolvedIP: resolvedIP, err: err}:
@@ -1665,6 +1744,7 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 			return res.ws, res.resolvedIP, nil
 		}
 		if res.err != nil {
+            if isTLSCertificateError(res.err) { certificateErrorSeen = true }
 			lastErr = res.err
 			if res.resolvedIP != "" {
 				finalIP = res.resolvedIP
@@ -1672,6 +1752,22 @@ func cfConnectDomain(ctx context.Context, domain, path string, timeout float64) 
 		}
 	}
 
+    // Optional and explicit WS/80 fallback. The parent timeout bounds this
+    // attempt; avoid spreading plaintext mode to direct Telegram/HTTPS routes.
+    if cfPlainFallbackEnabled.Load() && !certificateErrorSeen && ctx.Err() == nil {
+        plainAddr := domain
+        if finalIP != "" { plainAddr = finalIP }
+        plainCtx, cancelPlain, plainTimeout := newTimedAttemptContext(ctx, 1500*time.Millisecond)
+        diagCount(&cfPlainTries)
+        plainWS, plainErr := wsConnectCFPlain(plainCtx, plainAddr, domain, path, plainTimeout)
+        cancelPlain()
+        if plainErr == nil && plainWS != nil {
+            diagCount(&cfPlainOk)
+            return plainWS, plainAddr, nil
+        }
+        diagCount(&cfPlainFailed)
+        if plainErr != nil { lastErr = plainErr }
+    }
 	return nil, finalIP, lastErr
 }
 
@@ -3918,6 +4014,11 @@ func SetCfProxyCacheDir(cCacheDir *C.char) {
 	cfproxyMu.Unlock()
 }
 
+//export SetCfProxyPlainFallback
+func SetCfProxyPlainFallback(enabled C.int) {
+    cfPlainFallbackEnabled.Store(enabled != 0)
+}
+
 //export SetCfProxyConfig
 func SetCfProxyConfig(enabled C.int, priority C.int, cUserDomain *C.char) {
 	cfproxyMu.Lock()
@@ -3951,12 +4052,26 @@ func SetSecret(cSecret *C.char) {
 //export SetDiagnosticEnabled
 func SetDiagnosticEnabled(enabled C.int) {
     wsDiagnosticsEnabled.Store(enabled != 0)
-    if enabled != 0 { resetDiagnostics() }
+    if enabled != 0 {
+        resetDiagnostics()
+        cfPlainTries.Store(0)
+        cfPlainOk.Store(0)
+        cfPlainFailed.Store(0)
+    }
 }
 
 //export GetDiagnosticStats
 func GetDiagnosticStats() *C.char {
-    return C.CString(diagnosticsSnapshot())
+    snapshot := diagnosticsSnapshot()
+    // The Java exporter accepts fixed numeric keys only. Keep new transport
+    // diagnostics as an independent allowlisted field set (see GetTransportStats).
+    return C.CString(snapshot)
+}
+
+//export GetTransportStats
+func GetTransportStats() *C.char {
+    return C.CString(fmt.Sprintf("cf_ws80_try=%d;cf_ws80_ok=%d;cf_ws80_fail=%d",
+        cfPlainTries.Load(), cfPlainOk.Load(), cfPlainFailed.Load()))
 }
 
 //export GetStats

@@ -110,6 +110,7 @@ public class TgWsProxyService extends Service {
                 NativeProxy.setSendBuffer(buffer);
                 NativeProxy.setCfProxyCacheDir(getCacheDir().getAbsolutePath());
                 NativeProxy.setCfProxyConfig(p.getBoolean("cf_enabled", true), true, p.getString("cf_domain", ""));
+                NativeProxy.setCfProxyPlainFallback(p.getBoolean("cf_ws80_fallback", false));
                 NativeProxy.setFakeTls(p.getBoolean("fake_tls", false), p.getString("fake_domain", "google.com"));
                 int result = NativeProxy.startProxy("127.0.0.1", port, p.getString("dc_ips", ""), secret, 0);
                 if (!active(requested)) { NativeProxy.stopProxy(); return; }
@@ -192,6 +193,7 @@ public class TgWsProxyService extends Service {
         monitor = new Thread(() -> {
             int failures = 0;
             String lastSnapshot = "";
+            String lastTransportSnapshot = "";
             Boolean lastTelegramObserved = null;
             while (active(requested) && isRunning) {
                 try { Thread.sleep(10000); } catch (InterruptedException e) { return; }
@@ -201,6 +203,11 @@ public class TgWsProxyService extends Service {
                     if (!snapshot.equals(lastSnapshot)) {
                         WsProxyDiagnostics.sample(this, snapshot);
                         lastSnapshot = snapshot;
+                    }
+                    String transportSnapshot = NativeProxy.getTransportStats();
+                    if (!transportSnapshot.equals(lastTransportSnapshot)) {
+                        WsProxyDiagnostics.transportSample(this, transportSnapshot);
+                        lastTransportSnapshot = transportSnapshot;
                     }
                 }
                 if (WsProxyDiagnostics.enabled(this)) {

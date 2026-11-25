@@ -45,6 +45,23 @@ class WsProxyDiagnosticContractTest(unittest.TestCase):
             self.assertIn("Java_tw_nekomimi_nekogram_wsproxy_NativeProxy_" + symbol, self.jni)
             self.assertIn("native " + ("String " if symbol.startswith("Get") else "void ") + symbol, self.native)
 
+    def test_ws80_is_opt_in_and_scoped_to_cf(self):
+        self.assertIn('getBoolean("cf_ws80_fallback", false)', self.service)
+        self.assertIn('setCfProxyPlainFallback(', self.service)
+        self.assertIn('SetCfProxyPlainFallback', self.native)
+        for symbol in ("GetTransportStats", "SetCfProxyPlainFallback"):
+            self.assertIn("//export " + symbol, self.go)
+            self.assertIn('dlsym(go_handle, "' + symbol + '")', self.jni)
+            self.assertIn('Java_soundgram_wsproxy_NativeProxy_' + symbol, self.jni)
+        self.assertIn('cfPlainFallbackEnabled.Load()', self.go)
+        self.assertIn('if !secure { port = "80"; scheme = "http" }', self.go)
+        self.assertIn('cfTLSName(host)', self.go)
+        self.assertIn('verifiedWsTLSConfig(tlsServerName)', self.go)
+        self.assertIn('String checked = validateTransportSnapshot(snapshot);', self.diag)
+        self.assertIn('WsProxyDiagnostics.transportSample(this, transportSnapshot)', self.service)
+        self.assertIn('new android.app.AlertDialog.Builder(getParentActivity())', self.ui)
+        self.assertIn('Резервный WS/80 без TLS', self.ui)
+
     def test_opt_in_bounded_and_no_raw_strings(self):
         self.assertIn('getBoolean(KEY_ENABLED, false)', self.diag)
         self.assertIn('if (!enabled(context)) return;', self.diag)

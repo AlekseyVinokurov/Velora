@@ -8,6 +8,7 @@ import (
     "net/http"
     "net/http/httptest"
     "testing"
+    "strings"
     "time"
 )
 
@@ -68,5 +69,71 @@ func TestNativeStopWaitsForPreviousRun(t *testing.T) {
         if StartProxy(nil, 0, nil, nil, 0) != 0 { t.Fatal("native start failed") }
         if StopProxy() != 0 { t.Fatal("native stop failed") }
         if globalDone != nil || globalCancel != nil { t.Fatal("native run not joined") }
+    }
+}
+
+
+func TestCfTLSNameSeparatesHostAndSNI(t *testing.T) {
+    tests := []struct{ host, want string }{
+        {"kws2.cakeisalie.co.uk", "cakeisalie.co.uk"},
+        {"kws4.pclead.co.uk", "pclead.co.uk"},
+        {"kws203.some.example", "some.example"},
+        {"kwsX.example.org", "kwsX.example.org"},
+        {"kws.example.org", "kws.example.org"},
+        {"kws2.web.telegram.org", "web.telegram.org"},
+        {"kws2", "kws2"},
+    }
+    for _, tt := range tests {
+        if got := cfTLSName(tt.host); got != tt.want {
+            t.Errorf("cfTLSName(%q)=%q, want %q", tt.host, got, tt.want)
+        }
+    }
+    // A direct Telegram WS hostname must remain unchanged by wsConnectOnce.
+    if verifiedWsTLSConfig("kws2.web.telegram.org").ServerName != "kws2.web.telegram.org" {
+        t.Fatal("Direct WS TLS ServerName modified")
+    }
+}
+
+func TestWs80RequiresExplicitOptIn(t *testing.T) {
+    if cfPlainFallbackEnabled.Load() {
+        t.Fatal("Cloudflare plaintext WS cannot be enabled by default")
+    }
+    SetCfProxyPlainFallback(1)
+    if !cfPlainFallbackEnabled.Load() {
+        t.Fatal("Explicit opt-in was ignored")
+    }
+    SetCfProxyPlainFallback(0)
+    if cfPlainFallbackEnabled.Load() {
+        t.Fatal("Opt-out was ignored")
+    }
+    if verifiedWsTLSConfig("cakeisalie.co.uk").InsecureSkipVerify {
+        t.Fatal("Secure transport must keep hostname and certificate verification")
+    }
+}
+
+
+func TestCertificateFailureCannotTriggerPlainFallback(t *testing.T) {
+    if isTLSCertificateError(nil) { t.Fatal("nil is not a certificate error") }
+    if !isTLSCertificateError(x509.UnknownAuthorityError{}) {
+        t.Fatal("unknown CA must prevent downgrade")
+    }
+    if !isTLSCertificateError(x509.HostnameError{}) {
+        t.Fatal("hostname mismatch must prevent downgrade")
+    }
+}
+
+func TestPlainWebSocketUpgradeIsMinimalAndUsesCRLF(t *testing.T) {
+    req := plainWsUpgradeRequest("/apiws", "kws2.cakeisalie.co.uk", "testkey")
+    for _, line := range []string{
+        "GET /apiws HTTP/1.1\r\n",
+        "Host: kws2.cakeisalie.co.uk\r\n",
+        "Upgrade: websocket\r\n",
+        "Sec-WebSocket-Protocol: binary\r\n",
+    } {
+        if !strings.Contains(req, line) { t.Fatalf("missing header %q in %q", line, req) }
+    }
+    if strings.Contains(req, "Origin:") { t.Fatal("plain WS contains HTTPS Origin") }
+    if !strings.HasSuffix(req, "\r\n\r\n") {
+        t.Fatalf("WebSocket upgrade missing CRLF separator: %q", req)
     }
 }

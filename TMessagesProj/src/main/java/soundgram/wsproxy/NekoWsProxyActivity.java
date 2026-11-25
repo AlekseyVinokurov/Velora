@@ -124,7 +124,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 shadow2Row,
                 securityHeaderRow, secretRow,
                 shadow3Row,
-                cfHeaderRow, cfEnabledRow, cfDomainRow,
+                cfHeaderRow, cfEnabledRow, cfDomainRow, cfPlainRow,
                 shadow4Row,
                 fakeTlsHeaderRow, fakeTlsEnabledRow, fakeTlsDomainRow,
                 shadowFakeTlsRow,
@@ -241,6 +241,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
         cfHeaderRow         = row++;
         cfEnabledRow        = row++;
         cfDomainRow         = row++;
+        cfPlainRow          = row++;
         shadow4Row          = row++;
 
         fakeTlsHeaderRow    = row++;
@@ -368,6 +369,28 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
             getPrefs().edit().putBoolean("cf_enabled", on).commit();
             updateRows();
             if (getPrefs().getBoolean("enabled", false)) restartProxy();
+
+        } else if (position == cfPlainRow) {
+            boolean enabled = getPrefs().getBoolean("cf_ws80_fallback", false);
+            if (enabled) {
+                getPrefs().edit().putBoolean("cf_ws80_fallback", false).commit();
+                updateRows();
+                if (getPrefs().getBoolean("enabled", false)) restartProxy();
+            } else {
+                new android.app.AlertDialog.Builder(getParentActivity())
+                        .setTitle("Резервный WebSocket без TLS")
+                        .setMessage("При недоступности защищённых Cloudflare-соединений "
+                                + "Velora сможет использовать WS/80. Шифрование Telegram MTProto "
+                                + "сохраняется, но дополнительного TLS к Cloudflare не будет: "
+                                + "домен и метаданные соединения могут быть видны сети. "
+                                + "Включить этот резервный маршрут?")
+                        .setPositiveButton("Включить", (d, which) -> {
+                            getPrefs().edit().putBoolean("cf_ws80_fallback", true).commit();
+                            updateRows();
+                            if (getPrefs().getBoolean("enabled", false)) restartProxy();
+                        })
+                        .setNegativeButton("Отмена", null).show();
+            }
 
         } else if (position == cfDomainRow) {
             showInputDialog("Custom Cloudflare domain (leave blank for auto)",
@@ -543,7 +566,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
             return position == diagToggleRow || position == diagSaveRow || position == diagClearRow
                     || position == enableRow || position == autoStartRow
                     || position == portRow || position == poolRow || position == bufferRow
-                    || position == secretRow || position == cfEnabledRow || position == cfDomainRow
+                    || position == secretRow || position == cfEnabledRow || position == cfDomainRow || position == cfPlainRow
                     || position == fakeTlsEnabledRow || position == fakeTlsDomainRow || position == dcIpsRow;
         }
 
@@ -591,6 +614,9 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 } else if (position == cfEnabledRow) {
                     cell.setTextAndCheck("Cloudflare CDN",
                             prefs.getBoolean("cf_enabled", DEFAULT_CF_ENABLED), true);
+                } else if (position == cfPlainRow) {
+                    cell.setTextAndCheck("Резервный WS/80 без TLS",
+                            prefs.getBoolean("cf_ws80_fallback", false), true);
                 } else if (position == fakeTlsEnabledRow) {
                     cell.setTextAndCheck("Enable FakeTLS",
                             prefs.getBoolean("fake_tls", DEFAULT_FAKE_TLS), true);
@@ -685,7 +711,8 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                             + "Использует WebSocket/TLS для Telegram и локальный SOCKS5 для музыки. "
                             + "При отключении восстанавливает сохранённый прокси Telegram. "
                             + "При включении VPN останавливается; автоматически не возобновляется. "
-                            + "Диагностика выключена по умолчанию. В отчёт входят только категории ошибок и счётчики, без адресов и секретов.");
+                            + "Диагностика выключена по умолчанию. В отчёт входят только категории ошибок и счётчики, без адресов и секретов. "
+                    + "Резервный WS/80 — только после явного согласия, без дополнительного TLS.");
                 }
             }
         }
@@ -706,7 +733,7 @@ public class NekoWsProxyActivity extends org.telegram.ui.ActionBar.BaseFragment 
                 return TYPE_SHADOW;
 
             if (position == diagToggleRow || position == enableRow || position == autoStartRow
-                    || position == cfEnabledRow || position == fakeTlsEnabledRow)
+                    || position == cfEnabledRow || position == cfPlainRow || position == fakeTlsEnabledRow)
                 return TYPE_TEXT_CHECK;
 
             if (position == statusRow || position == pingRow || position == secretRow)

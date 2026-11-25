@@ -40,6 +40,8 @@ public class NativeProxy {
     public static native String GetSecretWithPrefix();
     public static native String GetStats();
     public static native String GetDiagnosticStats();
+    public static native String GetTransportStats();
+    public static native void SetCfProxyPlainFallback(int enabled);
     public static native void SetDiagnosticEnabled(int enabled);
     public static native void FreeString(String p);
     public static native void ResetForNetworkChange();
@@ -127,6 +129,20 @@ public class NativeProxy {
             Log.e("NativeProxy", "GetSecretWithPrefix error", t);
             return "";
         }
+    }
+
+    public static void setCfProxyPlainFallback(boolean enabled) {
+        if (!isLoaded) return;
+        try { SetCfProxyPlainFallback(enabled ? 1 : 0); }
+        catch (Throwable ignored) {}
+    }
+
+    public static String getTransportStats() {
+        if (!isLoaded) return "";
+        try {
+            String value = GetTransportStats();
+            return value != null ? value : "";
+        } catch (Throwable ignored) { return ""; }
     }
 
     public static void setDiagnosticsEnabled(boolean enabled) {

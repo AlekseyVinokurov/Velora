@@ -33,6 +33,10 @@ public final class WsProxyDiagnostics {
             "ws_ok", "ws_fail", "http_403", "http_429", "cf_try", "ws_try"
     };
 
+    private static final String[] TRANSPORT_KEYS = {
+            "cf_ws80_try", "cf_ws80_ok", "cf_ws80_fail"
+    };
+
     private WsProxyDiagnostics() {}
 
     public static boolean enabled(Context context) {
@@ -75,6 +79,28 @@ public final class WsProxyDiagnostics {
         if (fields.length != NATIVE_KEYS.length) return "";
         for (int i = 0; i < fields.length; i++) {
             String prefix = NATIVE_KEYS[i] + "=";
+            if (!fields[i].startsWith(prefix)) return "";
+            String num = fields[i].substring(prefix.length());
+            if (num.isEmpty() || num.length() > 12) return "";
+            for (int j = 0; j < num.length(); j++) {
+                if (num.charAt(j) < '0' || num.charAt(j) > '9') return "";
+            }
+        }
+        return snapshot;
+    }
+
+    public static synchronized void transportSample(Context context, String snapshot) {
+        if (!enabled(context)) return;
+        String checked = validateTransportSnapshot(snapshot);
+        if (!checked.isEmpty()) append(context, "transport " + checked);
+    }
+
+    static String validateTransportSnapshot(String snapshot) {
+        if (snapshot == null || snapshot.length() > 96) return "";
+        String[] fields = snapshot.split(";", -1);
+        if (fields.length != TRANSPORT_KEYS.length) return "";
+        for (int i = 0; i < fields.length; i++) {
+            String prefix = TRANSPORT_KEYS[i] + "=";
             if (!fields[i].startsWith(prefix)) return "";
             String num = fields[i].substring(prefix.length());
             if (num.isEmpty() || num.length() > 12) return "";
@@ -158,6 +184,7 @@ public final class WsProxyDiagnostics {
         text.append("Local listener running: ").append(running).append('\n');
         text.append("Local port: ").append(p.getInt("port", 1443)).append('\n');
         text.append("CF enabled: ").append(p.getBoolean("cf_enabled", true)).append('\n');
+        text.append("CF WS80 fallback allowed: ").append(p.getBoolean("cf_ws80_fallback", false)).append('\n');
         text.append("FakeTLS enabled: ").append(p.getBoolean("fake_tls", false)).append('\n');
         text.append("Diagnostics enabled: ").append(enabled(context)).append('\n');
         text.append("Note: local TCP availability does not prove Telegram connectivity.\n");
