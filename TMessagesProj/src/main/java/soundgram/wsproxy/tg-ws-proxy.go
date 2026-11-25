@@ -1477,6 +1477,22 @@ func wsConnectCF(ctx context.Context, dialAddr, host, path string, timeout time.
     return wsConnectOnceTransport(ctx, dialAddr, host, path, timeout, cfTLSName(host), true)
 }
 
+// Flowseal-compatible minimal WS/80 upgrade, without HTTPS Origin or browser
+// headers that can be filtered independently of the required upgrade fields.
+func plainWsUpgradeRequest(path, host, key string) string {
+    return fmt.Sprintf(
+        "GET %s HTTP/1.1\\r\\n"+
+        "Host: %s\\r\\n"+
+        "Upgrade: websocket\\r\\n"+
+        "Connection: Upgrade\\r\\n"+
+        "Sec-WebSocket-Key: %s\\r\\n"+
+        "Sec-WebSocket-Version: 13\\r\\n"+
+        "Sec-WebSocket-Protocol: binary\\r\\n"+
+        "\\r\\n",
+        path, host, key,
+    )
+}
+
 func wsConnectCFPlain(ctx context.Context, dialAddr, host, path string, timeout time.Duration) (*RawWebSocket, error) {
     return wsConnectOnceTransport(ctx, dialAddr, host, path, timeout, "", false)
 }
@@ -1551,6 +1567,7 @@ func wsConnectOnceTransport(ctx context.Context, dialAddr, domain, path string, 
 			"Pragma: no-cache\r\n\r\n",
 		path, domain, wsKey, scheme, domain, randomUserAgent(),
 	)
+    if !secure { req = plainWsUpgradeRequest(path, domain, wsKey) }
 
 	_ = rawConn.SetWriteDeadline(time.Now().Add(timeout))
 	if _, err = rawConn.Write([]byte(req)); err != nil {
