@@ -70,3 +70,42 @@ func TestNativeStopWaitsForPreviousRun(t *testing.T) {
         if globalDone != nil || globalCancel != nil { t.Fatal("native run not joined") }
     }
 }
+
+
+func TestCfTLSNameSeparatesHostAndSNI(t *testing.T) {
+    tests := []struct{ host, want string }{
+        {"kws2.cakeisalie.co.uk", "cakeisalie.co.uk"},
+        {"kws4.pclead.co.uk", "pclead.co.uk"},
+        {"kws203.some.example", "some.example"},
+        {"kwsX.example.org", "kwsX.example.org"},
+        {"kws.example.org", "kws.example.org"},
+        {"kws2.web.telegram.org", "web.telegram.org"},
+        {"kws2", "kws2"},
+    }
+    for _, tt := range tests {
+        if got := cfTLSName(tt.host); got != tt.want {
+            t.Errorf("cfTLSName(%q)=%q, want %q", tt.host, got, tt.want)
+        }
+    }
+    // A direct Telegram WS hostname must remain unchanged by wsConnectOnce.
+    if verifiedWsTLSConfig("kws2.web.telegram.org").ServerName != "kws2.web.telegram.org" {
+        t.Fatal("Direct WS TLS ServerName modified")
+    }
+}
+
+func TestWs80RequiresExplicitOptIn(t *testing.T) {
+    if cfPlainFallbackEnabled.Load() {
+        t.Fatal("Cloudflare plaintext WS cannot be enabled by default")
+    }
+    SetCfProxyPlainFallback(1)
+    if !cfPlainFallbackEnabled.Load() {
+        t.Fatal("Explicit opt-in was ignored")
+    }
+    SetCfProxyPlainFallback(0)
+    if cfPlainFallbackEnabled.Load() {
+        t.Fatal("Opt-out was ignored")
+    }
+    if verifiedWsTLSConfig("cakeisalie.co.uk").InsecureSkipVerify {
+        t.Fatal("Secure transport must keep hostname and certificate verification")
+    }
+}
